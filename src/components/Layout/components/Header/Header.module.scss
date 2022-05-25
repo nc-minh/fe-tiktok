@@ -2,6 +2,7 @@
     --search-border-radius: 92px;
     --search-height: 46px;
     --search-top-spacer: 9px;
+    --search-button-width: 52px;
 
     height: var(--default-layout-header-height, 60px);
     width: 100%;
@@ -37,6 +38,11 @@
         font-size: 1.6rem;
         background-color: transparent;
         height: 100%;
+        caret-color: var(--primary);
+    }
+
+    input:not(:placeholder-shown) ~ .search-btn{
+        color: rgba(22, 24, 35, 0.75);
     }
 
     &::after{
@@ -46,7 +52,7 @@
         display: block;
         height: calc(var(--search-height) - var(--search-top-spacer) * 2);
         top: var(--search-top-spacer);
-        right: 52px;
+        right: var(--search-button-width);
         background-color: rgba(22, 24, 35, 0.12);
     }
 
@@ -56,17 +62,18 @@
 
 }
 
-.clear{
-
-}
-
+.clear,
 .loading{
-
+    position: absolute;
+    right: calc(var(--search-button-width) + 16px);
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(22, 24, 35, 0.34);
 }
 
 .search-btn{
     height: 100%;
-    width: 52px;
+    width: var(--search-button-width);
     border-top-right-radius: var(--search-border-radius);
     border-bottom-right-radius: var(--search-border-radius);
     font-size: 1.8rem;
@@ -75,5 +82,9 @@
     &:hover{
         cursor: pointer;
         background-color: rgba(22, 24, 35, 0.03);
+    }
+
+    &:active{
+        background-color: rgba(22, 24, 35, 0.06);
     }
 }
