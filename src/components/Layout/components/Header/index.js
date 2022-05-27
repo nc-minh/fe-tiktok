@@ -2,7 +2,7 @@ import classNames from 'classnames/bind';
 
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleXmark, faSpinner, faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { faCircleXmark, faSpinner, faMagnifyingGlass, faSignIn } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react/headless';
 
 import { Wrapper as PopperWrapper } from '~/components/Popper';
@@ -61,7 +61,10 @@ function Header() {
         </Tippy>
 
         <div className={cx('actions')}>
-          <Button primary>Login</Button>
+          <Button text>Register</Button>
+          <Button outline rounded leftIcon={<FontAwesomeIcon icon={faSignIn} />}>
+            Login
+          </Button>
         </div>
       </div>
     </header>
