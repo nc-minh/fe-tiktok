@@ -19,6 +19,7 @@
         background-color: transparent;
         height: 100%;
         caret-color: var(--primary);
+        padding-right: 40px;
     }
 
     input:not(:placeholder-shown) ~ .search-btn{
