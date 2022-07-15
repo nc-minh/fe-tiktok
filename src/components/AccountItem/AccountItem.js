@@ -10,14 +10,14 @@ import styles from './AccountItem.module.scss';
 const cx = classNames.bind(styles);
 function AccountItem({ data }) {
   return (
-    <Link to={`/@${data.nickname}`} className={cx('wrapper')}>
-      <Image className={cx('avatar')} src={data.avatar} alt={data.full_name} />
+    <Link to={`/@${data.username}`} className={cx('wrapper')}>
+      <Image className={cx('avatar')} src={data.avatar} alt={data.fullname} />
       <div className={cx('info')}>
         <strong className={cx('name')}>
-          <strong>{data.full_name}</strong>
+          <strong>{data.fullname}</strong>
           {data.tick && <FontAwesomeIcon className={cx('checkIcon')} icon={faCheckCircle} />}
         </strong>
-        <span className={cx('username')}>{data.nickname}</span>
+        <span className={cx('username')}>{data.username}</span>
       </div>
     </Link>
   );
