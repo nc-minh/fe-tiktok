@@ -4,11 +4,12 @@ import NoFooterLayout from 'app/layouts/NoFooterLayout';
 import { Home } from 'app/pages/Home';
 import { Introduction } from 'app/pages/Introduction';
 import { PublicRoutes } from './types';
+import routeConfig from './routeConfig';
 
 //Public routes
 const publicRoutes: PublicRoutes[] = [
   {
-    path: '/',
+    path: routeConfig.home,
     component: Home,
   },
   {

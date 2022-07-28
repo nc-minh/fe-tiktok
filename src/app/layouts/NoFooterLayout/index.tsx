@@ -1,7 +1,7 @@
 import classNames from 'classnames/bind';
 
 import styles from './NoFooterLayout.module.scss';
-import { Header } from 'app/layouts/components/Header';
+import Header from 'app/layouts/components/Header';
 
 interface Props {
   children: JSX.Element;

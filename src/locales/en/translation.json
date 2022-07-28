@@ -2,5 +2,7 @@
     "hello": "Hello everyone",
     "home": "Home",
     "introduction": "Introduction",
-    "NoFooterLayout": "No footer layout"
+    "NoFooterLayout": "No footer layout",
+
+    "placeHolder": "Search accounts and videos"
 }

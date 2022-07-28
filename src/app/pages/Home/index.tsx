@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import styles from './Home.module.scss';
 import reactIcon from 'assets/images/react-icon.svg';
-import { Button } from 'app/components/Button';
+import Button from 'app/components/Button';
 import { incrementActions } from './slice';
 
 const cx = classNames.bind(styles);
