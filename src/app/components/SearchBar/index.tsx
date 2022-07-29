@@ -38,6 +38,7 @@ interface Props {
   value?: string;
   onBlur?: () => any;
   onFocus?: () => void;
+  onClick?: () => void;
   className?: string;
   placeHolder?: string;
   loading?: boolean;
@@ -56,6 +57,7 @@ function SearchBar(props: Props) {
     onBlur = () => {},
     onFocus = () => {},
     onSubmit = () => {},
+    onClick = () => {},
     placeHolder = '',
     loading = false,
     tooltipIsOpen = false,
@@ -98,10 +100,11 @@ function SearchBar(props: Props) {
           onKeyDown={onKeyDown}
           onBlur={handleInputBlur}
           onFocus={handleInputFocus}
+          onClick={onClick}
           value={value}
           placeholder={placeHolder}
         />
-        {value.length > 0 && (
+        {value.length > 0 && !loading && (
           <CloseIcon className={cx('closeIcon')} onClick={onClear} />
         )}
         {loading && <SpinnerIcon className={cx('loading', 'closeIcon')} />}

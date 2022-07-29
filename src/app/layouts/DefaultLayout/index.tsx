@@ -3,6 +3,7 @@ import classNames from 'classnames/bind';
 import styles from './DefaultLayout.module.scss';
 import { Footer } from 'app/layouts/components/Footer';
 import Header from 'app/layouts/components/Header';
+import Sidebar from 'app/layouts/components/Sidebar';
 
 const cx = classNames.bind(styles);
 
@@ -14,7 +15,10 @@ function DefaultLayout({ children }: Props) {
   return (
     <div className={cx('wrapper')}>
       <Header />
-      {children}
+      <div className={cx('container')}>
+        <Sidebar />
+        <div className={cx('content')}>{children}</div>
+      </div>
       <Footer />
     </div>
   );

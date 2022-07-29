@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import routeConfig from 'app/routes/routeConfig';
+import { routeConfig } from 'app/routes/routeConfig';
 import styles from './Header.module.scss';
 import tiktokLogo from 'assets/images/tiktokLogo.svg';
 import Button from 'app/components/Button';
@@ -27,6 +27,9 @@ import SearchBar from 'app/components/SearchBar';
 import { MenuItemType } from 'types/Menu';
 import { useSearchUsers } from 'queries/users';
 import { useDebounce } from 'app/hooks';
+import DialogCustomize from 'app/components/DialogCustomize';
+import PopupContent from 'app/components/PopupContent';
+import PopupLogin from 'app/components/PopupLogin';
 
 const cx = classNames.bind(styles);
 
@@ -34,7 +37,8 @@ function Header() {
   const { t } = useTranslation();
   const [textSearch, setTextSearch] = useState('');
   const [tooltipIsOpen, setTooltipIsOpen] = useState(false);
-  const [isFocus, setIsFocus] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const [isLogin, setIsLogin] = useState(false);
 
   const debouncedValue = useDebounce(textSearch, 500);
 
@@ -66,8 +70,7 @@ function Header() {
       title: 'Keyboard shortcuts',
     },
   ];
-  const currentUser = true;
-  const data = true;
+  const currentUser = false;
 
   const USER_MENU: MenuItemType[] = [
     {
@@ -94,21 +97,30 @@ function Header() {
     },
   ];
 
-  const { data: searchUsersResults } = useSearchUsers(
+  const { data: searchUsersResults, isFetching } = useSearchUsers(
     {
-      q: debouncedValue,
+      q: debouncedValue.trim(),
       type: 'less',
     },
-    isFocus,
+    isActive,
   );
 
   const handleChangeSearch = useCallback(
     (event: any) => {
       const { type, keyCode } = event;
+
+      const searchValue = event.target.value;
+
       if (type === 'keydown' && keyCode === 13) {
         setTextSearch(event.target.value);
       }
-      return setTextSearch(event.target.value);
+
+      if (!searchValue.startsWith(' ')) {
+        setTextSearch(searchValue);
+        setIsActive(true);
+      } else {
+        setIsActive(false);
+      }
     },
     [setTextSearch, textSearch],
   );
@@ -116,27 +128,22 @@ function Header() {
   const handleClearSearch = useCallback(
     (event: any) => {
       setTextSearch('');
-      setIsFocus(false);
       setTooltipIsOpen(false);
     },
     [setTextSearch, textSearch],
   );
 
-  const handleOnFocus = useCallback(() => {
-    console.log('vai loz');
-    setIsFocus(true);
-    if (searchUsersResults?.length > 0) setTooltipIsOpen(true);
-  }, [isFocus, setIsFocus, searchUsersResults]);
+  const handleOnFocus = useCallback(() => {}, []);
 
   const handleOnBlur = useCallback(() => {
     setTooltipIsOpen(false);
-    setIsFocus(false);
-  }, [isFocus, setIsFocus, searchUsersResults]);
+  }, [isFetching]);
 
-  useEffect(() => {
-    if (searchUsersResults?.length > 0) setTooltipIsOpen(true);
-    console.log('searchUsersResults:::', searchUsersResults);
-  }, [searchUsersResults]);
+  console.log('isLogin', isLogin);
+
+  const handleOnCloseDialog = useCallback(() => {
+    setIsLogin(false);
+  }, [setIsLogin, isLogin]);
 
   return (
     <header className={cx('wrapper')}>
@@ -153,8 +160,10 @@ function Header() {
           onClear={handleClearSearch}
           onFocus={handleOnFocus}
           onBlur={handleOnBlur}
-          tooltipIsOpen={tooltipIsOpen}
+          tooltipIsOpen={tooltipIsOpen && searchUsersResults?.length > 0}
+          onClick={() => setTooltipIsOpen(true)}
           listResults={searchUsersResults}
+          loading={isFetching ? true : false}
         />
         <div className={cx('actions')}>
           {currentUser ? (
@@ -179,7 +188,9 @@ function Header() {
           ) : (
             <>
               <Button text>Register</Button>
-              <Button primary>Login</Button>
+              <Button onClick={() => setIsLogin(true)} primary>
+                Login
+              </Button>
             </>
           )}
 
@@ -198,6 +209,19 @@ function Header() {
           </Menu>
         </div>
       </div>
+      <DialogCustomize open={isLogin} onClose={handleOnCloseDialog}>
+        <PopupContent
+          onClose={handleOnCloseDialog}
+          footerContent="Don't have an account?"
+          linkContent="Sign up"
+          linkTo="/signup"
+          onClick={() => {
+            console.log('clicked');
+          }}
+        >
+          <PopupLogin />
+        </PopupContent>
+      </DialogCustomize>
     </header>
   );
 }

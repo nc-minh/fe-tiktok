@@ -83,7 +83,7 @@ function Button({
   }
 
   return (
-    <button className={classes}>
+    <button onClick={onClick} className={classes}>
       {leftIcon && <span className={cx('icon')}>{leftIcon}</span>}
       <span className={cx('title')}>{children}</span>
       {rightIcon && <span className={cx('icon')}>{rightIcon}</span>}
