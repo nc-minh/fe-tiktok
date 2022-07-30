@@ -1,5 +1,12 @@
-function Live() {
-  return <h1>live</h1>;
-}
+import { Helmet } from 'react-helmet-async';
 
-export default Live;
+export function Live() {
+  return (
+    <>
+      <Helmet defaultTitle="Tiktok LIVE | TikTok">
+        <meta name="description" content="Tiktok LIVE | TikTok" />
+      </Helmet>
+      <h1>live</h1>
+    </>
+  );
+}

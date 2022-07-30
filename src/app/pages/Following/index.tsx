@@ -1,5 +1,15 @@
-function Following() {
-  return <h1>following</h1>;
-}
+import { Helmet } from 'react-helmet-async';
 
-export default Following;
+export function Following() {
+  return (
+    <>
+      <Helmet defaultTitle="Following - Watch videos from creators you follow | TikTok">
+        <meta
+          name="description"
+          content="Following - Watch videos from creators you follow | TikTok"
+        />
+      </Helmet>
+      <h1>Following</h1>
+    </>
+  );
+}

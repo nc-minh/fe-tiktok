@@ -41,19 +41,6 @@
     padding: 5px 12px;
 }
 
-.loading{
-    animation: spinner .8s linear infinite;
-}
-
-@keyframes spinner {
-    from{
-        transform: rotate(0);
-    }
-    to{
-        transform: rotate(360deg);
-    }
-}
-
 .search-btn{
     display: flex;
     align-items: center;

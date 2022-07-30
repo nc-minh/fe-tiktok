@@ -68,6 +68,26 @@
     }
 }
 
+.box{
+    background-color: var(--white);
+    border-color: rgba(22, 24, 35, 0.12);
+    padding: 0 12px;
+    height: 44px;
+    font-weight: 600;
+    width: 100%;
+    position: relative;
+
+    + .box{
+        margin-top: 16px;
+        margin-left: 0;
+    }
+
+    > .icon{
+        position: absolute;
+        left: 12px;
+    }
+}
+
 // Button size
 
 .small{
@@ -86,3 +106,8 @@
     }
 }
 
+
+.size{
+    width: 2rem;
+    height: 2rem;
+}

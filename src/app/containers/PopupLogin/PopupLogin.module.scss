@@ -1,0 +1,26 @@
+.wrapper{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .title{
+        margin: 16px auto;
+        font-size: 3.2rem;
+        text-align: center;
+        font-weight: bold;
+    }
+}
+
+.backIconWrapper{
+    position: absolute;
+    top: 24px;
+    left: 24px;
+
+    .backIcon{
+        width: 2.4rem;
+        height: 2.4rem;
+        cursor: pointer;
+    }
+}

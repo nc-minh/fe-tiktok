@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
@@ -29,7 +29,10 @@ import { useSearchUsers } from 'queries/users';
 import { useDebounce } from 'app/hooks';
 import DialogCustomize from 'app/components/DialogCustomize';
 import PopupContent from 'app/components/PopupContent';
-import PopupLogin from 'app/components/PopupLogin';
+import PopupLogin from 'app/containers/PopupLogin';
+import PopupSignup from 'app/containers/PopupSignup';
+import { getUserData, removeItemFromStorage } from 'utils/storage';
+import { UserInfo } from 'types/User';
 
 const cx = classNames.bind(styles);
 
@@ -39,8 +42,11 @@ function Header() {
   const [tooltipIsOpen, setTooltipIsOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
+  const [tabLogin, setTabLogin] = useState(true);
 
   const debouncedValue = useDebounce(textSearch, 500);
+
+  const { username } = getUserData();
 
   const MENU_ITEMS: MenuItemType[] = [
     {
@@ -70,13 +76,20 @@ function Header() {
       title: 'Keyboard shortcuts',
     },
   ];
-  const currentUser = false;
+  const currentUser: UserInfo = useMemo(() => {
+    if (getUserData()?.username) {
+      return getUserData();
+    } else {
+      removeItemFromStorage('tokens');
+      return null;
+    }
+  }, []);
 
   const USER_MENU: MenuItemType[] = [
     {
       icon: <UserIcon />,
       title: 'View profile',
-      to: '/ok',
+      to: `/@${username}`,
     },
     {
       icon: <GetCoinIcon />,
@@ -92,7 +105,6 @@ function Header() {
     {
       icon: <LogoutIcon />,
       title: 'Log out',
-      to: '/signout',
       separate: true,
     },
   ];
@@ -136,14 +148,21 @@ function Header() {
   const handleOnFocus = useCallback(() => {}, []);
 
   const handleOnBlur = useCallback(() => {
-    setTooltipIsOpen(false);
+    setTimeout(() => {
+      setTooltipIsOpen(false);
+    }, 200);
   }, [isFetching]);
 
   console.log('isLogin', isLogin);
 
   const handleOnCloseDialog = useCallback(() => {
     setIsLogin(false);
+    setTabLogin(true);
   }, [setIsLogin, isLogin]);
+
+  const handleSwitchLoginTab = useCallback(() => {
+    setTabLogin(!tabLogin);
+  }, [tabLogin, setTabLogin]);
 
   return (
     <header className={cx('wrapper')}>
@@ -198,7 +217,7 @@ function Header() {
             {currentUser ? (
               <Image
                 className={cx('user-avatar')}
-                src="https://res.cloudinary.com/domvksfsk/image/upload/v1654866231/images/ae701b234250215809a234c8c0017c644bc36cc1.png"
+                src={currentUser.avatar}
                 alt="avatar"
               />
             ) : (
@@ -212,14 +231,13 @@ function Header() {
       <DialogCustomize open={isLogin} onClose={handleOnCloseDialog}>
         <PopupContent
           onClose={handleOnCloseDialog}
-          footerContent="Don't have an account?"
-          linkContent="Sign up"
-          linkTo="/signup"
-          onClick={() => {
-            console.log('clicked');
-          }}
+          footerContent={
+            tabLogin ? "Don't have an account?" : 'Already have an account?'
+          }
+          linkContent={tabLogin ? 'Sign up' : 'Log in'}
+          onClick={handleSwitchLoginTab}
         >
-          <PopupLogin />
+          {tabLogin ? <PopupLogin /> : <PopupSignup />}
         </PopupContent>
       </DialogCustomize>
     </header>

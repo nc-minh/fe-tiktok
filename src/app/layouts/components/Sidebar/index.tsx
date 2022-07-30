@@ -12,9 +12,14 @@ import { ReactComponent as LiveActiveIcon } from 'assets/icons/liveActive.svg';
 
 const cx = classNames.bind(styles);
 
-function Sidebar() {
+interface Props {
+  className?: string;
+}
+
+function Sidebar({ className = '' }: Props) {
+  const classes = cx('wrapper', { [className]: className });
   return (
-    <aside className={cx('wrapper')}>
+    <aside className={classes}>
       <Menu>
         <span>
           <MenuItem

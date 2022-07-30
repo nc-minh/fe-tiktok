@@ -1,4 +1,9 @@
 import { Dialog } from '@mui/material';
+import classNames from 'classnames/bind';
+
+import styles from './DialogCustomize.module.scss';
+
+const cx = classNames.bind(styles);
 
 export interface Props {
   open?: boolean;
@@ -14,7 +19,7 @@ function DialogCustomize({
   console.log(open);
 
   return (
-    <Dialog onClose={onClose} open={open}>
+    <Dialog classes={{ paper: cx('paper') }} onClose={onClose} open={open}>
       {children}
     </Dialog>
   );

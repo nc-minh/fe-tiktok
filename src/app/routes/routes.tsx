@@ -1,12 +1,13 @@
 //Layout
 import NoFooterLayout from 'app/layouts/NoFooterLayout';
+import FullWidthLayout from 'app/layouts/FullWidthLayout';
 
-import { Home } from 'app/pages/Home';
-import { Introduction } from 'app/pages/Introduction';
 import { PublicRoutes } from './types';
 import { routeConfig } from './routeConfig';
-import Following from 'app/pages/Following';
-import Live from 'app/pages/Live';
+import { Home } from 'app/pages/Home/Loadable';
+import { Following } from 'app/pages/Following/Loadable';
+import { Profile } from 'app/pages/Profile/Loadable';
+import { Live } from 'app/pages/Live/Loadable';
 
 //Public routes
 const publicRoutes: PublicRoutes[] = [
@@ -15,20 +16,21 @@ const publicRoutes: PublicRoutes[] = [
     component: Home,
   },
   {
-    path: '/introduction',
-    component: Introduction,
+    path: routeConfig.profile,
+    component: Profile,
+    layout: FullWidthLayout,
   },
   {
-    path: '/following',
+    path: routeConfig.following,
     component: Following,
   },
   {
-    path: '/live',
+    path: routeConfig.live,
     component: Live,
   },
   {
     path: '/no-footer',
-    component: Introduction,
+    component: Profile,
     layout: NoFooterLayout,
   },
 ];

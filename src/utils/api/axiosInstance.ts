@@ -6,7 +6,6 @@ import handleRefreshToken from './refreshToken';
 
 const axiosInstance = axios.create({
   baseURL: configs.apiEndpoint,
-  timeout: 1000,
 });
 
 axiosInstance.interceptors.request.use(
@@ -26,16 +25,16 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   function (response: any) {
+    console.log('res from instance:::', response);
+
     return response;
   },
   async function (error: any) {
     const { config, response } = error;
     const errorMessage = response?.data?.message;
+    const status = response?.data?.status;
 
-    if (errorMessage === 'Unauthorized') {
-      removeItemFromStorage('tokens');
-      window.location.replace('/login');
-    }
+    console.log('response from error(instance)', response);
 
     if (errorMessage === 'jwt expired') {
       const apiResponseData = await handleRefreshToken({
@@ -45,6 +44,12 @@ axiosInstance.interceptors.response.use(
         data: config.data,
       });
       return apiResponseData;
+    }
+
+    if (String(status).startsWith('4') || String(status).startsWith('5')) {
+      removeItemFromStorage('tokens');
+      removeItemFromStorage('userData');
+      window.location.replace('/login');
     }
 
     return Promise.reject(error);

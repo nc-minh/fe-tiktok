@@ -2,6 +2,7 @@ import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 
 import styles from './Button.module.scss';
+import { ReactComponent as SpinnerIcon } from 'assets/icons/spinner.svg';
 
 const cx = classNames.bind(styles);
 
@@ -20,6 +21,9 @@ interface Props {
   text?: boolean;
   disabled?: boolean;
   rounded?: boolean;
+  box?: boolean;
+  type?: any;
+  loading?: boolean;
 }
 
 function Button({
@@ -37,6 +41,9 @@ function Button({
   text = false,
   disabled = false,
   rounded = false,
+  box = false,
+  type = 'button',
+  loading = false,
 }: Props) {
   const _props: any = {
     onClick,
@@ -59,6 +66,7 @@ function Button({
     text,
     disabled,
     rounded,
+    box,
     [className]: className,
   });
 
@@ -83,9 +91,11 @@ function Button({
   }
 
   return (
-    <button onClick={onClick} className={classes}>
+    <button type={type} onClick={onClick} className={classes}>
       {leftIcon && <span className={cx('icon')}>{leftIcon}</span>}
-      <span className={cx('title')}>{children}</span>
+      <span className={cx('title')}>
+        {loading ? <SpinnerIcon className={cx('loading', 'size')} /> : children}
+      </span>
       {rightIcon && <span className={cx('icon')}>{rightIcon}</span>}
     </button>
   );

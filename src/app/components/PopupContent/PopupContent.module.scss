@@ -1,6 +1,6 @@
 .wrapper{
     max-height: 693px;
-    height: 80%;
+    height: 80vh;
     overflow: hidden;
     margin: auto;
     background-color: var(--white);
@@ -28,7 +28,7 @@
 
     .content{
         width: 483px;
-        height: calc(100vh - 64px);
+        height: 100%;
         padding: 48px 0px 0px;
         display: flex;
         flex-direction: column;
@@ -47,6 +47,10 @@
                 font-weight: 600;
                 cursor: pointer;
                 user-select: none;
+
+                &:hover{
+                    text-decoration: underline;
+                }
             }
         }
 
@@ -54,6 +58,8 @@
             min-height: 50px;
             flex: 1;
             overflow: auto;
+            padding: 0 50px;
+            margin-bottom: 16px;
         }
     }
 }
