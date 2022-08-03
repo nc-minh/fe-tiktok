@@ -19,8 +19,6 @@ interface RenderMenuProps {
 }
 
 const RenderMenu = ({ items }: RenderMenuProps) => {
-  console.log(items);
-
   const handleLogout = useCallback(
     (logout: any) => () => {
       if (logout) {

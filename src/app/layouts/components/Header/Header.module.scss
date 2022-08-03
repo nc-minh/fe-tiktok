@@ -71,8 +71,9 @@
 .user-avatar{
     width: 32px;
     height: 32px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 50%;
     margin-left: 12px;
     cursor: pointer;
+    border: 0.5px solid rgba(22, 24, 35, 0.12);
 }

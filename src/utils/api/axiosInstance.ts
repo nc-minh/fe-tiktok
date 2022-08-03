@@ -24,8 +24,28 @@ axiosInstance.interceptors.request.use(
 );
 
 axiosInstance.interceptors.response.use(
-  function (response: any) {
-    console.log('res from instance:::', response);
+  async function (response: any) {
+    const errorMessage = response?.data?.message;
+    const { config } = response;
+
+    if (errorMessage === 'jwt expired') {
+      const apiResponseData = await handleRefreshToken({
+        baseURL: config.baseURL,
+        url: config.url,
+        method: config.method,
+        data: config.data,
+      });
+      return apiResponseData;
+    }
+
+    if (
+      errorMessage === 'invalid signature' ||
+      errorMessage === 'You are not logged in'
+    ) {
+      removeItemFromStorage('tokens');
+      removeItemFromStorage('userData');
+      window.location.replace('/');
+    }
 
     return response;
   },
@@ -33,10 +53,13 @@ axiosInstance.interceptors.response.use(
     const { config, response } = error;
     const errorMessage = response?.data?.message;
     const status = response?.data?.status;
+    console.log('errorMessage', errorMessage);
+    console.log('res:', response);
 
-    console.log('response from error(instance)', response);
-
-    if (errorMessage === 'jwt expired') {
+    if (
+      errorMessage === 'jwt expired' ||
+      errorMessage === 'You are not logged in'
+    ) {
       const apiResponseData = await handleRefreshToken({
         baseURL: config.baseURL,
         url: config.url,
@@ -49,7 +72,7 @@ axiosInstance.interceptors.response.use(
     if (String(status).startsWith('4') || String(status).startsWith('5')) {
       removeItemFromStorage('tokens');
       removeItemFromStorage('userData');
-      window.location.replace('/login');
+      window.location.replace('/');
     }
 
     return Promise.reject(error);

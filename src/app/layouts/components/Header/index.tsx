@@ -5,6 +5,8 @@ import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { useSelector, useDispatch } from 'react-redux';
+import { reloadAvatarActions } from 'app/containers/ProfileHeaderUpload/slice';
 
 import { routeConfig } from 'app/routes/routeConfig';
 import styles from './Header.module.scss';
@@ -33,11 +35,13 @@ import PopupLogin from 'app/containers/PopupLogin';
 import PopupSignup from 'app/containers/PopupSignup';
 import { getUserData, removeItemFromStorage } from 'utils/storage';
 import { UserInfo } from 'types/User';
+import { RootState } from 'stores';
 
 const cx = classNames.bind(styles);
 
 function Header() {
   const { t } = useTranslation();
+  const dispath = useDispatch();
   const [textSearch, setTextSearch] = useState('');
   const [tooltipIsOpen, setTooltipIsOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -47,6 +51,10 @@ function Header() {
   const debouncedValue = useDebounce(textSearch, 500);
 
   const { username } = getUserData();
+
+  const reloadStatus: boolean = useSelector(
+    (state: RootState) => state.reloadAvatar.avatarStatus,
+  );
 
   const MENU_ITEMS: MenuItemType[] = [
     {
@@ -78,12 +86,13 @@ function Header() {
   ];
   const currentUser: UserInfo = useMemo(() => {
     if (getUserData()?.username) {
+      // dispath(reloadAvatarActions.reloadAvatar(false));
       return getUserData();
     } else {
       removeItemFromStorage('tokens');
       return null;
     }
-  }, []);
+  }, [reloadStatus]);
 
   const USER_MENU: MenuItemType[] = [
     {
@@ -152,8 +161,6 @@ function Header() {
       setTooltipIsOpen(false);
     }, 200);
   }, [isFetching]);
-
-  console.log('isLogin', isLogin);
 
   const handleOnCloseDialog = useCallback(() => {
     setIsLogin(false);

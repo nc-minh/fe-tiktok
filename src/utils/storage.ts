@@ -17,8 +17,16 @@ const getLanguage = () =>
 
 const getTokens = () => JSON.parse(localStorage.getItem('tokens') || '{"":""}');
 
-const getUserData = () =>
-  JSON.parse(localStorage.getItem('userData') || '{"":""}');
+const getUserData = () => {
+  const item = localStorage.getItem('userData');
+
+  try {
+    return JSON.parse(item || '{"":""}');
+  } catch (error) {
+    localStorage.removeItem('userData');
+    return '{"":""}';
+  }
+};
 // Remove items from storage
 export const removeItemFromStorage = (key: any) => localStorage.removeItem(key);
 

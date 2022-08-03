@@ -16,8 +16,6 @@ function DialogCustomize({
   open = false,
   children,
 }: Props) {
-  console.log(open);
-
   return (
     <Dialog classes={{ paper: cx('paper') }} onClose={onClose} open={open}>
       {children}

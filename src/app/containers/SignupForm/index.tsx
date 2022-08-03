@@ -58,7 +58,6 @@ function SignupForm() {
         );
       },
       onError: async (err: any) => {
-        console.log(err);
         setServerError(err);
       },
     });

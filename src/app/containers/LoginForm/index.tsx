@@ -36,8 +36,6 @@ function LoginForm() {
   const login = useLogin();
 
   const { data: GetUserInfo, isFetching } = useGetUserInfo(isEnabled);
-
-  console.log('GetUserInfo', GetUserInfo);
   useEffect(() => {
     if (GetUserInfo?.username) {
       setUserData(GetUserInfo);
@@ -52,13 +50,8 @@ function LoginForm() {
         setTokens(res?.tokens);
 
         setIsEnabled(true);
-
-        console.log('res', res);
-
-        console.log('GetUserInfo', GetUserInfo);
       },
       onError: async (err: any) => {
-        console.log(err);
         setServerError(err);
       },
     });

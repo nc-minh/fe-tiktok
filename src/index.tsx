@@ -4,13 +4,13 @@ import 'react-app-polyfill/stable';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider, ReactReduxContext } from 'react-redux';
+import { HelmetProvider } from 'react-helmet-async';
 
 // Use consistent styling
 import 'sanitize.css/sanitize.css';
 
-import { HelmetProvider } from 'react-helmet-async';
-
 import GolobalStyles from 'styles/GlobalStyles';
+import ErrorBoundary from 'utils/ErrorBoundary';
 
 // Import root app
 import { App } from 'app';
@@ -27,7 +27,9 @@ root.render(
     <React.StrictMode>
       <HelmetProvider>
         <GolobalStyles>
-          <App />
+          <ErrorBoundary>
+            <App />
+          </ErrorBoundary>
         </GolobalStyles>
       </HelmetProvider>
     </React.StrictMode>
