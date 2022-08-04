@@ -9,11 +9,11 @@ const cx = classNames.bind(styles);
 interface Props {
   to?: string;
   href?: string;
-  children?: string | JSX.Element;
+  children?: string | React.ReactNode;
   onClick?: () => void;
   className?: string;
-  leftIcon?: JSX.Element;
-  rightIcon?: JSX.Element;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
   primary?: boolean;
   outline?: boolean;
   small?: boolean;

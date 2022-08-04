@@ -80,6 +80,17 @@
                 }
             }
 
+            .fullnameWrapper{
+                display: flex;
+                align-items: center;
+
+                .checkIcon{
+                    width: 2rem;
+                    height: 2rem;
+                    margin-left: 8px;
+                    cursor: pointer;
+                }
+            }
             
         }
 

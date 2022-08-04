@@ -12,7 +12,7 @@ const cx = classNames.bind(styles);
 function FullWidthLayout({ children }: Props) {
   return (
     <div className={cx('wrapper')}>
-      <Header />
+      <Header className={cx('header')} />
       <div className={cx('container')}>
         <Sidebar className={cx('width')} />
         <div className={cx('content')}>{children}</div>

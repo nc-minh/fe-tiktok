@@ -20,7 +20,7 @@ function ProfileHeader() {
   const { data: GetUserInfoLogin, refetch: refetchInfoLogin } =
     useGetUserInfo(enabledMyself);
   useEffect(() => {
-    if (GetUserByUsername?._id === _id) {
+    if (GetUserByUsername?._id === _id && GetUserByUsername?._id) {
       setEnabledMyself(true);
     } else {
       setUser(GetUserByUsername);

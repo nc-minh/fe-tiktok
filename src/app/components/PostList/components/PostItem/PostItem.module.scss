@@ -1,0 +1,51 @@
+.wrapper{
+    width: fit-content;
+    height: fit-content;
+    margin: 8px 0;
+    cursor: pointer;
+
+    .content{
+        height: 324px;
+        width: 100%;
+        background-color: black;
+        position: relative;
+        overflow: hidden;
+
+        .video, .image, .text{
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+        }
+
+        .view{
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 67px 13px 17px;
+            background: linear-gradient(rgba(22, 24, 35, 0) 2.92%, rgba(22, 24, 35, 0.5) 98.99%);
+
+            .playIcon{
+                margin-right: 4px;
+            }
+
+            .viewCount{
+                color: var(--white);
+                font-weight: 600;
+                vertical-align: middle;
+                font-size: 16px;
+            }
+        }
+
+        .text{
+            color: var(--white);
+            padding: 12px 12px;
+            overflow-y: auto;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 11;
+            overflow: hidden;
+            height: 85%;
+        }
+    }
+}

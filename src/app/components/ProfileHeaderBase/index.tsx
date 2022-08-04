@@ -6,16 +6,22 @@ import Image from 'app/components/Image';
 import classNames from 'classnames/bind';
 import { Tooltip } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
+import { useDispatch } from 'react-redux';
 
 import styles from './ProfileHeaderBase.module.scss';
 import { ReactComponent as EditIcon } from 'assets/icons/edit.svg';
 import { ReactComponent as ShareIcon } from 'assets/icons/share.svg';
 import { ReactComponent as UnfollowIcon } from 'assets/icons/unfollow.svg';
+import { ReactComponent as CheckIcon } from 'assets/icons/check.svg';
 import { UserInfo } from 'types/User';
 import SkeletonCustomize from 'app/components/SkeletonCustomize';
 import { useFollow } from 'mutations/follow';
 import DialogCustomize from '../DialogCustomize';
 import EditProfile from 'app/containers/EditProfile';
+import { getUserData } from 'utils/storage';
+import { detectLoginActions } from './slice';
+import PostFeedTab from 'app/containers/PostFeedTab';
+import { numberFormat } from 'utils/constants';
 
 const cx = classNames.bind(styles);
 
@@ -33,11 +39,14 @@ const ButtonRender = ({
   refetch = () => {},
   handleOnpenEditPopup = () => {},
 }: ButtonRenderProps) => {
+  const dispath = useDispatch();
   const follow_id = user?._id;
+  const { _id } = getUserData();
+
   const follow = useFollow();
 
   const onFollow = useCallback(() => {
-    if (follow_id) {
+    if (follow_id && _id) {
       follow.mutate(
         { follow_id },
         {
@@ -47,6 +56,8 @@ const ButtonRender = ({
           onError: async () => {},
         },
       );
+    } else {
+      dispath(detectLoginActions.detectLogin(true));
     }
   }, [user]);
 
@@ -134,7 +145,16 @@ function ProfileHeaderBase({
           <div className={cx('infoMain')}>
             <Image className={cx('avatar')} src={user?.avatar || ''} />
             <div className={cx('nameWrapper')}>
-              <h1 className={cx('fullname')}>{user?.fullname}</h1>
+              {user?.tick ? (
+                <div className={cx('fullnameWrapper')}>
+                  <h1 className={cx('fullname')}>{user?.fullname}</h1>
+                  <Tooltip title="Verified" arrow placement="right">
+                    <CheckIcon className={cx('checkIcon')} />
+                  </Tooltip>
+                </div>
+              ) : (
+                <h1 className={cx('fullname')}>{user?.fullname}</h1>
+              )}
               <strong className={cx('username')}>{user?.username}</strong>
 
               <ButtonRender
@@ -149,15 +169,21 @@ function ProfileHeaderBase({
           </div>
           <div className={cx('countInfos')}>
             <div className={cx('countInfos__item')}>
-              <strong className={cx('count')}>{user.followings_count}</strong>
+              <strong title="Following" className={cx('count')}>
+                {numberFormat(user.followings_count)}
+              </strong>
               <span className={cx('actionName')}>Following</span>
             </div>
             <div className={cx('countInfos__item')}>
-              <strong className={cx('count')}>{user.followers_count}</strong>
+              <strong title="Followers" className={cx('count')}>
+                {numberFormat(user.followers_count)}
+              </strong>
               <span className={cx('actionName')}>Followers</span>
             </div>
             <div className={cx('countInfos__item')}>
-              <strong className={cx('count')}>{user.likes_count}</strong>
+              <strong title="Likes" className={cx('count')}>
+                {numberFormat(user.likes_count)}
+              </strong>
               <span className={cx('actionName')}>Likes</span>
             </div>
           </div>
@@ -166,7 +192,9 @@ function ProfileHeaderBase({
       ) : (
         <SkeletonCustomize profileHeader />
       )}
-      <h1>video</h1>
+
+      {user && <PostFeedTab userId={user?._id} />}
+
       <DialogCustomize open={isEditPopup} onClose={handleOnCloseEditPopup}>
         <EditProfile
           handleOnCloseEditPopup={handleOnCloseEditPopup}

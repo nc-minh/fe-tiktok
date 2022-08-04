@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface childrenData {
   code: string;
   title: string;
@@ -9,7 +11,7 @@ export interface childrenMenu {
 }
 
 export interface MenuItemType {
-  icon: JSX.Element;
+  icon: React.ReactNode;
   title: string;
   children?: childrenMenu;
   to?: string;

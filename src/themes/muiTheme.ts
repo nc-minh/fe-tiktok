@@ -10,6 +10,7 @@ const theme = createTheme({
     MuiTooltip: {
       styleOverrides: { tooltip: { fontSize: '1.6rem' } },
     },
+    MuiTab: { styleOverrides: { root: { fontSize: '1.6rem' } } },
   },
   typography: {
     fontSize: 16,

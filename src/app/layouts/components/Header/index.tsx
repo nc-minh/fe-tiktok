@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { reloadAvatarActions } from 'app/containers/ProfileHeaderUpload/slice';
+import { detectLoginActions } from 'app/components/ProfileHeaderBase/slice';
 
 import { routeConfig } from 'app/routes/routeConfig';
 import styles from './Header.module.scss';
@@ -39,9 +39,16 @@ import { RootState } from 'stores';
 
 const cx = classNames.bind(styles);
 
-function Header() {
+interface Props {
+  className?: string;
+}
+
+function Header({ className = '' }: Props) {
   const { t } = useTranslation();
   const dispath = useDispatch();
+  const classes = cx('inner', {
+    [className]: className,
+  });
   const [textSearch, setTextSearch] = useState('');
   const [tooltipIsOpen, setTooltipIsOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -171,9 +178,20 @@ function Header() {
     setTabLogin(!tabLogin);
   }, [tabLogin, setTabLogin]);
 
+  const detectLogin: any = useSelector(
+    (state: RootState) => state.detectLogin.detectLogin,
+  );
+
+  useEffect(() => {
+    if (detectLogin) {
+      setIsLogin(true);
+      dispath(detectLoginActions.detectLogin(false));
+    }
+  }, [detectLogin]);
+
   return (
     <header className={cx('wrapper')}>
-      <div className={cx('inner')}>
+      <div className={classes}>
         <Link to={routeConfig.home} className={cx('logo')}>
           <Image src={tiktokLogo} alt="tiktok logo" />
         </Link>

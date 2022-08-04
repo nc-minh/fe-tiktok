@@ -2,12 +2,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    .header{
+        width: 100%;
+    }
 }
 
 .container{
     width: 100%;
     max-width: 100%;
-    min-height: 1000px;
     display: flex;
     padding: 0 var(--default-layout-horizontal-spacer);
     margin-top: var(--default-layout-header-height);
