@@ -8,7 +8,7 @@ const cx = classNames.bind(styles);
 export interface Props {
   open?: boolean;
   onClose?: () => void;
-  children?: JSX.Element;
+  children?: React.ReactNode;
 }
 
 function DialogCustomize({

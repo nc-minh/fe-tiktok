@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { Typography, Snackbar, Alert } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
 import { useCallback, useState } from 'react';
 
@@ -15,6 +15,7 @@ import { ReactComponent as AppleIcon } from 'assets/icons/socialNetwork/apple.sv
 import { ReactComponent as InstagramIcon } from 'assets/icons/socialNetwork/instagram.svg';
 import { ReactComponent as BackIcon } from 'assets/icons/arrowLeft.svg';
 import SignupForm from 'app/containers/SignupForm';
+import SnackbarCustomize from 'app/components/SnackbarCustomize';
 
 const cx = classNames.bind(styles);
 
@@ -90,19 +91,13 @@ function PopupSignup() {
         </a>
         .
       </Typography>
-      <Snackbar
+      <SnackbarCustomize
         open={openSnackbar}
         autoHideDuration={2000}
         onClose={handleCloseSnackbar}
-      >
-        <Alert
-          onClose={handleCloseSnackbar}
-          severity="info"
-          sx={{ width: '100%', fontSize: '1.4rem' }}
-        >
-          Signup using this method is not supported!
-        </Alert>
-      </Snackbar>
+        content="Login using this method is not supported!"
+        type="info"
+      />
     </>
   );
 }

@@ -33,6 +33,25 @@
 .actions{
     display: flex;
     align-items: center;
+
+    .upload{
+        height: 36px;
+        min-width: 114px;
+        font-style: normal;
+        font-weight: 500;
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .uploadIcon{
+            margin-right: 8px;
+        }
+
+        &:hover{
+            background-color: rgba(22, 24, 35, 0.03);
+        }
+    }
 }
 
 .action-btn{

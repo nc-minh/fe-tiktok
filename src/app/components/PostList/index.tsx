@@ -25,31 +25,31 @@ function PostList({ type, userId }: Props) {
 
   if (type === 'Videos') {
     return (
-      <div className={cx('grid')}>
-        <div className={cx('row')}>
+      <div className={cx('wrapper')}>
+        <div className={cx('content')}>
           {GetPostOfUser?.post &&
             GetPostOfUser.post.map((item: ResponsePostType, index: number) => (
               <PostItem item={item} key={index} />
             ))}
-
-          {isFetching && <SkeletonCustomize postList />}
-
-          {GetPostOfUser?.post?.length === 0 && <NotContent />}
         </div>
+
+        {isFetching && <SkeletonCustomize postList />}
+
+        {GetPostOfUser?.post?.length === 0 && <NotContent />}
       </div>
     );
   }
 
   return (
-    <div className={cx('grid')}>
-      <div className={cx('row')}>
+    <div className={cx('wrapper')}>
+      <div className={cx('content')}>
         {postListLike &&
           postListLike.map((item: any, index: number) => (
             <PostItem item={item} key={index} />
           ))}
-
-        {!postListLike && <Private />}
       </div>
+
+      {!postListLike && <Private />}
     </div>
   );
 }

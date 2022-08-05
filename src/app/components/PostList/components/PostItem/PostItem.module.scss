@@ -1,20 +1,22 @@
 .wrapper{
-    width: fit-content;
-    height: fit-content;
-    margin: 8px 0;
-    cursor: pointer;
 
     .content{
-        height: 324px;
         width: 100%;
-        background-color: black;
-        position: relative;
         overflow: hidden;
 
-        .video, .image, .text{
-            height: 100%;
-            width: 100%;
-            object-fit: contain;
+        .mediaWrapper{
+            display: block;
+            position: relative;
+            height: 275px;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+
+            .video, .image, .text{
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+            }
         }
 
         .view{
@@ -45,7 +47,21 @@
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 11;
             overflow: hidden;
-            height: 85%;
+            height: 100%;
+            width: 100%;
+            color: var(--text);
+        }
+
+        .desc{
+            font-weight: 400;
+            padding: 2px 4px 0px;
+            height: 28px;
+            overflow: hidden;
+            box-sizing: content-box;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 1;
+            cursor: text;
         }
     }
 }

@@ -39,59 +39,58 @@ function PostItem({ item }: Props) {
 
   if (checkType === 'Video') {
     return (
-      <Link
-        to="/"
-        className={cx('wrapper', 'col', 'pc-l-2', 'l-3', 'm-4', 'c-6')}
-      >
+      <div className={cx('wrapper')}>
         <div className={cx('content')}>
-          <video
-            onMouseOver={onMouseOver}
-            onMouseOut={onMouseOut}
-            className={cx('video')}
-            ref={ref}
-            muted={true}
-          >
-            <source src={item.media_url} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-          <div className={cx('view')}>
-            <PlayIcon className={cx('playIcon')} />
-            <strong className={cx('viewCount')}>{item.view_count}</strong>
-          </div>
+          <Link to="/" className={cx('mediaWrapper')}>
+            <video
+              onMouseOver={onMouseOver}
+              onMouseOut={onMouseOut}
+              className={cx('video')}
+              ref={ref}
+              muted={true}
+            >
+              <source src={item.media_url} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+            <div className={cx('view')}>
+              <PlayIcon className={cx('playIcon')} />
+              <strong className={cx('viewCount')}>{item.view_count}</strong>
+            </div>
+          </Link>
+
+          <div className={cx('desc')}>{item.contents}</div>
         </div>
-      </Link>
+      </div>
     );
   }
   if (checkType === 'Image') {
     return (
-      <Link
-        to="/"
-        className={cx('wrapper', 'col', 'pc-l-2', 'l-3', 'm-4', 'c-6')}
-      >
+      <div className={cx('wrapper')}>
         <div className={cx('content')}>
-          <Image className={cx('image')} src={item.media_url} />
-          <div className={cx('view')}>
-            <PlayIcon className={cx('playIcon')} />
-            <strong className={cx('viewCount')}>{item.view_count}</strong>
-          </div>
+          <Link to="/" className={cx('mediaWrapper')}>
+            <Image className={cx('image')} src={item.media_url} />
+            <div className={cx('view')}>
+              <PlayIcon className={cx('playIcon')} />
+              <strong className={cx('viewCount')}>{item.view_count}</strong>
+            </div>
+          </Link>
         </div>
-      </Link>
+      </div>
     );
   }
 
   return (
-    <Link
-      to="/"
-      className={cx('wrapper', 'col', 'pc-l-2', 'l-3', 'm-4', 'c-6')}
-    >
+    <div className={cx('wrapper')}>
       <div className={cx('content')}>
-        <p className={cx('text')}>{item.contents}</p>
-        <div className={cx('view')}>
-          <PlayIcon className={cx('playIcon')} />
-          <strong className={cx('viewCount')}>{item.view_count}</strong>
-        </div>
+        <Link to="/" className={cx('mediaWrapper')}>
+          <p className={cx('text')}>{item.contents}</p>
+          <div className={cx('view')}>
+            <PlayIcon className={cx('playIcon')} />
+            <strong className={cx('viewCount')}>{item.view_count}</strong>
+          </div>
+        </Link>
       </div>
-    </Link>
+    </div>
   );
 }
 

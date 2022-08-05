@@ -23,9 +23,24 @@ export default function PostFeedTab({ userId }: Props) {
 
   return (
     <div className={cx('wrapper')}>
-      <Tabs value={value} onChange={handleChange} aria-label="user tabs">
-        <Tab label="Videos" value="Videos" />
-        <Tab label="Liked" value="Liked" />
+      <Tabs
+        classes={{ indicator: cx('indicator') }}
+        value={value}
+        onChange={handleChange}
+        aria-label="user tabs"
+      >
+        <Tab
+          classes={{ selected: cx('selected') }}
+          className={cx('tab')}
+          label="Videos"
+          value="Videos"
+        />
+        <Tab
+          classes={{ selected: cx('selected') }}
+          className={cx('tab')}
+          label="Liked"
+          value="Liked"
+        />
       </Tabs>
       <PostList userId={userId} type={value} />
     </div>

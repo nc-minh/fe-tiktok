@@ -1,6 +1,9 @@
 .wrapper{
     width: 100%;
     min-height: 490px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
     .content{
         width: 100%;

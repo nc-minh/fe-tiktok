@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import classNames from 'classnames/bind';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,7 +16,6 @@ import Menu from 'app/containers/Menu';
 import Image from 'app/components/Image';
 import { ReactComponent as InboxIcon } from 'assets/icons/inbox.svg';
 import { ReactComponent as MessageIcon } from 'assets/icons/message.svg';
-import { ReactComponent as UploadIcon } from 'assets/icons/upload.svg';
 import { ReactComponent as LanguageIcon } from 'assets/icons/english.svg';
 import { ReactComponent as QuestionIcon } from 'assets/icons/question.svg';
 import { ReactComponent as KeyboardIcon } from 'assets/icons/keyboard.svg';
@@ -25,6 +24,7 @@ import { ReactComponent as GetCoinIcon } from 'assets/icons/getCoin.svg';
 import { ReactComponent as SettingIcon } from 'assets/icons/setting.svg';
 import { ReactComponent as LogoutIcon } from 'assets/icons/logout.svg';
 import { ReactComponent as MoreIcon } from 'assets/icons/more.svg';
+import { ReactComponent as PlusIcon } from 'assets/icons/plus.svg';
 import SearchBar from 'app/components/SearchBar';
 import { MenuItemType } from 'types/Menu';
 import { useSearchUsers } from 'queries/users';
@@ -46,6 +46,7 @@ interface Props {
 function Header({ className = '' }: Props) {
   const { t } = useTranslation();
   const dispath = useDispatch();
+  const navigate = useNavigate();
   const classes = cx('inner', {
     [className]: className,
   });
@@ -57,7 +58,7 @@ function Header({ className = '' }: Props) {
 
   const debouncedValue = useDebounce(textSearch, 500);
 
-  const { username } = getUserData();
+  const { username, _id } = getUserData();
 
   const reloadStatus: boolean = useSelector(
     (state: RootState) => state.reloadAvatar.avatarStatus,
@@ -189,6 +190,17 @@ function Header({ className = '' }: Props) {
     }
   }, [detectLogin]);
 
+  const onUpload = useCallback(() => {
+    if (_id) {
+      console.log('upload ne``');
+
+      navigate('/upload');
+    } else {
+      console.log('hong duoc upload ne`');
+      dispath(detectLoginActions.detectLogin(true));
+    }
+  }, [_id, detectLogin]);
+
   return (
     <header className={cx('wrapper')}>
       <div className={classes}>
@@ -212,11 +224,10 @@ function Header({ className = '' }: Props) {
         <div className={cx('actions')}>
           {currentUser ? (
             <>
-              <Tooltip arrow title="Upload video" placement="bottom">
-                <span className={cx('action-btn')}>
-                  <UploadIcon />
-                </span>
-              </Tooltip>
+              <Button onClick={onUpload} box className={cx('upload')}>
+                <PlusIcon className={cx('uploadIcon')} />
+                Upload
+              </Button>
               <Tooltip arrow title="Message" placement="bottom">
                 <span className={cx('action-btn')}>
                   <MessageIcon />
@@ -231,7 +242,10 @@ function Header({ className = '' }: Props) {
             </>
           ) : (
             <>
-              <Button text>Register</Button>
+              <Button onClick={onUpload} box className={cx('upload')}>
+                <PlusIcon className={cx('uploadIcon')} />
+                Upload
+              </Button>
               <Button onClick={() => setIsLogin(true)} primary>
                 Login
               </Button>

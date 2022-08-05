@@ -147,15 +147,15 @@ function ProfileHeaderBase({
             <div className={cx('nameWrapper')}>
               {user?.tick ? (
                 <div className={cx('fullnameWrapper')}>
-                  <h1 className={cx('fullname')}>{user?.fullname}</h1>
+                  <h1 className={cx('fullname')}>{user?.username}</h1>
                   <Tooltip title="Verified" arrow placement="right">
                     <CheckIcon className={cx('checkIcon')} />
                   </Tooltip>
                 </div>
               ) : (
-                <h1 className={cx('fullname')}>{user?.fullname}</h1>
+                <h1 className={cx('fullname')}>{user?.username}</h1>
               )}
-              <strong className={cx('username')}>{user?.username}</strong>
+              <strong className={cx('username')}>{user?.fullname}</strong>
 
               <ButtonRender
                 user={user}

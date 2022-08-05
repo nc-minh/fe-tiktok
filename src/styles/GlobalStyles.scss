@@ -1,6 +1,5 @@
-@import 'normalize.css'; 
-@import './Grid.scss';
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400;500;600;700&display=swap');
+@import "normalize.css";
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@200;300;400;500;600;700&display=swap");
 
 :root {
     --primary: #fe2c55;
@@ -8,7 +7,7 @@
     --white: #fff;
     --text-color: #161823;
 
-    --font-family: 'IBM Plex Sans', sans-serif;
+    --font-family: "IBM Plex Sans", sans-serif;
 
     //DefaultLayout
     --default-layout-header-height: 60px;
@@ -34,7 +33,7 @@ body {
     color: var(--text-color);
     overflow-y: overlay;
     text-rendering: optimizeSpeed;
-    min-height: 100vh
+    min-height: 100vh;
 }
 
 // Scrollbar css
@@ -53,7 +52,9 @@ html *::-webkit-scrollbar-track {
     background-color: rgba(0, 0, 0, 0);
 }
 
-button, input, [tabindex] {
+button,
+input,
+[tabindex] {
     outline: none;
     border: none;
 }
@@ -63,15 +64,69 @@ a {
     text-decoration: none;
 }
 
-.loading{
-    animation: spinner .8s linear infinite;
+.loading {
+    animation: spinner 0.8s linear infinite;
+}
+
+.loading-2 {
+    animation: spinner 2s linear infinite;
 }
 
 @keyframes spinner {
-    from{
+    from {
         transform: rotate(0);
     }
-    to{
+    to {
         transform: rotate(360deg);
     }
+}
+
+@keyframes musicSymbols1 {
+    0% {
+        opacity: 0;
+        transform: translate3d(0.5em, calc(0.2em), 0px) rotate(calc(20deg)) scale(0.6);
+    }
+    20% {
+        opacity: 0.6;
+    }
+    40% {
+        opacity: 1;
+        transform: translate3d(0.1em, calc(-0.2em), 0px) rotate(calc(60deg)) scale(1);
+    }
+    60% {
+        transform: translate3d(-0.1em, calc(-0.4em), 0px) rotate(calc(80deg));
+    }
+    80% {
+        opacity: 0.8;
+        transform: translate3d(-0.2em, -0.6em, 0px) rotate(100deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(-0.3em, calc(-0.8em), 0px) rotate(calc(120deg));
+    }
+}
+
+.musicSymbolsIcon1 {
+    animation: 2s linear 0s infinite normal none running musicSymbols1;
+}
+
+.musicSymbolsIcon2 {
+    animation: 2s linear 0s infinite normal none running musicSymbols1;
+}
+
+.musicSymbolsIcon3 {
+    animation: 2s linear 0s infinite normal none running musicSymbols1;
+}
+
+@keyframes slider {
+    0% {
+        transform: translate3d(0px, 0px, 0px);
+    }
+    100% {
+        transform: translate3d(-50%, 0px, 0px);
+    }
+}
+
+.sliderSoundText{
+    animation: 10s linear 0s infinite normal none running slider;
 }
