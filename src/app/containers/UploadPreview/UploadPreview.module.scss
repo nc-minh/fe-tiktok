@@ -1,0 +1,227 @@
+.wrapper {
+    width: 100%;
+    height: 100%;
+
+    .container {
+        width: 284px;
+        height: 556px;
+
+        .content {
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--black);
+            border-radius: 24px;
+            overflow: hidden;
+            padding: 24px 12px;
+            background-color: var(--black);
+            position: relative;
+
+            .video {
+                width: 100%;
+                height: 100%;
+                z-index: 1;
+                object-fit: cover;
+            }
+
+            .header {
+                position: absolute;
+                z-index: 2;
+                top: 40px;
+                left: 0;
+                right: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                p {
+                    font-size: 1.2rem;
+                    line-height: 17px;
+                    font-weight: 600;
+                    color: rgba(255, 255, 255, 0.75);
+
+                    + p {
+                        margin-left: 20px;
+                    }
+                }
+
+                p:last-child {
+                    color: var(--white);
+                }
+            }
+
+            .actions {
+                position: absolute;
+                right: 24px;
+                bottom: 130px;
+                opacity: 0.6;
+                z-index: 2;
+            }
+
+            .avatar {
+                position: absolute;
+                bottom: 275px;
+                right: 20px;
+                z-index: 2;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                opacity: 0.6;
+                border: 0.5px solid rgba(22, 24, 35, 0.12);
+            }
+
+            .music {
+                width: 40px;
+                height: 40px;
+                position: absolute;
+                bottom: 74px;
+                right: 20px;
+                z-index: 5;
+                opacity: 0.6;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: conic-gradient(
+                    from 90deg at 50% 50%,
+                    rgb(57, 57, 57) -40.11deg,
+                    rgb(21, 21, 21) 47.27deg,
+                    rgb(57, 57, 57) 143.02deg,
+                    rgb(22, 22, 22) 227.49deg,
+                    rgb(57, 57, 57) 319.89deg,
+                    rgb(21, 21, 21) 407.27deg
+                );
+
+                .avatarMusic {
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                }
+            }
+
+            .musicSymbols {
+                position: absolute;
+                bottom: 125px;
+                right: 64px;
+                z-index: 5;
+
+                .icon1 {
+                    position: absolute;
+                    top: calc(20px);
+                    left: calc(-20px);
+                    display: block;
+                    width: calc(15px);
+                    height: calc(15px);
+                }
+
+                .icon2 {
+                    position: absolute;
+                    top: calc(8px);
+                    left: calc(-24px);
+                    display: block;
+                    width: calc(12px);
+                    height: calc(12px);
+                }
+
+                .icon3 {
+                    position: absolute;
+                    top: calc(-4px);
+                    left: calc(-28px);
+                    display: block;
+                    width: calc(9px);
+                    height: calc(9px);
+                }
+            }
+
+            .metaData {
+                position: absolute;
+                bottom: 70px;
+                left: 25px;
+                z-index: 2;
+                opacity: 0.6;
+                color: white;
+                font-size: 1.2rem;
+                line-height: 17px;
+
+                .metaData-username {
+                }
+
+                .metaData-caption {
+                }
+
+                .metaData-sound {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    .metaData-icon {
+                        margin-right: 7px;
+                    }
+
+                    .metaData-soundTextWrapper {
+                        overflow: hidden;
+                        max-width: 150px;
+                        font-size: 1.2rem;
+                        line-height: 17px;
+                    }
+
+                    .metaData-soundText {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+
+    .changeVideoBtn{
+        margin-top: 18px;
+        background: rgb(255, 255, 255);
+        border: 1px solid rgba(22, 24, 35, 0.12);
+        box-sizing: border-box;
+        border-radius: 12px;
+        padding: 13px;
+        display: flex;
+        -webkit-box-pack: justify;
+        justify-content: space-between;
+        -webkit-box-align: center;
+        align-items: center;
+
+        .changeVideoRight{
+            font-size: 1.2rem;
+            line-height: 17px;
+            font-weight: 400;
+            color: rgba(22, 24, 35, 0.75);
+            display: flex;
+            -webkit-box-pack: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            align-items: center;
+            max-width: 150px;
+
+            .changeVideoIcon{
+                margin-right: 4px;
+            }
+
+            .changeVideoFilename{
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                overflow: hidden;
+                width: 120px;
+            }
+        }
+
+        .changeVideoText{
+            font-size: 1.2rem;
+            line-height: 17px;
+            font-weight: 600;
+            color: rgb(22, 24, 35);
+            cursor: pointer;
+
+            &:hover{
+                text-decoration: underline;
+            }
+        }
+    }
+}

@@ -1,0 +1,54 @@
+.wrapper {
+    background: rgb(255, 255, 255);
+    border-radius: 9px;
+    width: 310px;
+    z-index: 1000;
+    overflow: hidden;
+
+    .content {
+        height: 100%;
+        width: 100%;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+
+        .titleWrapper {
+            padding: 32px 32px 24px;
+
+            .title {
+                font-weight: 600;
+                font-size: 2rem;
+                line-height: 24px;
+                color: rgb(22, 24, 35);
+                word-break: break-word;
+                text-align: center;
+            }
+
+            .desc {
+                margin-top: 8px;
+                font-weight: 400;
+                font-size: 1.5rem;
+                line-height: 18px;
+                word-break: break-word;
+                text-align: center;
+                color: rgba(22, 24, 35, 0.5);
+            }
+        }
+
+        .replace,
+        .editing {
+            padding: 16.5px 16px 17px;
+            text-align: center;
+            word-break: break-word;
+            cursor: pointer;
+            border-top: 1px solid rgba(22, 24, 35, 0.12);
+            font-size: 1.5rem;
+            line-height: 18px;
+        }
+
+        .replace {
+            font-weight: 600;
+            color: var(--primary);
+        }
+    }
+}

@@ -2,5 +2,7 @@
     "hello": "Hello everyone",
     "home": "Trang chủ",
     "introduction": "Giới thiệu",
-    "NoFooterLayout": "Không chân trang"
+    "NoFooterLayout": "Không chân trang",
+
+    "placeHolder": "Tìm kiếm tài khoản và video"
 }

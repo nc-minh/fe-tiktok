@@ -29,7 +29,7 @@ async function handleRefreshToken({
     window.location.replace('/login');
   } else if (response.data) {
     const tokens = response.data?.data;
-    setTokens(tokens);
+    setTokens(tokens.tokens);
     const { accessToken } = getTokens();
 
     return axiosInstance.request({

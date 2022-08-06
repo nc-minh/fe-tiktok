@@ -1,0 +1,131 @@
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+
+    .infoMain{
+        display: flex;
+        max-width: 624px;
+
+        .avatar{
+            border-radius: 50%;
+            width: 116px;
+            height: 116px;
+            border: 1px solid #ccc;
+            object-fit: contain;
+        }
+
+        .nameWrapper{
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            flex: 1;
+
+            .fullname{
+                font-size: 3.2rem;
+                line-height: 3.8rem;
+                font-weight: 700;
+            }
+
+            .username{
+                font-size: 1.8rem;
+                font-weight: 600;
+                line-height: 2.5rem;
+            }
+
+            .btnEdit{
+                height: 36px;
+                min-height: 36px;
+                width: fit-content;
+                font-size: 1.6rem;
+                padding: 0 16px;
+
+                > span{
+                    position: unset;
+                }
+
+                &:hover{
+                    border-color: rgb(208, 209, 211);
+                    background-color: rgb(248, 248, 248);
+                }
+            }
+
+            .follow{
+                max-width: 208px;
+                height: 36px;
+            }
+
+            .messageWrapper{
+                display: flex;
+
+                .unfollowIcon{
+                    width: 36px;
+                    height: 36px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border: 1px solid rgba(22, 24, 35, 0.12);
+                    cursor: pointer;
+                    border-radius: 4px;
+
+                    &:hover{
+                        background-color: rgba(22, 24, 35, 0.03);
+                    }
+                }
+
+                .message{
+                    min-width: 164px;
+                    height: 36px;
+                    margin-right: 8px;
+                }
+            }
+
+            .fullnameWrapper{
+                display: flex;
+                align-items: center;
+
+                .checkIcon{
+                    width: 2rem;
+                    height: 2rem;
+                    margin-left: 8px;
+                    cursor: pointer;
+                }
+            }
+            
+        }
+
+        .shareIcon{
+            cursor: pointer;
+        }
+    }
+
+    .countInfos{
+        display: flex;
+        margin-top: 22px;
+
+        .countInfos__item{
+            height: 25px;
+            margin-right: 20px;
+
+            .actionName{
+                margin-left: 6px;
+                font-weight: 400;
+                font-size: 1.6rem;
+            }
+
+            .count{
+                line-height: 2.5rem;
+                font-size: 1.8rem;
+            }
+        }
+    }
+
+    .bio{
+        font-size: 1.6rem;
+        font-weight: 400;
+        white-space: pre-line;
+        line-height: 22px;text-align: left;
+        margin-top: 10px;
+    }
+}

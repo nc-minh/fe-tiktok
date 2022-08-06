@@ -1,0 +1,23 @@
+.profileHeader{
+    display: flex;
+
+    .right{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-left: 20px;
+    }
+}
+
+.postList{
+    width: 100%;
+
+    .wrapper{
+        margin: 8px 0;
+
+        .item{
+            width: 100%;
+            height: 324px;
+        }
+    }
+}
