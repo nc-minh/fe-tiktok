@@ -7,11 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Upload.module.scss';
 import { ReactComponent as UploadIcon } from 'assets/icons/upload.svg';
 import Button from 'app/components/Button';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import UploadPreview from 'app/containers/UploadPreview';
 import { MB_50 } from 'utils/constants';
 import SnackbarCustomize from 'app/components/SnackbarCustomize';
 import { getUserData } from 'utils/storage';
+import DialogCustomize from 'app/components/DialogCustomize';
+import PopupBackorContinue from 'app/components/PopupBackorContinue';
 
 const cx = classNames.bind(styles);
 
@@ -31,6 +33,8 @@ export function Upload() {
   const [mediaFile, setMediaFile] = useState();
   const [sizeLimitNotify, setSizeLimitNotify] = useState(false);
   const [caption, setCaption] = useState('');
+  const inputRef = useRef<any>(null);
+  const [isBackorDiscard, setIsBackorDiscard] = useState(false);
 
   const navigate = useNavigate();
 
@@ -47,6 +51,7 @@ export function Upload() {
       const files = selectorFiles.target.files;
       if (files[0]?.size > MB_50) {
         setSizeLimitNotify(true);
+        selectorFiles.target.value = null;
         return;
       }
       if (files) setMediaFile(files[0]);
@@ -64,12 +69,30 @@ export function Upload() {
       if (mediaFile) formData.append('media_url', mediaFile);
       if (contents) formData.append('contents', contents);
     },
-    [mediaFile],
+    [mediaFile, setMediaFile],
   );
 
   const handleCloseSnackbar = useCallback(() => {
     setSizeLimitNotify(false);
   }, [sizeLimitNotify, setSizeLimitNotify]);
+
+  const onChangeVideo = useCallback(() => {
+    setMediaFile(undefined);
+    inputRef.current.value = null;
+  }, [mediaFile, setMediaFile]);
+
+  const handleOnOpenDialog = useCallback(() => {
+    setIsBackorDiscard(true);
+  }, [isBackorDiscard, setIsBackorDiscard]);
+
+  const handleOnCloseDialog = useCallback(() => {
+    setIsBackorDiscard(false);
+  }, [isBackorDiscard, setIsBackorDiscard]);
+
+  const onDiscard = useCallback(() => {
+    setIsBackorDiscard(false);
+    navigate('/');
+  }, [isBackorDiscard, setIsBackorDiscard]);
   return (
     <>
       <div className={cx('wrapper')}>
@@ -81,7 +104,7 @@ export function Upload() {
             </header>
             <main className={cx('upload')}>
               <input
-                // onChange={e => chooseMediaFile(e)}
+                ref={inputRef}
                 onChange={chooseMediaFile}
                 className={cx('input')}
                 id="uploadInput"
@@ -89,7 +112,11 @@ export function Upload() {
               />
               <div className={cx('show')}>
                 {mediaFile ? (
-                  <UploadPreview caption={caption} file={mediaFile} />
+                  <UploadPreview
+                    caption={caption}
+                    file={mediaFile}
+                    onChangeVideo={onChangeVideo}
+                  />
                 ) : (
                   <div className={cx('chooseMediaWrapper')}>
                     <label
@@ -170,6 +197,7 @@ export function Upload() {
                           className={cx('btn', 'discard')}
                           box
                           type="text"
+                          onClick={handleOnOpenDialog}
                         >
                           Discard
                         </Button>
@@ -194,6 +222,16 @@ export function Upload() {
         vertical="top"
         content="Maximum 50MB!"
       />
+      <DialogCustomize open={isBackorDiscard} onClose={handleOnCloseDialog}>
+        <PopupBackorContinue
+          onDiscard={onDiscard}
+          onClosePopup={handleOnCloseDialog}
+          title="Discard this post?"
+          desc="The video and all edits will be discarded."
+          okBtn="Discard"
+          cancelBtn="Continue editing"
+        />
+      </DialogCustomize>
     </>
   );
 }

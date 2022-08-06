@@ -12,14 +12,16 @@ import { ReactComponent as MusicIcon } from 'assets/icons/musicIcon.svg';
 import { ReactComponent as CircleCheckIcon } from 'assets/icons/circleCheckIcon.svg';
 import { getUserData } from 'utils/storage';
 import DialogCustomize from 'app/components/DialogCustomize';
+import PopupBackorContinue from '../../components/PopupBackorContinue';
 
 const cx = classNames.bind(styles);
 
 interface Props {
   file?: File;
   caption?: string;
+  onChangeVideo?: () => void;
 }
-function UploadPreview({ file, caption }: Props) {
+function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
   const { avatar, username } = getUserData();
   const [isChangeMedia, setIsChangeMedia] = useState(false);
   const fileName = useMemo(() => {
@@ -110,7 +112,14 @@ function UploadPreview({ file, caption }: Props) {
 
         {/* dialog back to choose media */}
         <DialogCustomize open={isChangeMedia} onClose={handleOnCloseDialog}>
-          OKOK
+          <PopupBackorContinue
+            onDiscard={onChangeVideo}
+            onClosePopup={handleOnCloseDialog}
+            title="Replace this video?"
+            desc="Caption and video settings will still be saved."
+            okBtn="Replace"
+            cancelBtn="Continue editing"
+          />
         </DialogCustomize>
       </div>
     );
@@ -180,7 +189,14 @@ function UploadPreview({ file, caption }: Props) {
 
         {/* dialog back to choose media */}
         <DialogCustomize open={isChangeMedia} onClose={handleOnCloseDialog}>
-          OKOK
+          <PopupBackorContinue
+            onDiscard={onChangeVideo}
+            onClosePopup={handleOnCloseDialog}
+            title="Replace this video?"
+            desc="Caption and video settings will still be saved."
+            okBtn="Replace"
+            cancelBtn="Continue editing"
+          />
         </DialogCustomize>
       </div>
     );
