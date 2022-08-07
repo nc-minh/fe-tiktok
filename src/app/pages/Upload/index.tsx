@@ -14,6 +14,7 @@ import SnackbarCustomize from 'app/components/SnackbarCustomize';
 import { getUserData } from 'utils/storage';
 import DialogCustomize from 'app/components/DialogCustomize';
 import PopupBackorContinue from 'app/components/PopupBackorContinue';
+import { useCreatePost } from 'mutations/post';
 
 const cx = classNames.bind(styles);
 
@@ -35,6 +36,7 @@ export function Upload() {
   const [caption, setCaption] = useState('');
   const inputRef = useRef<any>(null);
   const [isBackorDiscard, setIsBackorDiscard] = useState(false);
+  const createPost = useCreatePost();
 
   const navigate = useNavigate();
 
@@ -42,7 +44,7 @@ export function Upload() {
 
   useEffect(() => {
     if (!_id) {
-      navigate('/');
+      window.location.replace('/');
     }
   }, [_id]);
 
@@ -62,12 +64,20 @@ export function Upload() {
   const handlePost = useCallback(
     (values: ContentsValuesTypes) => {
       const contents = values.contents;
-      console.log(contents);
-      console.log(mediaFile);
+      console.log('contents:', contents);
 
       const formData = new FormData();
       if (mediaFile) formData.append('media_url', mediaFile);
       if (contents) formData.append('contents', contents);
+
+      createPost.mutate(formData, {
+        onSuccess(data) {
+          window.location.replace('/');
+        },
+        onError(error) {
+          alert(error);
+        },
+      });
     },
     [mediaFile, setMediaFile],
   );
@@ -188,8 +198,12 @@ export function Upload() {
                             onBlur={handleBlur}
                             value={values.contents}
                             id="contents"
+                            placeholder="caption"
                           />
                         </div>
+                        {errors.contents && touched.contents && (
+                          <p className={cx('error')}>{errors.contents}</p>
+                        )}
                       </div>
 
                       <div className={cx('btnWrapper')}>
@@ -201,7 +215,13 @@ export function Upload() {
                         >
                           Discard
                         </Button>
-                        <Button className={cx('btn')} primary type="submit">
+                        <Button
+                          className={cx('btn')}
+                          primary
+                          type="submit"
+                          disabled={caption === '' || createPost.isLoading}
+                          loading={createPost.isLoading}
+                        >
                           Post
                         </Button>
                       </div>

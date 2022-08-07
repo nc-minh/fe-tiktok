@@ -29,17 +29,12 @@ export default function SkeletonCustomize({ profileHeader, postList }: Props) {
 
   if (postList) {
     return (
-      <div className={cx('grid')}>
-        <div className={cx('postList', 'row')}>
-          {POST_LIST_LENGTH.map((item, index) => (
-            <div
-              key={index + item}
-              className={cx('wrapper', 'col', 'pc-l-2', 'l-3', 'm-4', 'c-6')}
-            >
-              <Skeleton className={cx('item')} variant="rectangular" />
-            </div>
-          ))}
-        </div>
+      <div className={cx('postList')}>
+        {POST_LIST_LENGTH.map((item, index) => (
+          <div key={index + item} className={cx('wrapper')}>
+            <Skeleton className={cx('item')} variant="rectangular" />
+          </div>
+        ))}
       </div>
     );
   }

@@ -1,5 +1,9 @@
 import { AxiosResponse } from 'axios';
-import { GetPostPayload, ResponseGetPostType } from 'types/Post';
+import {
+  CreatePostPayload,
+  GetPostPayload,
+  ResponseGetPostType,
+} from 'types/Post';
 
 import axiosInstance from 'utils/api/axiosInstance';
 import { PAGE_SIZE } from 'utils/constants';
@@ -17,5 +21,12 @@ export const getPostOfUser = async (
       },
     },
   );
+  return response.data?.data;
+};
+
+export const createPost = async (
+  payload: FormData,
+): Promise<CreatePostPayload> => {
+  const response: AxiosResponse = await axiosInstance.post(`/posts`, payload);
   return response.data?.data;
 };

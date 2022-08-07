@@ -18,3 +18,8 @@ export interface ResponseGetPostType {
   post?: ResponsePostType[];
   user?: UserInfo[];
 }
+
+export interface CreatePostPayload {
+  contents?: string;
+  media_url?: string;
+}
