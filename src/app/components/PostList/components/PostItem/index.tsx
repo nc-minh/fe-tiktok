@@ -74,6 +74,8 @@ function PostItem({ item }: Props) {
               <strong className={cx('viewCount')}>{item.view_count}</strong>
             </div>
           </Link>
+
+          <div className={cx('desc')}>{item.contents}</div>
         </div>
       </div>
     );
