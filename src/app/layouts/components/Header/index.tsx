@@ -60,10 +60,6 @@ function Header({ className = '' }: Props) {
 
   const { username, _id } = getUserData();
 
-  const reloadStatus: boolean = useSelector(
-    (state: RootState) => state.reloadAvatar.avatarStatus,
-  );
-
   const MENU_ITEMS: MenuItemType[] = [
     {
       icon: <LanguageIcon />,
@@ -100,7 +96,7 @@ function Header({ className = '' }: Props) {
       removeItemFromStorage('tokens');
       return null;
     }
-  }, [reloadStatus]);
+  }, []);
 
   const USER_MENU: MenuItemType[] = [
     {

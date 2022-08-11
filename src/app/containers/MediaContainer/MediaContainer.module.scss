@@ -1,0 +1,22 @@
+.wrapper{
+    height: 100%;
+    width: 100%;
+
+    .media{
+        height: 100%;
+        width: 100%;
+        object-fit: contain;
+        outline: none;
+    }
+
+    .contents{
+        color: var(--white);
+        height: 100%;
+        padding: 24px;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 2.6rem;
+    }
+}

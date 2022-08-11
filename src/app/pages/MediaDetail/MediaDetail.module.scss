@@ -1,0 +1,71 @@
+.wrapper{
+    height: 100%;
+    width: 100%;
+    display: flex;
+
+    .videoContainer{
+        flex: 1 1 896px;
+        background: rgb(0, 0, 0);
+        position: relative;
+        overflow: hidden;
+        padding: 0px 80px;
+        height: 100%;
+        position: relative;
+
+        .videoControls{
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            right: 0;
+
+            .controlsBtn{
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                cursor: pointer;
+                display: flex;
+                -webkit-box-pack: center;
+                justify-content: center;
+                -webkit-box-align: center;
+                align-items: center;
+                background: rgba(255, 255, 255, 0.12);
+                transform: rotate(-90deg);
+
+                &:hover{
+                    opacity: 0.7;
+                }
+            }
+
+            .down{
+               transform: rotate(90deg);
+               margin-top: 16px;
+            }
+        }
+
+        .closeMedia{
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+
+            .closeIcon{
+                fill: aliceblue;
+                width: 100%;
+                height: 100%;
+            }
+        }
+    }
+
+    .contentContainer{
+        flex: 0 0 544px;
+        height: 100%;
+        width: 544px;
+        display: flex;
+        flex-direction: column;
+        padding: 32px 0px 0px;
+    }
+}

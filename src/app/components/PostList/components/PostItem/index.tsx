@@ -5,13 +5,16 @@ import { Link } from 'react-router-dom';
 import styles from './PostItem.module.scss';
 import { ReactComponent as PlayIcon } from 'assets/icons/play.svg';
 import Image from 'app/components/Image';
+import { ResponsePostType } from 'types/Post';
+import { useParams } from 'react-router-dom';
 
 const cx = classNames.bind(styles);
 
 interface Props {
-  item?: any;
+  item: ResponsePostType;
 }
 function PostItem({ item }: Props) {
+  const { username = '' } = useParams();
   const [autoplay, setAutoplay] = useState(false);
   const ref = useRef<any>(null);
   const checkType: string = useMemo(() => {
@@ -41,7 +44,10 @@ function PostItem({ item }: Props) {
     return (
       <div className={cx('wrapper')}>
         <div className={cx('content')}>
-          <Link to="/" className={cx('mediaWrapper')}>
+          <Link
+            to={`/@${username}/video/${item._id}`}
+            className={cx('mediaWrapper')}
+          >
             <video
               onMouseOver={onMouseOver}
               onMouseOut={onMouseOut}
@@ -67,7 +73,10 @@ function PostItem({ item }: Props) {
     return (
       <div className={cx('wrapper')}>
         <div className={cx('content')}>
-          <Link to="/" className={cx('mediaWrapper')}>
+          <Link
+            to={`/@${username}/video/${item._id}`}
+            className={cx('mediaWrapper')}
+          >
             <Image className={cx('image')} src={item.media_url} />
             <div className={cx('view')}>
               <PlayIcon className={cx('playIcon')} />
@@ -84,7 +93,10 @@ function PostItem({ item }: Props) {
   return (
     <div className={cx('wrapper')}>
       <div className={cx('content')}>
-        <Link to="/" className={cx('mediaWrapper')}>
+        <Link
+          to={`/@${username}/video/${item._id}`}
+          className={cx('mediaWrapper')}
+        >
           <p className={cx('text')}>{item.contents}</p>
           <div className={cx('view')}>
             <PlayIcon className={cx('playIcon')} />
