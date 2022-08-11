@@ -11,8 +11,8 @@ export interface UserInfo {
   likes_count: number;
   website_url: string;
   social_network: [];
-  created_at: Date;
-  updated_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
 export interface UpdateUserType {

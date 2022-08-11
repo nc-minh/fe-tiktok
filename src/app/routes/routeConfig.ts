@@ -5,4 +5,5 @@ export const routeConfig = {
   upload: '/upload',
   search: '/search',
   live: '/live',
+  media_detail: '/@:username/video/:mediaId',
 };
