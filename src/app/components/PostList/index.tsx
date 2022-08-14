@@ -31,7 +31,7 @@ function PostList({ type, userId }: Props) {
     if (GetPostOfUser) {
       dispath(
         mediaOfLayoutFullActions.assignMedia({
-          mediaOfLayoutFull: GetPostOfUser,
+          data: GetPostOfUser,
           mode: 'profile',
           next: false,
         }),

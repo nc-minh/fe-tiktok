@@ -14,68 +14,86 @@ import styles from './MediaDetail.module.scss';
 import { RootState } from 'stores';
 import MediaContainer from 'app/containers/MediaContainer';
 import MediaDetailContent from 'app/containers/MediaDetailContent';
+import { ResponsePostType } from 'types/Post';
+import { UserInfo } from 'types/User';
 
 const cx = classNames.bind(styles);
+
+interface MediaOfLayoutFullType {
+  data: {
+    post: ResponsePostType[];
+    user: UserInfo;
+  };
+  mode?: string;
+  next?: boolean;
+}
 
 export function MediaDetail() {
   const navigate = useNavigate();
   const { username, mediaId } = useParams();
 
-  const mediaOfLayoutFull: any = useSelector(
+  const mediaOfLayoutFull: MediaOfLayoutFullType = useSelector(
     (state: RootState) => state.mediaOfLayoutFull.mediaOfLayoutFull,
   );
+  console.log('mediaOfLayoutFull', mediaOfLayoutFull);
 
-  const [currentMedia, setCurrentMedia] = useState<any>(() => {
-    let i = 0;
-    mediaOfLayoutFull?.post &&
-      mediaOfLayoutFull?.post.forEach((item: any, index: number) => {
+  const [posts, setPosts] = useState<ResponsePostType[]>([]);
+  const [userOfPost, setUserOfPost] = useState<UserInfo>();
+  const [currentMedia, setCurrentMedia] = useState<any>();
+
+  useEffect(() => {
+    if (mediaOfLayoutFull?.data?.post.length > 0) {
+      setPosts(mediaOfLayoutFull?.data?.post);
+    }
+
+    if (mediaOfLayoutFull.mode === 'profile') {
+      setUserOfPost(mediaOfLayoutFull?.data?.user);
+    }
+  }, [mediaOfLayoutFull]);
+
+  useEffect(() => {
+    if (posts && userOfPost && mediaOfLayoutFull.mode === 'profile') {
+      let i = 0;
+      posts.forEach((item: any, index: number) => {
         if (item._id === mediaId) {
           i = index;
           return;
         }
       });
-    return {
-      index: i,
-      data: mediaOfLayoutFull?.post && mediaOfLayoutFull?.post[i],
-      user: mediaOfLayoutFull?.user,
-    };
-  });
+
+      setCurrentMedia({ index: i, data: posts && posts[i], user: userOfPost });
+    }
+  }, [mediaOfLayoutFull, posts, userOfPost]);
+
+  console.log('currentMedia=>>>>>>>>', currentMedia);
 
   const handleUp = useCallback(() => {
     setCurrentMedia((pre: any) => {
       if (pre.index === 0) {
         return {
           index: pre.index,
-          data: mediaOfLayoutFull?.post[pre.index],
+          data: posts[pre.index],
         };
       }
-      navigate(
-        `/@${username}/video/${mediaOfLayoutFull?.post[pre.index - 1]._id}`,
-      );
       return {
         index: pre.index - 1,
-        data: mediaOfLayoutFull?.post[pre.index - 1],
+        data: posts[pre.index - 1],
       };
     });
   }, [currentMedia, setCurrentMedia]);
 
   const handleDown = useCallback(() => {
     setCurrentMedia((pre: any) => {
-      if (pre.index === mediaOfLayoutFull?.post.length - 1) {
+      if (pre.index === posts.length - 1) {
         return {
           index: pre.index,
-          data: mediaOfLayoutFull?.post[pre.index],
-          user: mediaOfLayoutFull?.user,
+          data: posts[pre.index],
         };
       }
-      navigate(
-        `/@${username}/video/${mediaOfLayoutFull?.post[pre.index + 1]._id}`,
-      );
 
       return {
         index: pre.index + 1,
-        data: mediaOfLayoutFull?.post[pre.index + 1],
-        user: mediaOfLayoutFull?.user,
+        data: posts[pre.index + 1],
       };
     });
   }, [currentMedia, setCurrentMedia]);
@@ -102,7 +120,7 @@ export function MediaDetail() {
     navigate('/');
   }, []);
 
-  console.log(currentMedia?.data);
+  console.log('currentMedia?.data', currentMedia?.data);
 
   return (
     <>
@@ -111,7 +129,7 @@ export function MediaDetail() {
       </Helmet>
       <div className={cx('wrapper')}>
         <div className={cx('videoContainer')}>
-          <MediaContainer media={currentMedia?.data} />
+          {currentMedia && <MediaContainer media={currentMedia?.data} />}
           <div className={cx('videoControls')}>
             <button onClick={handleUp} className={cx('controlsBtn')}>
               <ArrowIcon />
@@ -126,7 +144,12 @@ export function MediaDetail() {
           </div>
         </div>
         <div className={cx('contentContainer')}>
-          <MediaDetailContent postInfo={currentMedia?.data} />
+          {userOfPost && currentMedia && (
+            <MediaDetailContent
+              postInfo={currentMedia?.data}
+              userOfPost={userOfPost}
+            />
+          )}
         </div>
       </div>
     </>

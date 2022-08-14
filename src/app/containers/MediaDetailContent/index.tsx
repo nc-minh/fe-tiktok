@@ -16,14 +16,16 @@ import Image from 'app/components/Image';
 import { CommentInfoType } from 'types/Comment';
 import CommentItem from 'app/components/CommentItem';
 import { PostInfoType } from 'types/Post';
+import { UserInfo } from 'types/User';
 
 const cx = classNames.bind(styles);
 
 interface Props {
   postInfo: PostInfoType;
+  userOfPost: UserInfo;
 }
 
-function MediaDetailContent({ postInfo }: Props) {
+function MediaDetailContent({ postInfo, userOfPost }: Props) {
   const pathName = window.location.href;
 
   const test: CommentInfoType[] = [
@@ -80,16 +82,14 @@ function MediaDetailContent({ postInfo }: Props) {
               />
             </div>
             <div className={cx('infoWrapper')}>
-              <h3 className={cx('username')}>{postInfo.user_id.username}</h3>
-              <strong className={cx('fullname')}>
-                {postInfo.user_id.fullname}
-              </strong>
+              <h3 className={cx('username')}>{userOfPost.username}</h3>
+              <strong className={cx('fullname')}>{userOfPost.fullname}</strong>
             </div>
             <Button className={cx('actionBtn')} outline>
               Follow
             </Button>
           </div>
-          <main className={cx('videoDesc')}>{postInfo.contents}</main>
+          <main className={cx('videoDesc')}>{postInfo?.contents}</main>
           <div className={cx('interactive')}>
             <div className={cx('InteractiveLeft')}>
               <div className={cx('actionBtnWrapper')}>
@@ -97,7 +97,7 @@ function MediaDetailContent({ postInfo }: Props) {
                   <HeartIcon className={cx('actionIcon')} />
                 </div>
                 <strong className={cx('actionCount')}>
-                  {postInfo.reaction_count}
+                  {postInfo?.reaction_count}
                 </strong>
               </div>
               <div className={cx('actionBtnWrapper')}>
@@ -105,7 +105,7 @@ function MediaDetailContent({ postInfo }: Props) {
                   <CommentIcon className={cx('actionIcon')} />
                 </div>
                 <strong className={cx('actionCount')}>
-                  {postInfo.comment_count}
+                  {postInfo?.comment_count || 0}
                 </strong>
               </div>
             </div>
