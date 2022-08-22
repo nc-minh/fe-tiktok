@@ -10,16 +10,20 @@
 
 .container{
     width: 100%;
+    height: calc(100vh - var(--default-layout-header-height));
     max-width: 100%;
     display: flex;
-    padding: 0 var(--default-layout-horizontal-spacer);
+    padding-left: var(--default-layout-horizontal-spacer);
     margin-top: var(--default-layout-header-height);
 
     .width{
         width: 240px;
     }
+
+    .content{
+        flex: 1;
+        height: calc(100vh - var(--default-layout-header-height));
+        overflow-y: scroll;
+    }
 }
 
-.content{
-    flex: 1;
-}

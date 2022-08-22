@@ -188,11 +188,8 @@ function Header({ className = '' }: Props) {
 
   const onUpload = useCallback(() => {
     if (_id) {
-      console.log('upload ne``');
-
       navigate('/upload');
     } else {
-      console.log('hong duoc upload ne`');
       dispath(detectLoginActions.detectLogin(true));
     }
   }, [_id, detectLogin]);

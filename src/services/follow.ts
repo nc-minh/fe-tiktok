@@ -14,3 +14,20 @@ export const follow = async (payload: FollowType) => {
   }
   return response?.data?.data;
 };
+
+export const getFollowings = async (
+  user_id: string,
+  pageSize: number,
+  currentPage: number,
+) => {
+  const response: AxiosResponse = await axiosInstance.get(
+    `/follows/followings/${user_id}`,
+    {
+      params: {
+        pageSize,
+        currentPage,
+      },
+    },
+  );
+  return response?.data?.data;
+};

@@ -132,7 +132,6 @@ function EditProfile({
               }}
               validationSchema={SignupSchema}
               onSubmit={values => {
-                console.log(values);
                 updateUser.mutate(values, {
                   onSuccess: async data => {
                     setUserData(data);

@@ -1,3 +1,39 @@
 .wrapper{
-    text-align: center;
+    text-align: left;
+    .container{
+        .content{
+                border-top: rgba(22, 24, 35, 0.12) 1px solid;
+                padding-top: 16px;
+
+            .list{
+                width: 100%;
+                margin-bottom: 8px;
+                
+                .item{
+                    color: rgba(22, 24, 35, 0.5);
+                    font-weight: 600;
+                    font-size: 1.2rem;
+                    line-height: 1.7rem;
+                    display: inline-block;
+                    margin-right: 6px;
+                    margin-top: 5px;
+                    
+                    &:hover{
+                        text-decoration: underline;
+                    }
+                }
+            }
+
+            // copyright
+            .copyright{
+                    color: rgba(22, 24, 35, 0.5);
+                    font-weight: 600;
+                    font-size: 1.2rem;
+                    line-height: 1.7rem;
+                    display: inline-block;
+                    margin-right: 6px;
+                    margin-top: 5px;
+            }
+        }
+    }
 }

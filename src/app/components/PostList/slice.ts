@@ -44,7 +44,6 @@ export const mediaOfLayoutFullSlice = createSlice({
   reducers: {
     assignMedia: (state, action) => {
       state.mediaOfLayoutFull = action.payload;
-      console.log(action.payload);
     },
   },
 });

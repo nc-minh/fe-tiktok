@@ -33,13 +33,10 @@ function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
   }, [file]);
 
   const handleOnCloseDialog = useCallback(() => {
-    console.log('close log');
     setIsChangeMedia(false);
   }, [setIsChangeMedia, isChangeMedia]);
 
   const handleOnOpenDialog = useCallback(() => {
-    console.log('open log');
-
     setIsChangeMedia(true);
   }, [setIsChangeMedia, isChangeMedia]);
 

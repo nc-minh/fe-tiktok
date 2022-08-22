@@ -1,0 +1,65 @@
+.wrapper{
+    width: 100%;
+    height: 100%;
+
+    .container{
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        width: 100%;
+
+        &:hover{
+            background: rgba(22, 24, 35, 0.03);
+        }
+
+        .imageWrapper{
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 12px;
+
+            .image{
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .userWrapper{
+            flex: 1;
+            display: flex;
+            justify-content: space-between;
+            flex-direction: column;
+
+            .nameWrapper{
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+
+                .username{
+                    color: rgb(22, 24, 35);
+                    font-weight: 700;
+                    font-size: 1.6rem;
+                    line-height: 2rem;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    max-width: 156px;
+                    margin-right: 4px;
+                }
+            }
+
+            .fullname{
+                max-width: 260px;
+                font-weight: 400;
+                font-size: 1.3rem;
+                line-height: 1.5rem;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: nowrap;
+            }
+        }
+    }
+}

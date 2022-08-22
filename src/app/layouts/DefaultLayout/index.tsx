@@ -1,7 +1,6 @@
 import classNames from 'classnames/bind';
 
 import styles from './DefaultLayout.module.scss';
-import { Footer } from 'app/layouts/components/Footer';
 import Header from 'app/layouts/components/Header';
 import Sidebar from 'app/layouts/components/Sidebar';
 
@@ -19,7 +18,6 @@ function DefaultLayout({ children }: Props) {
         <Sidebar />
         <div className={cx('content')}>{children}</div>
       </div>
-      <Footer />
     </div>
   );
 }

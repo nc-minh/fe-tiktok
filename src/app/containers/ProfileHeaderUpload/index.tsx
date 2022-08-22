@@ -33,9 +33,7 @@ function ProfileHeaderUpload({
         refetchInfoLogin();
         handleBackToEditUser();
       },
-      onError(error) {
-        console.log(error);
-      },
+      onError(error) {},
     });
   }, [file]);
   return (

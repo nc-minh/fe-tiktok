@@ -2,4 +2,31 @@
     width: 356px;
     padding: 20px 0 26px 8px;
     margin-left: -18px;
+    height: calc(100vh - var(--default-layout-header-height));
+
+    .container{
+        height: 100%;
+        width: 100%;
+        overflow-y: scroll;
+
+        &::-webkit-scrollbar{
+            border-radius: 0;
+            width: 8px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.15);
+            visibility: hidden;
+        }
+
+        &::-webkit-scrollbar-track {
+            border-radius: 0;
+            background-color: rgba(0, 0, 0, 0);
+        }
+    }
+
+    &:hover > .container::-webkit-scrollbar-thumb{
+        visibility: visible;
+    }
 }

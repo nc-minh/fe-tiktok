@@ -1,0 +1,24 @@
+.wrapper{
+    width: 100%;
+    padding: 16px 0;
+    color: rgba(22, 24, 35, 0.75);
+    border-top: rgba(22, 24, 35, 0.12) 1px solid;
+
+    .header{
+        padding: 0 8px;
+        margin-bottom: 8px;
+        font-size: 1.4rem;
+        line-height: 2rem;
+    }
+
+    .footer{
+        color: var(--primary);
+        font-weight: 600;
+        font-size: 1.4rem;
+        line-height: 2rem;
+        padding: 0 8px;
+        padding: 0px 8px;
+        margin-top: 8px;
+        cursor: pointer;
+    }
+}

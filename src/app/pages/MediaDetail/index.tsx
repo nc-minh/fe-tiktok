@@ -16,6 +16,7 @@ import MediaContainer from 'app/containers/MediaContainer';
 import MediaDetailContent from 'app/containers/MediaDetailContent';
 import { ResponsePostType } from 'types/Post';
 import { UserInfo } from 'types/User';
+import { log } from 'console';
 
 const cx = classNames.bind(styles);
 
@@ -35,7 +36,6 @@ export function MediaDetail() {
   const mediaOfLayoutFull: MediaOfLayoutFullType = useSelector(
     (state: RootState) => state.mediaOfLayoutFull.mediaOfLayoutFull,
   );
-  console.log('mediaOfLayoutFull', mediaOfLayoutFull);
 
   const [posts, setPosts] = useState<ResponsePostType[]>([]);
   const [userOfPost, setUserOfPost] = useState<UserInfo>();
@@ -65,8 +65,6 @@ export function MediaDetail() {
     }
   }, [mediaOfLayoutFull, posts, userOfPost]);
 
-  console.log('currentMedia=>>>>>>>>', currentMedia);
-
   const handleUp = useCallback(() => {
     setCurrentMedia((pre: any) => {
       if (pre.index === 0) {
@@ -75,6 +73,10 @@ export function MediaDetail() {
           data: posts[pre.index],
         };
       }
+
+      setTimeout(() => {
+        navigate(`/@${username}/video/${posts[pre.index - 1]?._id}`);
+      }, 0);
       return {
         index: pre.index - 1,
         data: posts[pre.index - 1],
@@ -91,6 +93,9 @@ export function MediaDetail() {
         };
       }
 
+      setTimeout(() => {
+        navigate(`/@${username}/video/${posts[pre.index + 1]?._id}`);
+      }, 0);
       return {
         index: pre.index + 1,
         data: posts[pre.index + 1],
@@ -102,25 +107,21 @@ export function MediaDetail() {
     const listener = (event: any) => {
       if (event.code === 'ArrowUp') {
         handleUp();
-        event.preventDefault();
       }
 
       if (event.code === 'ArrowDown') {
         handleDown();
-        event.preventDefault();
       }
     };
     document.addEventListener('keyup', listener);
     return () => {
       document.removeEventListener('keyup', listener);
     };
-  }, []);
+  }, [handleUp, handleDown, setCurrentMedia]);
 
   const handleCloseMediaDetail = useCallback(() => {
     navigate('/');
   }, []);
-
-  console.log('currentMedia?.data', currentMedia?.data);
 
   return (
     <>

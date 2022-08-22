@@ -1,5 +1,4 @@
 //Layout
-import NoFooterLayout from 'app/layouts/NoFooterLayout';
 import FullWidthLayout from 'app/layouts/FullWidthLayout';
 import NoSidebarLayout from 'app/layouts/NoSidebarLayout';
 import MediaDetailLayout from 'app/layouts/MediaDetailLayout';
@@ -36,11 +35,6 @@ const publicRoutes: PublicRoutes[] = [
     path: routeConfig.upload,
     component: Upload,
     layout: NoSidebarLayout,
-  },
-  {
-    path: '/no-footer',
-    component: Profile,
-    layout: NoFooterLayout,
   },
   {
     path: routeConfig.media_detail,

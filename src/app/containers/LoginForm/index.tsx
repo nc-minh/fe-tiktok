@@ -52,8 +52,6 @@ function LoginForm() {
         setIsEnabled(true);
       },
       onError: async (err: any) => {
-        console.log(err);
-
         setServerError(err);
       },
     });

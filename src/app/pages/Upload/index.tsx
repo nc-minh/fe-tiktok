@@ -64,7 +64,6 @@ export function Upload() {
   const handlePost = useCallback(
     (values: ContentsValuesTypes) => {
       const contents = values.contents;
-      console.log('contents:', contents);
 
       const formData = new FormData();
       if (mediaFile) formData.append('media_url', mediaFile);
