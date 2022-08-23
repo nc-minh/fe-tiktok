@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-unused-vars */
 import classNames from 'classnames/bind';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import styles from './ProfileHeaderUpload.module.scss';
@@ -23,6 +24,8 @@ function ProfileHeaderUpload({
 }: Props) {
   const dispath = useDispatch();
   const updateAvatar = useUpdateAvatar();
+  const [avatarpre, setAvatarpre] = useState('');
+
   const handleUpdateAvatar = useCallback(() => {
     const formData = new FormData();
     formData.append('avatar', file);
@@ -36,10 +39,24 @@ function ProfileHeaderUpload({
       onError(error) {},
     });
   }, [file]);
+
+  useEffect(() => {
+    if (file) {
+      const value = URL.createObjectURL(file);
+      setAvatarpre(value);
+    }
+  }, [file]);
+
+  useEffect(() => {
+    return () => {
+      avatarpre && URL.revokeObjectURL(avatarpre);
+    };
+  }, [avatarpre, setAvatarpre]);
+
   return (
     <section className={cx('content')}>
       <div className={cx('imgWrapper')}>
-        <Image className={cx('img')} src={URL.createObjectURL(file)} />
+        <Image className={cx('img')} src={avatarpre} />
       </div>
       <footer className={cx('footerAvatar')}>
         <Button className={cx('btn')} box onClick={handleBackToEditUser}>

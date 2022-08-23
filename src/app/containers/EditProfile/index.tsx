@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import classNames from 'classnames/bind';
@@ -10,7 +11,7 @@ import Image from 'app/components/Image';
 import { getUserData, setUserData } from 'utils/storage';
 import { ReactComponent as EditIcon } from 'assets/icons/edit-1.svg';
 import Button from 'app/components/Button';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useUpdateUser } from 'mutations/user';
 import ProfileHeaderUpload from '../ProfileHeaderUpload';
 import { ReactComponent as BackIcon } from 'assets/icons/arrowLeft.svg';
@@ -73,8 +74,9 @@ function EditProfile({
   const [avatarFile, setAvatarFile] = useState();
 
   const chooseAvatarFile = useCallback(
-    (selectorFiles: any) => {
-      if (selectorFiles) setAvatarFile(selectorFiles[0]);
+    (e: any) => {
+      const file = e.target.files[0];
+      if (file) setAvatarFile(file);
     },
     [avatarFile, setAvatarFile],
   );
@@ -82,6 +84,7 @@ function EditProfile({
   const handleBackToEditUser = useCallback(() => {
     setAvatarFile(undefined);
   }, [avatarFile, setAvatarFile]);
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
@@ -117,7 +120,7 @@ function EditProfile({
                   id="avatar"
                   type="file"
                   accept="image/png, image/gif, image/jpeg, image/jpg"
-                  onChange={e => chooseAvatarFile(e.target.files)}
+                  onChange={chooseAvatarFile}
                 />
                 <label className={cx('lable')} htmlFor="avatar">
                   <EditIcon />
