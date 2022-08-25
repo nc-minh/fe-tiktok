@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useGetUserInfo, useGetUserByUsername } from 'queries/users';
 import { UserInfo } from 'types/User';
 import { getUserData, setUserData } from 'utils/storage';
 import ProfileHeaderBase from 'app/components/ProfileHeaderBase';
+import NotFound from './components/Notfound';
 
 function ProfileHeader() {
   const [user, setUser] = useState<UserInfo>();
@@ -12,13 +13,15 @@ function ProfileHeader() {
   const [enabledMyself, setEnabledMyself] = useState(false);
   const { _id } = getUserData();
 
-  const { data: GetUserByUsername, refetch } = useGetUserByUsername(
-    username,
-    true,
-  );
+  const {
+    data: GetUserByUsername,
+    refetch,
+    isError,
+  } = useGetUserByUsername(username, true);
 
   const { data: GetUserInfoLogin, refetch: refetchInfoLogin } =
     useGetUserInfo(enabledMyself);
+
   useEffect(() => {
     if (GetUserByUsername?._id === _id && GetUserByUsername?._id) {
       setEnabledMyself(true);
@@ -43,13 +46,19 @@ function ProfileHeader() {
   }, [GetUserInfoLogin, setUser, setEnabledMyself, enabledMyself, username]);
 
   return (
-    <ProfileHeaderBase
-      isEdit={enabledMyself}
-      user={user}
-      refetch={refetch}
-      refetchInfoLogin={refetchInfoLogin}
-    />
+    <>
+      {isError ? (
+        <NotFound />
+      ) : (
+        <ProfileHeaderBase
+          isEdit={enabledMyself}
+          user={user}
+          refetch={refetch}
+          refetchInfoLogin={refetchInfoLogin}
+        />
+      )}
+    </>
   );
 }
 
-export default ProfileHeader;
+export default memo(ProfileHeader);

@@ -1,11 +1,12 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import { memo } from 'react';
 
 import styles from './Footer.module.scss';
 
 const cx = classNames.bind(styles);
 
-export function Footer() {
+function Footer() {
   return (
     <footer className={cx('wrapper')}>
       <div className={cx('container')}>
@@ -73,3 +74,5 @@ export function Footer() {
     </footer>
   );
 }
+
+export default memo(Footer);

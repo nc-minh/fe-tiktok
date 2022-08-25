@@ -2,7 +2,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import classNames from 'classnames/bind';
 import { Typography } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, memo } from 'react';
 
 import styles from './SignupForm.module.scss';
 import Button from 'app/components/Button';
@@ -190,4 +190,4 @@ function SignupForm() {
   );
 }
 
-export default SignupForm;
+export default memo(SignupForm);

@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import classNames from 'classnames/bind';
 import { Typography } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, memo } from 'react';
 
 import styles from './LoginForm.module.scss';
 import Button from 'app/components/Button';
@@ -141,4 +141,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default memo(LoginForm);

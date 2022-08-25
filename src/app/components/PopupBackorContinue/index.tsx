@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import { memo } from 'react';
 
 import styles from './PopupBackorContinue.module.scss';
 
@@ -38,4 +39,4 @@ function PopupBackorContinue({
   );
 }
 
-export default PopupBackorContinue;
+export default memo(PopupBackorContinue);

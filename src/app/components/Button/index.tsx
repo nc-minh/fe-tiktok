@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import { memo } from 'react';
 
 import styles from './Button.module.scss';
 import { ReactComponent as SpinnerIcon } from 'assets/icons/spinner.svg';
@@ -101,4 +102,4 @@ function Button({
   );
 }
 
-export default Button;
+export default memo(Button);

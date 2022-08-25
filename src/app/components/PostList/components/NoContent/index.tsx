@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import { memo } from 'react';
 
 import styles from './NoContent.module.scss';
 import { ReactComponent as UserIcon } from 'assets/icons/user-thin.svg';
@@ -19,4 +20,4 @@ function NotContent() {
   );
 }
 
-export default NotContent;
+export default memo(NotContent);

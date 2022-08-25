@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Button from 'app/components/Button';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, memo } from 'react';
 import Image from 'app/components/Image';
 import classNames from 'classnames/bind';
 import { Tooltip } from '@mui/material';
@@ -205,4 +205,4 @@ function ProfileHeaderBase({
   );
 }
 
-export default ProfileHeaderBase;
+export default memo(ProfileHeaderBase);

@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useGetPostOfUser } from 'queries/post';
@@ -70,4 +70,4 @@ function PostList({ type, userId }: Props) {
   );
 }
 
-export default PostList;
+export default memo(PostList);

@@ -2,6 +2,7 @@
 import Skeleton from '@mui/material/Skeleton';
 import { Box } from '@mui/material';
 import classNames from 'classnames/bind';
+import { memo } from 'react';
 
 import styles from './SkeletonCustomize.module.scss';
 
@@ -16,11 +17,7 @@ interface Props {
 const POST_LIST_LENGTH = ['1', '2', '3', '4', '5', '6', '7', '8'];
 const FOLLOWINGS = ['1', '2', '3', '4', '5'];
 
-export default function SkeletonCustomize({
-  profileHeader,
-  postList,
-  followings,
-}: Props) {
+function SkeletonCustomize({ profileHeader, postList, followings }: Props) {
   if (profileHeader) {
     return (
       <div className={cx('profileHeader')}>
@@ -72,3 +69,5 @@ export default function SkeletonCustomize({
     </Box>
   );
 }
+
+export default memo(SkeletonCustomize);

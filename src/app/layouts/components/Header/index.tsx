@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, memo } from 'react';
 import classNames from 'classnames/bind';
 import { Link, useNavigate } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
@@ -29,10 +28,6 @@ import SearchBar from 'app/components/SearchBar';
 import { MenuItemType } from 'types/Menu';
 import { useSearchUsers } from 'queries/users';
 import { useDebounce } from 'app/hooks';
-import DialogCustomize from 'app/components/DialogCustomize';
-import PopupContent from 'app/components/PopupContent';
-import PopupLogin from 'app/containers/PopupLogin';
-import PopupSignup from 'app/containers/PopupSignup';
 import { getUserData, removeItemFromStorage } from 'utils/storage';
 import { UserInfo } from 'types/User';
 import { RootState } from 'stores';
@@ -53,8 +48,6 @@ function Header({ className = '' }: Props) {
   const [textSearch, setTextSearch] = useState('');
   const [tooltipIsOpen, setTooltipIsOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
-  const [tabLogin, setTabLogin] = useState(true);
 
   const debouncedValue = useDebounce(textSearch, 500);
 
@@ -166,25 +159,9 @@ function Header({ className = '' }: Props) {
     }, 200);
   }, [isFetching]);
 
-  const handleOnCloseDialog = useCallback(() => {
-    setIsLogin(false);
-    setTabLogin(true);
-  }, [setIsLogin, isLogin]);
-
-  const handleSwitchLoginTab = useCallback(() => {
-    setTabLogin(!tabLogin);
-  }, [tabLogin, setTabLogin]);
-
   const detectLogin: any = useSelector(
     (state: RootState) => state.detectLogin.detectLogin,
   );
-
-  useEffect(() => {
-    if (detectLogin) {
-      setIsLogin(true);
-      dispath(detectLoginActions.detectLogin(false));
-    }
-  }, [detectLogin]);
 
   const onUpload = useCallback(() => {
     if (_id) {
@@ -193,6 +170,10 @@ function Header({ className = '' }: Props) {
       dispath(detectLoginActions.detectLogin(true));
     }
   }, [_id, detectLogin]);
+
+  const handleOnLogin = useCallback(() => {
+    dispath(detectLoginActions.detectLogin(true));
+  }, [detectLogin]);
 
   return (
     <header className={cx('wrapper')}>
@@ -239,7 +220,7 @@ function Header({ className = '' }: Props) {
                 <PlusIcon className={cx('uploadIcon')} />
                 Upload
               </Button>
-              <Button onClick={() => setIsLogin(true)} primary>
+              <Button onClick={handleOnLogin} primary>
                 Login
               </Button>
             </>
@@ -260,20 +241,8 @@ function Header({ className = '' }: Props) {
           </Menu>
         </div>
       </div>
-      <DialogCustomize open={isLogin} onClose={handleOnCloseDialog}>
-        <PopupContent
-          onClose={handleOnCloseDialog}
-          footerContent={
-            tabLogin ? "Don't have an account?" : 'Already have an account?'
-          }
-          linkContent={tabLogin ? 'Sign up' : 'Log in'}
-          onClick={handleSwitchLoginTab}
-        >
-          {tabLogin ? <PopupLogin /> : <PopupSignup />}
-        </PopupContent>
-      </DialogCustomize>
     </header>
   );
 }
 
-export default Header;
+export default memo(Header);

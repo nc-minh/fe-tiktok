@@ -16,7 +16,6 @@ import MediaContainer from 'app/containers/MediaContainer';
 import MediaDetailContent from 'app/containers/MediaDetailContent';
 import { ResponsePostType } from 'types/Post';
 import { UserInfo } from 'types/User';
-import { log } from 'console';
 
 const cx = classNames.bind(styles);
 
@@ -31,11 +30,14 @@ interface MediaOfLayoutFullType {
 
 export function MediaDetail() {
   const navigate = useNavigate();
+
   const { username, mediaId } = useParams();
 
   const mediaOfLayoutFull: MediaOfLayoutFullType = useSelector(
     (state: RootState) => state.mediaOfLayoutFull.mediaOfLayoutFull,
   );
+
+  console.log('okokokokok', mediaOfLayoutFull);
 
   const [posts, setPosts] = useState<ResponsePostType[]>([]);
   const [userOfPost, setUserOfPost] = useState<UserInfo>();
@@ -120,7 +122,7 @@ export function MediaDetail() {
   }, [handleUp, handleDown, setCurrentMedia]);
 
   const handleCloseMediaDetail = useCallback(() => {
-    navigate('/');
+    navigate(`/@${username}`);
   }, []);
 
   return (
@@ -128,31 +130,38 @@ export function MediaDetail() {
       <Helmet defaultTitle="Tiktok View | TikTok">
         <meta name="description" content="Tiktok View | TikTok" />
       </Helmet>
-      <div className={cx('wrapper')}>
-        <div className={cx('videoContainer')}>
-          {currentMedia && <MediaContainer media={currentMedia?.data} />}
-          <div className={cx('videoControls')}>
-            <button onClick={handleUp} className={cx('controlsBtn')}>
-              <ArrowIcon />
-            </button>
-            <button onClick={handleDown} className={cx('controlsBtn', 'down')}>
-              <ArrowIcon />
-            </button>
-          </div>
+      {mediaOfLayoutFull?.data?.post.length > 0 && (
+        <div className={cx('wrapper')}>
+          <div className={cx('videoContainer')}>
+            {currentMedia && <MediaContainer media={currentMedia?.data} />}
+            <div className={cx('videoControls')}>
+              <button onClick={handleUp} className={cx('controlsBtn')}>
+                <ArrowIcon />
+              </button>
+              <button
+                onClick={handleDown}
+                className={cx('controlsBtn', 'down')}
+              >
+                <ArrowIcon />
+              </button>
+            </div>
 
-          <div className={cx('closeMedia')} onClick={handleCloseMediaDetail}>
-            <CloseIcon className={cx('closeIcon')} />
+            <div className={cx('closeMedia')} onClick={handleCloseMediaDetail}>
+              <CloseIcon className={cx('closeIcon')} />
+            </div>
+          </div>
+          <div className={cx('contentContainer')}>
+            {userOfPost && currentMedia && (
+              <MediaDetailContent
+                postInfo={currentMedia?.data}
+                userOfPost={userOfPost}
+              />
+            )}
           </div>
         </div>
-        <div className={cx('contentContainer')}>
-          {userOfPost && currentMedia && (
-            <MediaDetailContent
-              postInfo={currentMedia?.data}
-              userOfPost={userOfPost}
-            />
-          )}
-        </div>
-      </div>
+      )}
+
+      {mediaOfLayoutFull?.data?.post.length === 0 && <h1>{'No content :>'}</h1>}
     </>
   );
 }

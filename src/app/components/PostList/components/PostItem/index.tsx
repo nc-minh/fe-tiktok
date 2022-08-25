@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState, memo } from 'react';
 import { Link } from 'react-router-dom';
 
 import styles from './PostItem.module.scss';
@@ -108,4 +108,4 @@ function PostItem({ item }: Props) {
   );
 }
 
-export default PostItem;
+export default memo(PostItem);

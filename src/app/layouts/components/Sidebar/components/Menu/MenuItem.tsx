@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import classNames from 'classnames/bind';
+import { memo } from 'react';
 
 import styles from './Menu.module.scss';
 
@@ -25,4 +26,4 @@ function MenuItem({ title, to, icon, activeIcon }: Props) {
   );
 }
 
-export default MenuItem;
+export default memo(MenuItem);

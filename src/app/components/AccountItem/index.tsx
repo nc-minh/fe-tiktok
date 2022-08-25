@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import { memo } from 'react';
 
 import Image from 'app/components/Image';
 import styles from './AccountItem.module.scss';
@@ -31,4 +32,4 @@ function AccountItem({ userInfo }: Props) {
   );
 }
 
-export default AccountItem;
+export default memo(AccountItem);

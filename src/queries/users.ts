@@ -28,6 +28,8 @@ export const useGetUserByUsername = (username: string, enabled: boolean) =>
     {
       staleTime: STALE_TIME.ONE_HOUR,
       enabled: enabled,
+      retry: false,
+      refetchOnWindowFocus: false,
     },
   );
 

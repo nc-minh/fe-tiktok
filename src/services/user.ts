@@ -15,7 +15,6 @@ export const getUserByUsername = async (
   const response: AxiosResponse = await axiosInstance.get(
     `/users/info/${username}`,
   );
-
   return response?.data?.data;
 };
 

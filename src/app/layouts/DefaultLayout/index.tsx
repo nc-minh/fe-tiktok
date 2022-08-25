@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import { memo } from 'react';
 
 import styles from './DefaultLayout.module.scss';
 import Header from 'app/layouts/components/Header';
@@ -22,4 +23,4 @@ function DefaultLayout({ children }: Props) {
   );
 }
 
-export default DefaultLayout;
+export default memo(DefaultLayout);

@@ -4,6 +4,7 @@
 import classNames from 'classnames/bind';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { useCallback, memo, useState } from 'react';
 
 import styles from './EditProfile.module.scss';
 import { ReactComponent as CloseIcon } from 'assets/icons/close.svg';
@@ -11,7 +12,6 @@ import Image from 'app/components/Image';
 import { getUserData, setUserData } from 'utils/storage';
 import { ReactComponent as EditIcon } from 'assets/icons/edit-1.svg';
 import Button from 'app/components/Button';
-import { useCallback, useEffect, useState } from 'react';
 import { useUpdateUser } from 'mutations/user';
 import ProfileHeaderUpload from '../ProfileHeaderUpload';
 import { ReactComponent as BackIcon } from 'assets/icons/arrowLeft.svg';
@@ -256,4 +256,4 @@ function EditProfile({
   );
 }
 
-export default EditProfile;
+export default memo(EditProfile);

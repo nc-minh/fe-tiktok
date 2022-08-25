@@ -1,6 +1,6 @@
 import { Tooltip } from '@mui/material';
 import classNames from 'classnames/bind';
-import { useCallback } from 'react';
+import { useCallback, memo } from 'react';
 
 import { removeItemFromStorage } from 'utils/storage';
 import { MenuItemType } from 'types/Menu';
@@ -57,4 +57,4 @@ function Menu({ children, items = [] }: Props) {
     </Tooltip>
   );
 }
-export default Menu;
+export default memo(Menu);

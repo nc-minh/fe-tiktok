@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, memo } from 'react';
 import { FollowingsResponseType } from 'types/Follow';
 import { UserInfo } from 'types/User';
 
@@ -79,4 +79,4 @@ function SidebarContainer({
   );
 }
 
-export default SidebarContainer;
+export default memo(SidebarContainer);

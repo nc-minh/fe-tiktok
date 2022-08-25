@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-unused-vars */
 import classNames from 'classnames/bind';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, memo } from 'react';
 import { useDispatch } from 'react-redux';
 
 import styles from './ProfileHeaderUpload.module.scss';
@@ -75,4 +75,4 @@ function ProfileHeaderUpload({
   );
 }
 
-export default ProfileHeaderUpload;
+export default memo(ProfileHeaderUpload);

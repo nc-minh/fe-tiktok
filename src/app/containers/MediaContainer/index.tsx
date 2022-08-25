@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import { memo } from 'react';
 
 import styles from './MediaContainer.module.scss';
 import { isImage, isVideo } from 'utils/constants';
@@ -42,4 +43,4 @@ function MediaContainer({ media }: Props) {
   );
 }
 
-export default MediaContainer;
+export default memo(MediaContainer);

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, memo } from 'react';
 import classNames from 'classnames/bind';
 
 import { routeConfig } from 'app/routes/routeConfig';
@@ -11,7 +11,7 @@ import { ReactComponent as UserGroupActiveIcon } from 'assets/icons/userGroupAct
 import { ReactComponent as LiveIcon } from 'assets/icons/live.svg';
 import { ReactComponent as LiveActiveIcon } from 'assets/icons/liveActive.svg';
 import SidebarContainer from 'app/components/SidebarContainer';
-import { Footer } from 'app/layouts/components/Footer';
+import Footer from 'app/layouts/components/Footer';
 import { useGetFollowings } from 'queries/follow';
 import { getUserData } from 'utils/storage';
 import { FollowingsResponseType } from 'types/Follow';
@@ -126,4 +126,4 @@ function Sidebar({ className = '' }: Props) {
   );
 }
 
-export default Sidebar;
+export default memo(Sidebar);

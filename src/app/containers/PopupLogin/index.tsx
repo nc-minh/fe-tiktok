@@ -1,6 +1,6 @@
 import classNames from 'classnames/bind';
 import { Helmet } from 'react-helmet-async';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, memo } from 'react';
 
 import styles from './PopupLogin.module.scss';
 import Button from '../../components/Button';
@@ -90,4 +90,4 @@ function PopupLogin() {
   );
 }
 
-export default PopupLogin;
+export default memo(PopupLogin);

@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import { memo } from 'react';
 
 import styles from './Private.module.scss';
 import { ReactComponent as LockIcon } from 'assets/icons/lock.svg';
@@ -20,4 +21,4 @@ function Private() {
   );
 }
 
-export default Private;
+export default memo(Private);

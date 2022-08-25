@@ -43,7 +43,6 @@ axiosInstance.interceptors.response.use(
 
     if (
       errorMessage === 'invalid signature' ||
-      errorMessage === 'You are not logged in' ||
       errorMessage === 'jwt malformed'
     ) {
       removeItemFromStorage('tokens');

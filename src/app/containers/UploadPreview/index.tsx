@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, memo } from 'react';
 
 import styles from './UploadPreview.module.scss';
 import { isImage, isVideo } from 'utils/constants';
@@ -202,4 +202,4 @@ function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
   return <div className={cx('wrapper')}>Format Error</div>;
 }
 
-export default UploadPreview;
+export default memo(UploadPreview);

@@ -1,9 +1,10 @@
 import classNames from 'classnames/bind';
+import { memo } from 'react';
+import { Link } from 'react-router-dom';
 
 import Image from 'app/components/Image';
 import styles from './SidebarUser.module.scss';
 import { ReactComponent as TickIcon } from 'assets/icons/check.svg';
-import { Link } from 'react-router-dom';
 import { UserFollowingsType } from 'types/Follow';
 
 const cx = classNames.bind(styles);
@@ -30,4 +31,4 @@ function SidebarUser({ user }: Props) {
   );
 }
 
-export default SidebarUser;
+export default memo(SidebarUser);

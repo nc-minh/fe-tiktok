@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import { memo } from 'react';
 
 import styles from './PopupContent.module.scss';
 import { ReactComponent as CloseIcon } from 'assets/icons/close.svg';
@@ -49,4 +50,4 @@ function PopupContent({
   );
 }
 
-export default PopupContent;
+export default memo(PopupContent);

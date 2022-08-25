@@ -1,5 +1,6 @@
 import { Dialog } from '@mui/material';
 import classNames from 'classnames/bind';
+import { memo } from 'react';
 
 import styles from './DialogCustomize.module.scss';
 
@@ -23,4 +24,4 @@ function DialogCustomize({
   );
 }
 
-export default DialogCustomize;
+export default memo(DialogCustomize);
