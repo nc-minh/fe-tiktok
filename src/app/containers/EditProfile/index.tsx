@@ -15,6 +15,8 @@ import Button from 'app/components/Button';
 import { useUpdateUser } from 'mutations/user';
 import ProfileHeaderUpload from '../ProfileHeaderUpload';
 import { ReactComponent as BackIcon } from 'assets/icons/arrowLeft.svg';
+import { userActions } from 'app/layouts/slice';
+import { useDispatch } from 'react-redux';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -52,6 +54,7 @@ function EditProfile({
     return bio;
   });
   const updateUser = useUpdateUser();
+  const dispath = useDispatch();
 
   const handleChangeUsernamePre = useCallback(
     (e: any) => {
@@ -140,6 +143,7 @@ function EditProfile({
                     setUserData(data);
                     handleOnCloseEditPopup();
                     refetchInfoLogin();
+                    dispath(userActions.getRefetch(true));
                   },
                   onError: async (err: any) => {},
                 });

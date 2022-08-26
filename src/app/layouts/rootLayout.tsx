@@ -10,11 +10,11 @@ import PopupContent from 'app/components/PopupContent';
 import PopupLogin from 'app/containers/PopupLogin';
 import PopupSignup from 'app/containers/PopupSignup';
 import { RootState } from 'stores';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { detectLoginActions } from 'app/components/ProfileHeaderBase/slice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useGetUserInfo } from 'queries/users';
 import { getTokens } from 'utils/storage';
+import { userActions } from './slice';
 
 function RootLayout() {
   const dispath = useDispatch();
@@ -24,29 +24,32 @@ function RootLayout() {
 
   const tokens = getTokens();
 
-  console.log('tokens', tokens);
+  const detectLogin: any = useSelector(
+    (state: RootState) => state.detectLogin.detectLogin,
+  );
+
+  const refetchState: any = useSelector(
+    (state: RootState) => state.getUser.refetch,
+  );
 
   const handleOnCloseDialog = useCallback(() => {
     setIsLogin(false);
     setTabLogin(true);
-  }, [setIsLogin, isLogin]);
+    dispath(detectLoginActions.detectLogin(false));
+  }, [setIsLogin, isLogin, detectLogin]);
 
   const handleSwitchLoginTab = useCallback(() => {
     setTabLogin(!tabLogin);
   }, [tabLogin, setTabLogin]);
 
-  const detectLogin: any = useSelector(
-    (state: RootState) => state.detectLogin.detectLogin,
-  );
-
-  const { data: GetUserInfoLogin } = useGetUserInfo(
+  const { data: GetUserInfoLogin, refetch } = useGetUserInfo(
     tokens?.accessToken ? true : false,
   );
 
   useEffect(() => {
     if (GetUserInfoLogin) {
       console.log('GetUserInfoLogin', GetUserInfoLogin);
-      dispath(detectLoginActions.detectLogin(false));
+      dispath(userActions.getUser(GetUserInfoLogin));
     }
   }, [GetUserInfoLogin]);
 
@@ -56,7 +59,14 @@ function RootLayout() {
     }
   }, [detectLogin]);
 
-  console.log('okok', 'realod');
+  useEffect(() => {
+    if (refetchState) {
+      refetch();
+      dispath(userActions.getRefetch(false));
+    }
+  }, [refetchState]);
+
+  console.log('root layout', 'realod');
 
   return (
     <>

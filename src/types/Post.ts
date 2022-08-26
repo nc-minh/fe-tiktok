@@ -39,4 +39,18 @@ export interface PostInfoType {
     avatar: string;
     tick: boolean;
   };
+  isReaction: {
+    _id: string;
+  }[];
+}
+
+export interface ViewPostRes {
+  _id: string;
+  user_id: string;
+  contents: string;
+  media_url?: string;
+  reaction_count: number;
+  view_count: number;
+  category_id: [];
+  comment_count: number;
 }

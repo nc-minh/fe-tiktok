@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import classNames from 'classnames/bind';
-import React, { memo, useCallback, useState } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -27,6 +27,7 @@ import Input from 'app/components/Input';
 import { useCreateComment } from 'mutations/comment';
 import { detectLoginActions } from 'app/components/ProfileHeaderBase/slice';
 import { RootState } from 'stores';
+import { useViewPost } from 'mutations/post';
 
 const cx = classNames.bind(styles);
 
@@ -41,6 +42,7 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
   const dispath = useDispatch();
 
   const [textValue, setTextValue] = useState('');
+  const [isOpenComment, setIsOpenComment] = useState(false);
 
   const { data: GetCommentOfPost, refetch } = useGetCommentOfPost(
     postInfo?._id,
@@ -72,7 +74,7 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
         onError: (error: any) => {
           if (error?.name === 'AuthenticationError') {
             console.log('onError', error);
-            dispath(detectLoginActions.detectLogin(true));
+            dispath(detectLoginActions.detectLogin(false));
           }
         },
       },
@@ -100,6 +102,16 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
     dispath(detectLoginActions.detectLogin(true));
   }, [detectLogin]);
 
+  const userLogin: any = useSelector((state: RootState) => state.getUser.user);
+
+  useEffect(() => {
+    if (userLogin?.username) {
+      setIsOpenComment(true);
+    } else {
+      setIsOpenComment(false);
+    }
+  }, [userLogin]);
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
@@ -121,7 +133,12 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
             <div className={cx('InteractiveLeft')}>
               <div className={cx('actionBtnWrapper')}>
                 <div className={cx('actionIconWrapper')}>
-                  <HeartIcon className={cx('actionIcon')} />
+                  <HeartIcon
+                    className={cx(
+                      'actionIcon',
+                      postInfo?.isReaction[0]?._id && 'isReaction',
+                    )}
+                  />
                 </div>
                 <strong className={cx('actionCount')}>
                   {postInfo?.reaction_count || 0}
@@ -171,7 +188,7 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
         </main>
 
         <div className={cx('commentInput')}>
-          {detectLogin ? (
+          {isOpenComment ? (
             <div className={cx('commentInputWrapper')}>
               <div className={cx('commentInputAction')}>
                 <Input

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import { useCallback, useMemo, useState, memo } from 'react';
+import { useCallback, useMemo, useState, memo, useLayoutEffect } from 'react';
 import classNames from 'classnames/bind';
 import { Link, useNavigate } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
@@ -28,8 +29,7 @@ import SearchBar from 'app/components/SearchBar';
 import { MenuItemType } from 'types/Menu';
 import { useSearchUsers } from 'queries/users';
 import { useDebounce } from 'app/hooks';
-import { getUserData, removeItemFromStorage } from 'utils/storage';
-import { UserInfo } from 'types/User';
+import { getUserData, getTokens, removeItemFromStorage } from 'utils/storage';
 import { RootState } from 'stores';
 
 const cx = classNames.bind(styles);
@@ -38,6 +38,35 @@ interface Props {
   className?: string;
 }
 
+const MENU_ITEMS: MenuItemType[] = [
+  {
+    icon: <LanguageIcon />,
+    title: 'English',
+    children: {
+      title: 'Language',
+      data: [
+        {
+          code: 'en',
+          title: 'English',
+        },
+        {
+          code: 'vi',
+          title: 'Tieng Viet',
+        },
+      ],
+    },
+  },
+  {
+    icon: <QuestionIcon />,
+    title: 'Feedback and Help',
+    to: '/feedback',
+  },
+  {
+    icon: <KeyboardIcon />,
+    title: 'Keyboard shortcuts',
+  },
+];
+
 function Header({ className = '' }: Props) {
   const { t } = useTranslation();
   const dispath = useDispatch();
@@ -45,51 +74,17 @@ function Header({ className = '' }: Props) {
   const classes = cx('inner', {
     [className]: className,
   });
+  const userLogin: any = useSelector((state: RootState) => state.getUser.user);
+
   const [textSearch, setTextSearch] = useState('');
   const [tooltipIsOpen, setTooltipIsOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
 
+  console.log('first time', userLogin?.username);
+
   const debouncedValue = useDebounce(textSearch, 500);
 
   const { username, _id } = getUserData();
-
-  const MENU_ITEMS: MenuItemType[] = [
-    {
-      icon: <LanguageIcon />,
-      title: 'English',
-      children: {
-        title: 'Language',
-        data: [
-          {
-            code: 'en',
-            title: 'English',
-          },
-          {
-            code: 'vi',
-            title: 'Tieng Viet',
-          },
-        ],
-      },
-    },
-    {
-      icon: <QuestionIcon />,
-      title: 'Feedback and Help',
-      to: '/feedback',
-    },
-    {
-      icon: <KeyboardIcon />,
-      title: 'Keyboard shortcuts',
-    },
-  ];
-  const currentUser: UserInfo = useMemo(() => {
-    if (getUserData()?.username) {
-      // dispath(reloadAvatarActions.reloadAvatar(false));
-      return getUserData();
-    } else {
-      removeItemFromStorage('tokens');
-      return null;
-    }
-  }, []);
 
   const USER_MENU: MenuItemType[] = [
     {
@@ -114,6 +109,15 @@ function Header({ className = '' }: Props) {
       separate: true,
     },
   ];
+
+  const currentUser = useMemo(() => {
+    if (getTokens()?.accessToken) {
+      return true;
+    } else {
+      removeItemFromStorage('tokens');
+      return false;
+    }
+  }, [userLogin]);
 
   const { data: searchUsersResults, isFetching } = useSearchUsers(
     {
@@ -230,7 +234,7 @@ function Header({ className = '' }: Props) {
             {currentUser ? (
               <Image
                 className={cx('user-avatar')}
-                src={currentUser.avatar}
+                src={userLogin?.avatar}
                 alt="avatar"
               />
             ) : (

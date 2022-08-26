@@ -37,8 +37,6 @@ export function MediaDetail() {
     (state: RootState) => state.mediaOfLayoutFull.mediaOfLayoutFull,
   );
 
-  console.log('okokokokok', mediaOfLayoutFull);
-
   const [posts, setPosts] = useState<ResponsePostType[]>([]);
   const [userOfPost, setUserOfPost] = useState<UserInfo>();
   const [currentMedia, setCurrentMedia] = useState<any>();

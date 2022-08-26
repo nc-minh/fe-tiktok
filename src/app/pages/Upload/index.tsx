@@ -176,7 +176,13 @@ export function Upload() {
                     handleSubmit,
                     /* and other goodies */
                   }) => (
-                    <form className={cx('form')} onSubmit={handleSubmit}>
+                    <form
+                      className={cx('form')}
+                      onSubmit={e => {
+                        e.preventDefault();
+                        handleSubmit();
+                      }}
+                    >
                       <div className={cx('contents')}>
                         <label
                           className={cx('contentsLabel')}
@@ -206,14 +212,12 @@ export function Upload() {
                       </div>
 
                       <div className={cx('btnWrapper')}>
-                        <Button
+                        <div
                           className={cx('btn', 'discard')}
-                          box
-                          type="text"
                           onClick={handleOnOpenDialog}
                         >
                           Discard
-                        </Button>
+                        </div>
                         <Button
                           className={cx('btn')}
                           primary
