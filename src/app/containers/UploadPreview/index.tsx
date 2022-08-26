@@ -1,5 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import classNames from 'classnames/bind';
-import { useCallback, useMemo, useState, memo } from 'react';
+import {
+  useCallback,
+  useMemo,
+  useState,
+  memo,
+  useEffect,
+  useLayoutEffect,
+} from 'react';
 
 import styles from './UploadPreview.module.scss';
 import { isImage, isVideo } from 'utils/constants';
@@ -24,13 +32,23 @@ interface Props {
 function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
   const { avatar, username } = getUserData();
   const [isChangeMedia, setIsChangeMedia] = useState(false);
+  const [mediapre, setMediapre] = useState('');
   const fileName = useMemo(() => {
     return file?.name || '';
   }, [file]);
 
-  const templateUrl = useMemo(() => {
-    return (file && URL.createObjectURL(file)) || '';
+  useLayoutEffect(() => {
+    if (file) {
+      const value = URL.createObjectURL(file);
+      setMediapre(value);
+    }
   }, [file]);
+
+  useEffect(() => {
+    return () => {
+      mediapre && URL.revokeObjectURL(mediapre);
+    };
+  }, [mediapre, setMediapre]);
 
   const handleOnCloseDialog = useCallback(() => {
     setIsChangeMedia(false);
@@ -45,12 +63,7 @@ function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
       <div className={cx('wrapper')}>
         <div className={cx('container')}>
           <div className={cx('content')}>
-            <video
-              autoPlay
-              className={cx('video')}
-              src={templateUrl}
-              controls
-            />
+            <video autoPlay className={cx('video')} src={mediapre} controls />
 
             <div className={cx('header')}>
               <p>Following</p>
@@ -127,7 +140,7 @@ function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
       <div className={cx('wrapper')}>
         <div className={cx('container')}>
           <div className={cx('content')}>
-            <Image className={cx('video')} src={templateUrl} />
+            <Image className={cx('video')} src={mediapre} />
 
             <div className={cx('header')}>
               <p>Following</p>
