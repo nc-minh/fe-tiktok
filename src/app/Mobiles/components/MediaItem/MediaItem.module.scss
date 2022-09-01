@@ -1,0 +1,21 @@
+.wrapper{
+    height: calc(100vh - 49px);
+
+    .container{
+        height: 100%;
+        position: relative;
+
+        .right{
+            z-index: 5;
+            position: absolute;
+            bottom: 135px;
+            right: 12px;
+        }
+
+        .mediaCaption{
+            z-index: 5;
+            position: absolute;
+            bottom: 25px;
+        }
+    }
+}

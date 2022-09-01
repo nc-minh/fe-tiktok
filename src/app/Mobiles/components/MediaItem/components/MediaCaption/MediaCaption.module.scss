@@ -1,0 +1,119 @@
+.wrapper {
+    width: 100%;
+
+    .container {
+        width: 100%;
+        display: flex;
+
+        .infoWrapper {
+            color: var(--white);
+            flex: 1;
+            margin-left: 12px;
+            overflow: hidden;
+
+            .nameWrapper {
+                display: flex;
+                align-items: center;
+
+                .username {
+                    font-weight: 600;
+                    margin-right: 4px;
+                }
+            }
+
+            .contents {
+                font-size: 1.5rem;
+                font-weight: normal;
+                line-height: 1.2;
+                margin-bottom: 8px;
+                text-overflow: ellipsis;
+                overflow: hidden;
+                white-space: normal;
+                word-break: break-all;
+                display: -webkit-box;
+                -webkit-line-clamp: 4;
+                -webkit-box-orient: vertical;
+            }
+
+            .musicWrapper {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .icon {
+                    margin-right: 8px;
+                }
+
+                .overflow{
+                    overflow: hidden;
+
+                    .musicName {
+                        font-size: 1.5rem;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        display: inline-block;
+                    }
+                }
+
+                
+            }
+        }
+
+        .mediaWrapper {
+            width: 100px;
+            margin-top: 18px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+
+            .avatarWrapper {
+                width: 49px;
+                height: 49px;
+                border-radius: 50%;
+                overflow: hidden;
+                border: 6px solid #000;
+                margin-right: 12px;
+
+                .avatar {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+            }
+
+            .musicSymbols{
+                position: absolute;
+                bottom: 72px;
+                right: 70px;
+                z-index: 5;
+
+                .icon1 {
+                    position: absolute;
+                    top: calc(20px);
+                    left: calc(-20px);
+                    display: block;
+                    width: calc(25px);
+                    height: calc(25px);
+                }
+
+                .icon2 {
+                    position: absolute;
+                    top: calc(8px);
+                    left: calc(-24px);
+                    display: block;
+                    width: calc(16px);
+                    height: calc(16px);
+                }
+
+                .icon3 {
+                    position: absolute;
+                    top: calc(-4px);
+                    left: calc(-28px);
+                    display: block;
+                    width: calc(12px);
+                    height: calc(12px);
+                }
+            }
+        }
+    }
+}

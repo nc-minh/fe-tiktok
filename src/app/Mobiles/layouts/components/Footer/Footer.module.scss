@@ -1,0 +1,27 @@
+.wrapper{
+    width: 100%;
+
+    .container{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 49px;
+        background-color: #000;
+        padding: 0 16px;
+
+        .icon{
+            width: 4rem;
+            height: 4rem;
+            fill: #fff;
+        }
+
+        .resize{
+            width: 3.3rem;
+        }
+
+        .upload{
+            width: 8rem;
+            height: 6rem;
+        }
+    }
+}
