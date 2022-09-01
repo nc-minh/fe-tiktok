@@ -14,8 +14,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useGetUserInfo } from 'queries/users';
 import { getTokens } from 'utils/storage';
 import { globalStateActions } from './slice';
-import githubIcon from 'assets/icons/socialNetwork/github-logo.png';
 import SnackbarCustomize from 'app/components/SnackbarCustomize';
+import MobileLayout from 'app/Mobiles';
 
 function RootLayout() {
   const dispath = useDispatch();
@@ -87,39 +87,7 @@ function RootLayout() {
   }, [snackbarGlobal]);
 
   if (isMobile) {
-    return (
-      <>
-        <strong
-          style={{
-            textAlign: 'center',
-            width: '100%',
-            display: 'block',
-            marginTop: '120px',
-          }}
-        >
-          This content is available only on PC
-        </strong>
-        <div
-          style={{
-            width: '56px',
-            height: '56px',
-            margin: 'auto',
-            marginTop: '24px',
-          }}
-        >
-          <a
-            style={{ width: '100%', height: '100%' }}
-            href="https://github.com/nc-minh"
-          >
-            <img
-              style={{ width: '100%', height: '100%' }}
-              src={githubIcon}
-              alt="github"
-            />
-          </a>
-        </div>
-      </>
-    );
+    return <MobileLayout />;
   }
 
   return (

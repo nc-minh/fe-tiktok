@@ -127,6 +127,20 @@ a {
     }
 }
 
+@keyframes slider-2 {
+    0% {
+        transform: translate3d(0px, 0px, 0px);
+    }
+    100% {
+        transform: translate3d(-150%, 0px, 0px);
+    }
+}
+
+
 .sliderSoundText{
     animation: 10s linear 0s infinite normal none running slider;
+}
+
+.sliderSoundText-2{
+    animation: 5s linear 0s infinite normal none running slider-2;
 }

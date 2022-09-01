@@ -1,0 +1,21 @@
+.wrapper{
+    .container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 49px;
+        background-color: transparent;
+
+        .text{
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 1.7rem;
+            margin: 0 12px;
+        }
+
+        .active{
+            color: #fff;
+            font-weight: bold;
+            
+        }
+    }
+}
