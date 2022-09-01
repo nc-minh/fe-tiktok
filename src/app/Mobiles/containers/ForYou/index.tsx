@@ -1,33 +1,22 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import MediaItem from 'app/Mobiles/components/MediaItem';
 import classNames from 'classnames/bind';
 import { useGetPostTrends } from 'queries/post';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { PostTrends } from 'types/Post';
 
 import styles from './ForYou.module.scss';
 
-// const media = {
-//   media_url:
-//     'http://res.cloudinary.com/domvksfsk/video/upload/v1660145430/tiktok/videos/download%20%281%29.mp4-u0mQcJxSpemmbvWl0CiueciZeT3YZMJJ.mp4',
-//   contents: 'meo meo meo :))',
-//   comment_count: 1,
-//   isFollow: true,
-//   isReaction: true,
-//   reaction_count: 2,
-//   view_count: 3,
-//   user_id: {
-//     avatar:
-//       'http://res.cloudinary.com/domvksfsk/image/upload/v1661579103/tiktok/images/%5B000280%5D.jpg-455ZqHWdMH4mkVfO3MlMcdIvoNoXg8Aj.jpg',
-//     fullname: 'Me Me nè mn',
-//     tick: true,
-//     username: 'mememe',
-//   },
-// };
-
 const cx = classNames.bind(styles);
 
 function ForYou() {
+  const ref = useRef<any>(null);
+  const [scroll, setScroll] = useState(0);
+  const [translateY, setTranslateY] = useState(0);
+
   const { data, fetchNextPage } = useGetPostTrends({
     currentPage: 0,
     pageSize: 10,
@@ -38,15 +27,34 @@ function ForYou() {
       return prev.concat(curr.data as any);
     }, []);
   }, [data]) as PostTrends[];
+
+  useEffect(() => {
+    const listener = (event: any) => {
+      console.log(
+        'event.changedTouches[0].clientY',
+        event.changedTouches[0].clientY,
+      );
+    };
+    document.addEventListener('touchmove', listener);
+    return () => {
+      document.removeEventListener('touchmove', listener);
+    };
+  }, [scroll, setScroll]);
+
+  const style = {
+    transform: `translateY(${translateY}px)`,
+  };
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
         {GetPostTrends && (
           <InfiniteScroll
+            ref={ref}
             hasMore={true}
             next={fetchNextPage}
             dataLength={GetPostTrends?.length || 0}
             loader={null}
+            style={style}
           >
             {GetPostTrends.map((post, index) => (
               <MediaItem key={index} media={post} />
