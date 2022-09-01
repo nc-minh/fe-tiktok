@@ -3,14 +3,14 @@ import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from 'app/pages/Home/slice';
 import detectLoginReducer from 'app/components/ProfileHeaderBase/slice';
 import mediaOfLayoutFullReducer from 'app/components/PostList/slice';
-import userReducer from 'app/layouts/slice';
+import globalStateReducer from 'app/layouts/slice';
 
 export const store = configureStore({
   reducer: {
     counter: counterReducer,
     detectLogin: detectLoginReducer,
     mediaOfLayoutFull: mediaOfLayoutFullReducer,
-    getUser: userReducer,
+    globalState: globalStateReducer,
   },
 });
 // Infer the `RootState` and `AppDispatch` types from the store itself

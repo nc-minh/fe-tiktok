@@ -3,15 +3,21 @@ import { useParams } from 'react-router-dom';
 
 import { useGetUserInfo, useGetUserByUsername } from 'queries/users';
 import { UserInfo } from 'types/User';
-import { getUserData, setUserData } from 'utils/storage';
 import ProfileHeaderBase from 'app/components/ProfileHeaderBase';
 import NotFound from './components/Notfound';
+import { RootState } from 'stores';
+import { useDispatch, useSelector } from 'react-redux';
+import { globalStateActions } from 'app/layouts/slice';
 
 function ProfileHeader() {
   const [user, setUser] = useState<UserInfo>();
   const { username = '' } = useParams();
+  const dispath = useDispatch();
   const [enabledMyself, setEnabledMyself] = useState(false);
-  const { _id } = getUserData();
+  const userLogin: any = useSelector(
+    (state: RootState) => state.globalState.user,
+  );
+  const { _id } = userLogin;
 
   const {
     data: GetUserByUsername,
@@ -41,7 +47,7 @@ function ProfileHeader() {
   useEffect(() => {
     if (GetUserInfoLogin) {
       setUser(GetUserInfoLogin);
-      setUserData(GetUserInfoLogin);
+      dispath(globalStateActions.getUser(GetUserInfoLogin));
     }
   }, [GetUserInfoLogin, setUser, setEnabledMyself, enabledMyself, username]);
 

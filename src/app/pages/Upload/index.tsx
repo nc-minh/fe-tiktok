@@ -11,10 +11,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import UploadPreview from 'app/containers/UploadPreview';
 import { MB_50 } from 'utils/constants';
 import SnackbarCustomize from 'app/components/SnackbarCustomize';
-import { getUserData } from 'utils/storage';
 import DialogCustomize from 'app/components/DialogCustomize';
 import PopupBackorContinue from 'app/components/PopupBackorContinue';
 import { useCreatePost } from 'mutations/post';
+import { useSelector } from 'react-redux';
+import { RootState } from 'stores';
 
 const cx = classNames.bind(styles);
 
@@ -40,7 +41,10 @@ export function Upload() {
 
   const navigate = useNavigate();
 
-  const { _id } = getUserData();
+  const userLogin: any = useSelector(
+    (state: RootState) => state.globalState.user,
+  );
+  const { _id } = userLogin;
 
   useEffect(() => {
     if (!_id) {

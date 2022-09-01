@@ -7,7 +7,7 @@ import styles from './Menu.module.scss';
 const cx = classNames.bind(styles);
 
 interface Props {
-  title: string;
+  title?: string;
   onBack: () => void;
 }
 

@@ -19,7 +19,6 @@ function CommentItem({ commentInfo }: Props) {
     () => time_ago(commentInfo?.created_at),
     [commentInfo?.created_at],
   );
-  console.log('commentInfo?.user_id?.username', commentInfo?.user_id?.username);
 
   return (
     <div className={cx('wrapper')}>

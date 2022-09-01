@@ -16,10 +16,12 @@ import { ReactComponent as InstagramIcon } from 'assets/icons/socialNetwork/inst
 import { ReactComponent as BackIcon } from 'assets/icons/arrowLeft.svg';
 import LoginForm from '../LoginForm';
 import SnackbarCustomize from 'app/components/SnackbarCustomize';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 function PopupLogin() {
+  const { t } = useTranslation();
   const [isLogin, setIsLogin] = useState(true);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
@@ -47,33 +49,33 @@ function PopupLogin() {
 
       {isLogin ? (
         <div className={cx('wrapper')}>
-          <h2 className={cx('title')}>Log in to TikTok</h2>
+          <h2 className={cx('title')}>{t('btn.loginToTiktok')}</h2>
           <Button onClick={handleOpenSnackbar} leftIcon={<QRcodeIcon />} box>
-            Use QR code
+            {t('btn.use', { method: 'QR code' })}
           </Button>
           <Button onClick={() => setIsLogin(false)} leftIcon={<UserIcon />} box>
-            Use phone / email / username
+            {t('btn.use', { method: 'phone / email / username' })}
           </Button>
           <Button onClick={handleOpenSnackbar} leftIcon={<FacebookIcon />} box>
-            Continue with Facebook
+            {t('btn.continueWith', { text: 'Facebook' })}
           </Button>
           <Button onClick={handleOpenSnackbar} leftIcon={<GoogleIcon />} box>
-            Continue with Google
+            {t('btn.continueWith', { text: 'Google' })}
           </Button>
           <Button onClick={handleOpenSnackbar} leftIcon={<TwitterIcon />} box>
-            Continue with Twitter
+            {t('btn.continueWith', { text: 'Twitter' })}
           </Button>
           <Button onClick={handleOpenSnackbar} leftIcon={<LineIcon />} box>
-            Continue with LINE
+            {t('btn.continueWith', { text: 'LINE' })}
           </Button>
           <Button onClick={handleOpenSnackbar} leftIcon={<KakaoTalkIcon />} box>
-            Continue with KakaoTalk
+            {t('btn.continueWith', { text: 'KakaoTalk' })}
           </Button>
           <Button onClick={handleOpenSnackbar} leftIcon={<AppleIcon />} box>
-            Continue with Apple
+            {t('btn.continueWith', { text: 'Apple' })}
           </Button>
           <Button onClick={handleOpenSnackbar} leftIcon={<InstagramIcon />} box>
-            Continue with Instagram
+            {t('btn.continueWith', { text: 'Instagram' })}
           </Button>
         </div>
       ) : (
@@ -83,7 +85,7 @@ function PopupLogin() {
         open={openSnackbar}
         autoHideDuration={2000}
         onClose={handleCloseSnackbar}
-        content="Login using this method is not supported!"
+        content={t('text.notSuportThisMethod')}
         type="info"
       />
     </>

@@ -11,13 +11,15 @@ interface Props {
   to: string;
   icon: JSX.Element;
   activeIcon: JSX.Element;
+  onclick?: () => void;
 }
 
-function MenuItem({ title, to, icon, activeIcon }: Props) {
+function MenuItem({ title, to, icon, activeIcon, onclick = () => {} }: Props) {
   return (
     <NavLink
       className={nav => cx('menu-item', { active: nav.isActive })}
       to={to}
+      onClick={onclick}
     >
       <span className={cx('icon')}>{icon}</span>
       <span className={cx('active-icon')}>{activeIcon}</span>

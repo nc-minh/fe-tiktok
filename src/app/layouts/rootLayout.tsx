@@ -1,7 +1,6 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Fragment, memo, useCallback, useEffect, useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { isMobile } from 'react-device-detect';
 
 import { publicRoutes } from 'app/routes';
 import DefaultLayout from './DefaultLayout';
@@ -14,13 +13,18 @@ import { detectLoginActions } from 'app/components/ProfileHeaderBase/slice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useGetUserInfo } from 'queries/users';
 import { getTokens } from 'utils/storage';
-import { userActions } from './slice';
+import { globalStateActions } from './slice';
+import githubIcon from 'assets/icons/socialNetwork/github-logo.png';
+import SnackbarCustomize from 'app/components/SnackbarCustomize';
 
 function RootLayout() {
   const dispath = useDispatch();
 
   const [tabLogin, setTabLogin] = useState(true);
   const [isLogin, setIsLogin] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState<any>('info');
 
   const tokens = getTokens();
 
@@ -29,7 +33,11 @@ function RootLayout() {
   );
 
   const refetchState: any = useSelector(
-    (state: RootState) => state.getUser.refetch,
+    (state: RootState) => state.globalState.refetch,
+  );
+
+  const snackbarGlobal: any = useSelector(
+    (state: RootState) => state.globalState.snackbarGlobal,
   );
 
   const handleOnCloseDialog = useCallback(() => {
@@ -46,10 +54,14 @@ function RootLayout() {
     tokens?.accessToken ? true : false,
   );
 
+  const handleCloseSnackbar = useCallback(() => {
+    setOpenSnackbar(false);
+  }, [openSnackbar, setOpenSnackbar]);
+
   useEffect(() => {
     if (GetUserInfoLogin) {
-      console.log('GetUserInfoLogin', GetUserInfoLogin);
-      dispath(userActions.getUser(GetUserInfoLogin));
+      dispath(globalStateActions.getUser(GetUserInfoLogin));
+      setSnackbarMessage('success');
     }
   }, [GetUserInfoLogin]);
 
@@ -62,11 +74,53 @@ function RootLayout() {
   useEffect(() => {
     if (refetchState) {
       refetch();
-      dispath(userActions.getRefetch(false));
+      dispath(globalStateActions.getRefetch(false));
     }
   }, [refetchState]);
 
-  console.log('root layout', 'realod');
+  useEffect(() => {
+    if (snackbarGlobal?.status) {
+      setSnackbarMessage(snackbarGlobal?.message);
+      setOpenSnackbar(true);
+      setSnackbarType(snackbarGlobal?.type);
+    }
+  }, [snackbarGlobal]);
+
+  if (isMobile) {
+    return (
+      <>
+        <strong
+          style={{
+            textAlign: 'center',
+            width: '100%',
+            display: 'block',
+            marginTop: '120px',
+          }}
+        >
+          This content is available only on PC
+        </strong>
+        <div
+          style={{
+            width: '56px',
+            height: '56px',
+            margin: 'auto',
+            marginTop: '24px',
+          }}
+        >
+          <a
+            style={{ width: '100%', height: '100%' }}
+            href="https://github.com/nc-minh"
+          >
+            <img
+              style={{ width: '100%', height: '100%' }}
+              src={githubIcon}
+              alt="github"
+            />
+          </a>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -109,6 +163,14 @@ function RootLayout() {
           {tabLogin ? <PopupLogin /> : <PopupSignup />}
         </PopupContent>
       </DialogCustomize>
+      {/* SnackbarCustomize */}
+      <SnackbarCustomize
+        open={openSnackbar}
+        autoHideDuration={2000}
+        onClose={handleCloseSnackbar}
+        content={snackbarMessage}
+        type={snackbarType}
+      />
     </>
   );
 }

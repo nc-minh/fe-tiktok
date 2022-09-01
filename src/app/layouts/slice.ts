@@ -1,12 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { SnackbarGlobal } from 'types/Common';
 import { UserInfo } from 'types/User';
 
-export interface UserLogin {
+export interface GlobalState {
   user: UserInfo;
   refetch: boolean;
+  snackbarGlobal: SnackbarGlobal;
 }
 
-const initialState: UserLogin = {
+const initialState: GlobalState = {
   user: {
     _id: '',
     fullname: '',
@@ -24,10 +26,15 @@ const initialState: UserLogin = {
     updated_at: '',
   },
   refetch: false,
+  snackbarGlobal: {
+    status: false,
+    message: '',
+    type: 'info',
+  },
 };
 
-export const userSlice = createSlice({
-  name: 'user',
+export const globalStateSlice = createSlice({
+  name: 'globalState',
   initialState: initialState,
   reducers: {
     getUser: (state, action) => {
@@ -36,9 +43,12 @@ export const userSlice = createSlice({
     getRefetch: (state, action) => {
       state.refetch = action.payload;
     },
+    snackbarAction: (state, action) => {
+      state.snackbarGlobal = action.payload;
+    },
   },
 });
 
-export const userActions = userSlice.actions;
+export const globalStateActions = globalStateSlice.actions;
 
-export default userSlice.reducer;
+export default globalStateSlice.reducer;

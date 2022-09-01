@@ -13,10 +13,11 @@ import { ReactComponent as LiveActiveIcon } from 'assets/icons/liveActive.svg';
 import SidebarContainer from 'app/components/SidebarContainer';
 import Footer from 'app/layouts/components/Footer';
 import { useGetFollowings } from 'queries/follow';
-import { getUserData } from 'utils/storage';
 import { FollowingsResponseType } from 'types/Follow';
 import { UserInfo } from 'types/User';
 import { useGetSuggestedAccounts } from 'queries/users';
+import { useSelector } from 'react-redux';
+import { RootState } from 'stores';
 
 const cx = classNames.bind(styles);
 
@@ -28,7 +29,10 @@ const SUGGESTED_ACCOUNTS_SHOW = 5;
 
 function Sidebar({ className = '' }: Props) {
   const classes = cx('wrapper', { [className]: className });
-  const { _id } = getUserData();
+  const userLogin: any = useSelector(
+    (state: RootState) => state.globalState.user,
+  );
+  const { _id } = userLogin;
 
   const [followingAccounts, setFollowingAccounts] =
     useState<FollowingsResponseType[]>();
@@ -79,48 +83,53 @@ function Sidebar({ className = '' }: Props) {
   return (
     <aside className={classes}>
       <div className={cx('container')}>
-        <Menu>
-          <span>
-            <MenuItem
-              title="For You"
-              to={routeConfig.home}
-              icon={<HomeIcon />}
-              activeIcon={<HomeActiveIcon />}
-            />
-            <MenuItem
-              title="Following"
-              to={routeConfig.following}
-              icon={<UserGroupIcon />}
-              activeIcon={<UserGroupActiveIcon />}
-            />
-            <MenuItem
-              title="LIVE"
-              to={routeConfig.live}
-              icon={<LiveIcon />}
-              activeIcon={<LiveActiveIcon />}
-            />
-          </span>
-        </Menu>
-        <SidebarContainer
-          suggested={seeAllSwitch ? suggestedAccounts : suggestedAccountsLess}
-          title="Suggested accounts"
-          footerText={footerText}
-          type={'suggested'}
-          onSeeAll={handleSeeAllSuggested}
-          isSuggestedLoading={isSuggestedLoading}
-        />
-        {GetFollowingsStatus && (
+        <div className={cx('contents')}>
+          <Menu>
+            <span>
+              <MenuItem
+                title="For You"
+                to={routeConfig.home}
+                icon={<HomeIcon />}
+                activeIcon={<HomeActiveIcon />}
+                onclick={() => {
+                  window.location.href = '/';
+                }}
+              />
+              <MenuItem
+                title="Following"
+                to={routeConfig.following}
+                icon={<UserGroupIcon />}
+                activeIcon={<UserGroupActiveIcon />}
+              />
+              <MenuItem
+                title="LIVE"
+                to={routeConfig.live}
+                icon={<LiveIcon />}
+                activeIcon={<LiveActiveIcon />}
+              />
+            </span>
+          </Menu>
           <SidebarContainer
-            followings={followingAccounts}
-            title="Following accounts"
-            footerText="See more"
-            onSeeAll={handleSeeAllFollowings}
-            isFollowingsLoading={isFollowingsLoading}
+            suggested={seeAllSwitch ? suggestedAccounts : suggestedAccountsLess}
+            title="Suggested accounts"
+            footerText={footerText}
+            type={'suggested'}
+            onSeeAll={handleSeeAllSuggested}
+            isSuggestedLoading={isSuggestedLoading}
           />
-        )}
+          {GetFollowingsStatus && (
+            <SidebarContainer
+              followings={followingAccounts}
+              title="Following accounts"
+              footerText="See more"
+              onSeeAll={handleSeeAllFollowings}
+              isFollowingsLoading={isFollowingsLoading}
+            />
+          )}
 
-        {/* footer */}
-        <Footer />
+          {/* footer */}
+          <Footer />
+        </div>
       </div>
     </aside>
   );

@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
-/* eslint-disable no-unused-vars */
 import classNames from 'classnames/bind';
 import { useCallback, useEffect, useState, memo } from 'react';
 import { useDispatch } from 'react-redux';
@@ -9,6 +8,7 @@ import Image from 'app/components/Image';
 import Button from 'app/components/Button';
 import { useUpdateAvatar } from 'mutations/user';
 import { reloadAvatarActions } from './slice';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
@@ -22,6 +22,7 @@ function ProfileHeaderUpload({
   refetchInfoLogin = () => {},
   handleBackToEditUser = () => {},
 }: Props) {
+  const { t } = useTranslation();
   const dispath = useDispatch();
   const updateAvatar = useUpdateAvatar();
   const [avatarpre, setAvatarpre] = useState('');
@@ -31,12 +32,11 @@ function ProfileHeaderUpload({
     formData.append('avatar', file);
 
     updateAvatar.mutate(formData, {
-      onSuccess(data) {
+      onSuccess() {
         dispath(reloadAvatarActions.reloadAvatar(true));
         refetchInfoLogin();
         handleBackToEditUser();
       },
-      onError(error) {},
     });
   }, [file]);
 
@@ -60,7 +60,7 @@ function ProfileHeaderUpload({
       </div>
       <footer className={cx('footerAvatar')}>
         <Button className={cx('btn')} box onClick={handleBackToEditUser}>
-          Cancel
+          {t('btn.cancel')}
         </Button>
         <Button
           className={cx('btn')}
@@ -68,7 +68,7 @@ function ProfileHeaderUpload({
           onClick={handleUpdateAvatar}
           loading={updateAvatar.isLoading}
         >
-          Apply
+          {t('btn.apply')}
         </Button>
       </footer>
     </section>

@@ -29,7 +29,7 @@ import SearchBar from 'app/components/SearchBar';
 import { MenuItemType } from 'types/Menu';
 import { useSearchUsers } from 'queries/users';
 import { useDebounce } from 'app/hooks';
-import { getUserData, getTokens, removeItemFromStorage } from 'utils/storage';
+import { getTokens, removeItemFromStorage } from 'utils/storage';
 import { RootState } from 'stores';
 
 const cx = classNames.bind(styles);
@@ -51,7 +51,7 @@ const MENU_ITEMS: MenuItemType[] = [
         },
         {
           code: 'vi',
-          title: 'Tieng Viet',
+          title: 'Tiếng Việt',
         },
       ],
     },
@@ -74,17 +74,17 @@ function Header({ className = '' }: Props) {
   const classes = cx('inner', {
     [className]: className,
   });
-  const userLogin: any = useSelector((state: RootState) => state.getUser.user);
+  const userLogin: any = useSelector(
+    (state: RootState) => state.globalState.user,
+  );
 
   const [textSearch, setTextSearch] = useState('');
   const [tooltipIsOpen, setTooltipIsOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
 
-  console.log('first time', userLogin?.username);
-
   const debouncedValue = useDebounce(textSearch, 500);
 
-  const { username, _id } = getUserData();
+  const { username, _id } = userLogin;
 
   const USER_MENU: MenuItemType[] = [
     {
@@ -182,9 +182,9 @@ function Header({ className = '' }: Props) {
   return (
     <header className={cx('wrapper')}>
       <div className={classes}>
-        <Link to={routeConfig.home} className={cx('logo')}>
+        <a href={routeConfig.home} className={cx('logo')}>
           <Image src={tiktokLogo} alt="tiktok logo" />
-        </Link>
+        </a>
 
         <SearchBar
           autoFocus={false}
@@ -232,11 +232,13 @@ function Header({ className = '' }: Props) {
 
           <Menu items={currentUser ? USER_MENU : MENU_ITEMS}>
             {currentUser ? (
-              <Image
-                className={cx('user-avatar')}
-                src={userLogin?.avatar}
-                alt="avatar"
-              />
+              <div className={cx('user-avatarWrapper')}>
+                <Image
+                  className={cx('user-avatar')}
+                  src={userLogin?.avatar}
+                  alt="avatar"
+                />
+              </div>
             ) : (
               <span className={cx('more-btn')}>
                 <MoreIcon />

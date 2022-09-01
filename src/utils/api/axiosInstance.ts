@@ -4,18 +4,17 @@ import configs from 'configs';
 import { getTokens, removeItemFromStorage } from 'utils/storage';
 import handleRefreshToken from './refreshToken';
 
+const { accessToken } = getTokens();
+
 const axiosInstance = axios.create({
   baseURL: configs.apiEndpoint,
+  headers: {
+    Authorization: `Bearer ${accessToken}`,
+  },
 });
 
 axiosInstance.interceptors.request.use(
   function (config: any) {
-    const { accessToken } = getTokens();
-
-    config.headers = {
-      Authorization: `Bearer ${accessToken}`,
-    };
-
     return config;
   },
   function (error: any) {

@@ -18,9 +18,11 @@ import musicSymbols2Icon from 'assets/icons/musicSymbols-2.png';
 import musicSymbols3Icon from 'assets/icons/musicSymbols-3.png';
 import { ReactComponent as MusicIcon } from 'assets/icons/musicIcon.svg';
 import { ReactComponent as CircleCheckIcon } from 'assets/icons/circleCheckIcon.svg';
-import { getUserData } from 'utils/storage';
 import DialogCustomize from 'app/components/DialogCustomize';
 import PopupBackorContinue from '../../components/PopupBackorContinue';
+import { useSelector } from 'react-redux';
+import { RootState } from 'stores';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
@@ -30,7 +32,11 @@ interface Props {
   onChangeVideo?: () => void;
 }
 function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
-  const { avatar, username } = getUserData();
+  const userLogin: any = useSelector(
+    (state: RootState) => state.globalState.user,
+  );
+  const { t } = useTranslation();
+  const { avatar, username } = userLogin;
   const [isChangeMedia, setIsChangeMedia] = useState(false);
   const [mediapre, setMediapre] = useState('');
   const fileName = useMemo(() => {
@@ -66,8 +72,8 @@ function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
             <video autoPlay className={cx('video')} src={mediapre} controls />
 
             <div className={cx('header')}>
-              <p>Following</p>
-              <p>For You</p>
+              <p>{t('text.following')}</p>
+              <p>{t('text.forYou')}</p>
             </div>
 
             <div className={cx('actions')}>
@@ -116,7 +122,7 @@ function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
             <p className={cx('changeVideoFilename')}>{fileName}</p>
           </div>
           <div onClick={handleOnOpenDialog} className={cx('changeVideoText')}>
-            Change video
+            {t('text.changeVideo')}
           </div>
         </div>
 
@@ -143,8 +149,8 @@ function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
             <Image className={cx('video')} src={mediapre} />
 
             <div className={cx('header')}>
-              <p>Following</p>
-              <p>For You</p>
+              <p>{t('text.following')}</p>
+              <p>{t('text.forYou')}</p>
             </div>
 
             <div className={cx('actions')}>
@@ -193,7 +199,7 @@ function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
             <p className={cx('changeVideoFilename')}>{fileName}</p>
           </div>
           <div onClick={handleOnOpenDialog} className={cx('changeVideoText')}>
-            Change video
+            {t('text.changeVideo')}
           </div>
         </div>
 

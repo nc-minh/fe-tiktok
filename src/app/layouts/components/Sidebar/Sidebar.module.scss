@@ -1,15 +1,21 @@
-.wrapper{
+.wrapper {
     width: 356px;
-    padding: 20px 0 26px 8px;
-    margin-left: -18px;
-    height: calc(100vh - var(--default-layout-header-height));
 
-    .container{
-        height: 100%;
-        width: 100%;
+    .container {
+        width: inherit;
+        position: fixed;
+        padding: 20px 0 26px 8px;
+        margin-left: -18px;
+        height: calc(100vh - var(--default-layout-header-height));
         overflow-y: scroll;
 
-        &::-webkit-scrollbar{
+        .contents {
+            height: 100%;
+            width: 100%;
+            
+        }
+
+        &::-webkit-scrollbar {
             border-radius: 0;
             width: 8px;
         }
@@ -26,7 +32,7 @@
         }
     }
 
-    &:hover > .container::-webkit-scrollbar-thumb{
+    &:hover > .container::-webkit-scrollbar-thumb {
         visibility: visible;
     }
 }

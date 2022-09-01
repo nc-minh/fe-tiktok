@@ -7,6 +7,7 @@ import { ReactComponent as PlayIcon } from 'assets/icons/play.svg';
 import Image from 'app/components/Image';
 import { ResponsePostType } from 'types/Post';
 import { useParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
@@ -14,6 +15,7 @@ interface Props {
   item: ResponsePostType;
 }
 function PostItem({ item }: Props) {
+  const { t } = useTranslation();
   const { username = '' } = useParams();
   const [autoplay, setAutoplay] = useState(false);
   const ref = useRef<any>(null);
@@ -54,9 +56,9 @@ function PostItem({ item }: Props) {
               className={cx('video')}
               ref={ref}
               muted={true}
+              src={item.media_url}
             >
-              <source src={item.media_url} type="video/mp4" />
-              Your browser does not support the video tag.
+              {t('text.notsupport')}
             </video>
             <div className={cx('view')}>
               <PlayIcon className={cx('playIcon')} />

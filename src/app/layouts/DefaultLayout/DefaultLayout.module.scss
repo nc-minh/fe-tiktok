@@ -8,10 +8,12 @@
     width: var(--default-layout-width);
     max-width: 100%;
     display: flex;
+    justify-content: space-between;
     padding: 0 var(--default-layout-horizontal-spacer);
     margin-top: var(--default-layout-header-height);
 }
 
 .content{
-    flex: 1;
+    // flex: 1;
+    width: 692px;
 }

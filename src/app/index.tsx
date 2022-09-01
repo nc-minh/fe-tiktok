@@ -15,10 +15,10 @@ export function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter basename="/">
         <Helmet
-          defaultTitle="Template App"
+          defaultTitle="TikTok by me"
           htmlAttributes={{ lang: i18n.language }}
         >
-          <meta name="description" content="Template App" />
+          <meta name="description" content="TikTok by me" />
         </Helmet>
         <ThemeProvider theme={theme}>
           <StyledEngineProvider injectFirst>

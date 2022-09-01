@@ -11,6 +11,7 @@ import { Profile } from 'app/pages/Profile/Loadable';
 import { Live } from 'app/pages/Live/Loadable';
 import { Upload } from 'app/pages/Upload/Loadable';
 import { MediaDetail } from 'app/pages/MediaDetail/Loadable';
+import { NotFound } from 'app/pages/NotFound';
 
 //Public routes
 const publicRoutes: PublicRoutes[] = [
@@ -40,6 +41,10 @@ const publicRoutes: PublicRoutes[] = [
     path: routeConfig.media_detail,
     component: MediaDetail,
     layout: MediaDetailLayout,
+  },
+  {
+    path: routeConfig.not_found,
+    component: NotFound,
   },
 ];
 

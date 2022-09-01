@@ -37,7 +37,7 @@ function PostList({ type, userId }: Props) {
         }),
       );
     }
-  });
+  }, [GetPostOfUser]);
 
   if (type === 'Videos') {
     return (

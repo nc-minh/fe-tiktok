@@ -27,7 +27,7 @@ import Input from 'app/components/Input';
 import { useCreateComment } from 'mutations/comment';
 import { detectLoginActions } from 'app/components/ProfileHeaderBase/slice';
 import { RootState } from 'stores';
-import { useViewPost } from 'mutations/post';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
@@ -40,6 +40,7 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
   const pathName = window.location.href;
   const navigate = useNavigate();
   const dispath = useDispatch();
+  const { t } = useTranslation();
 
   const [textValue, setTextValue] = useState('');
   const [isOpenComment, setIsOpenComment] = useState(false);
@@ -67,13 +68,11 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
       },
       {
         onSuccess: data => {
-          console.log('onSuccess', data);
           refetch();
           setTextValue('');
         },
         onError: (error: any) => {
           if (error?.name === 'AuthenticationError') {
-            console.log('onError', error);
             dispath(detectLoginActions.detectLogin(false));
           }
         },
@@ -84,7 +83,6 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
   const handleOnKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === 'Enter') {
-        console.log('onKeyDown', textValue);
         handleCreateComment();
       }
     },
@@ -102,7 +100,9 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
     dispath(detectLoginActions.detectLogin(true));
   }, [detectLogin]);
 
-  const userLogin: any = useSelector((state: RootState) => state.getUser.user);
+  const userLogin: any = useSelector(
+    (state: RootState) => state.globalState.user,
+  );
 
   useEffect(() => {
     if (userLogin?.username) {
@@ -125,7 +125,7 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
               <strong className={cx('fullname')}>{userOfPost?.fullname}</strong>
             </div>
             <Button className={cx('actionBtn')} outline>
-              Follow
+              {t('btn.follow')}
             </Button>
           </div>
           <main className={cx('videoDesc')}>{postInfo?.contents}</main>
@@ -136,7 +136,9 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
                   <HeartIcon
                     className={cx(
                       'actionIcon',
-                      postInfo?.isReaction[0]?._id && 'isReaction',
+                      postInfo?.isReaction &&
+                        postInfo?.isReaction[0]?._id &&
+                        'isReaction',
                     )}
                   />
                 </div>
@@ -174,7 +176,7 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
           </div>
           <div className={cx('copyLink')}>
             <div className={cx('link')}>{pathName}</div>
-            <div className={cx('copyBtn')}>Copy link</div>
+            <div className={cx('copyBtn')}>{t('text.copylink')}</div>
           </div>
         </header>
 
@@ -192,7 +194,7 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
             <div className={cx('commentInputWrapper')}>
               <div className={cx('commentInputAction')}>
                 <Input
-                  placeholder="Add comment..."
+                  placeholder={t('placeholder.addComment')}
                   type="text"
                   className={cx('input')}
                   onKeyDown={handleOnKeyDown}
@@ -211,12 +213,12 @@ function MediaDetailContent({ postInfo, userOfPost }: Props) {
                 onClick={handleCreateComment}
                 className={cx('cmtBtn')}
               >
-                Post
+                {t('btn.post')}
               </Button>
             </div>
           ) : (
             <div onClick={handleShowLoginPopup} className={cx('plsLogin')}>
-              Please log in to comment
+              {t('text.loginToComment')}
             </div>
           )}
         </div>

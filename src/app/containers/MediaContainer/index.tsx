@@ -13,7 +13,7 @@ interface Props {
 
 function MediaContainer({ media }: Props) {
   if (!media) {
-    return <div>loi</div>;
+    return <div>wrong format</div>;
   }
   if (isVideo(media?.media_url)) {
     return (

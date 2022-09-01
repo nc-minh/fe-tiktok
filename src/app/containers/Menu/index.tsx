@@ -1,11 +1,15 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Tooltip } from '@mui/material';
 import classNames from 'classnames/bind';
-import { useCallback, memo } from 'react';
+import { useCallback, memo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { removeItemFromStorage } from 'utils/storage';
 import { MenuItemType } from 'types/Menu';
 import styles from './Menu.module.scss';
 import MenuItem from './MenuItem';
+import Header from './Header';
 
 const cx = classNames.bind(styles);
 
@@ -18,25 +22,51 @@ interface RenderMenuProps {
   items: MenuItemType[];
 }
 
+interface ARR {
+  data: MenuItemType[];
+  title?: string;
+}
+
 const RenderMenu = ({ items }: RenderMenuProps) => {
-  const handleLogout = useCallback(
-    (logout: any) => () => {
-      if (logout) {
+  const { t, i18n } = useTranslation();
+  const [history, setHistory] = useState<ARR[]>([{ data: items }]);
+  const currentMenu = history[history.length - 1];
+
+  const handleSelectMenu = useCallback(
+    (menuItem: any) => () => {
+      if (menuItem.title === 'Log out') {
         removeItemFromStorage('userData');
         removeItemFromStorage('tokens');
         window.location.replace('/');
+        return;
+      }
+
+      const isParent = !!menuItem.children;
+      if (isParent) {
+        setHistory(prev => [...prev, menuItem.children]);
+      }
+
+      if (menuItem?.code) {
+        i18n.changeLanguage(menuItem?.code);
       }
     },
-    [],
+    [history, setHistory],
   );
+
+  const handleBack = useCallback(() => {
+    setHistory(prev => prev.slice(0, prev.length - 1));
+  }, [history, setHistory]);
 
   return (
     <ul className={cx('menu-list')}>
-      {items.map((menuItem, index) => (
+      {history.length > 1 && (
+        <Header title={currentMenu?.title} onBack={handleBack} />
+      )}
+      {currentMenu.data.map((menuItem, index) => (
         <MenuItem
           key={index}
           item={menuItem}
-          onClick={handleLogout(menuItem.title === 'Log out')}
+          onClick={handleSelectMenu(menuItem)}
         />
       ))}
     </ul>
