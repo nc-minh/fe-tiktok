@@ -1,12 +1,13 @@
 import { ReactComponent as ArrowLeft } from 'assets/icons/arrowLeft.svg';
 import classNames from 'classnames/bind';
+import { memo } from 'react';
 
 import styles from './Menu.module.scss';
 
 const cx = classNames.bind(styles);
 
 interface Props {
-  title: string;
+  title?: string;
   onBack: () => void;
 }
 
@@ -21,4 +22,4 @@ function Header({ title, onBack }: Props) {
   );
 }
 
-export default Header;
+export default memo(Header);

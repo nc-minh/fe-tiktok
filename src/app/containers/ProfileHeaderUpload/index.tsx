@@ -1,6 +1,6 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import classNames from 'classnames/bind';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState, memo } from 'react';
 import { useDispatch } from 'react-redux';
 
 import styles from './ProfileHeaderUpload.module.scss';
@@ -8,6 +8,7 @@ import Image from 'app/components/Image';
 import Button from 'app/components/Button';
 import { useUpdateAvatar } from 'mutations/user';
 import { reloadAvatarActions } from './slice';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
@@ -21,31 +22,45 @@ function ProfileHeaderUpload({
   refetchInfoLogin = () => {},
   handleBackToEditUser = () => {},
 }: Props) {
+  const { t } = useTranslation();
   const dispath = useDispatch();
   const updateAvatar = useUpdateAvatar();
+  const [avatarpre, setAvatarpre] = useState('');
+
   const handleUpdateAvatar = useCallback(() => {
     const formData = new FormData();
     formData.append('avatar', file);
 
     updateAvatar.mutate(formData, {
-      onSuccess(data) {
+      onSuccess() {
         dispath(reloadAvatarActions.reloadAvatar(true));
         refetchInfoLogin();
         handleBackToEditUser();
       },
-      onError(error) {
-        console.log(error);
-      },
     });
   }, [file]);
+
+  useEffect(() => {
+    if (file) {
+      const value = URL.createObjectURL(file);
+      setAvatarpre(value);
+    }
+  }, [file]);
+
+  useEffect(() => {
+    return () => {
+      avatarpre && URL.revokeObjectURL(avatarpre);
+    };
+  }, [avatarpre, setAvatarpre]);
+
   return (
     <section className={cx('content')}>
       <div className={cx('imgWrapper')}>
-        <Image className={cx('img')} src={URL.createObjectURL(file)} />
+        <Image className={cx('img')} src={avatarpre} />
       </div>
       <footer className={cx('footerAvatar')}>
         <Button className={cx('btn')} box onClick={handleBackToEditUser}>
-          Cancel
+          {t('btn.cancel')}
         </Button>
         <Button
           className={cx('btn')}
@@ -53,11 +68,11 @@ function ProfileHeaderUpload({
           onClick={handleUpdateAvatar}
           loading={updateAvatar.isLoading}
         >
-          Apply
+          {t('btn.apply')}
         </Button>
       </footer>
     </section>
   );
 }
 
-export default ProfileHeaderUpload;
+export default memo(ProfileHeaderUpload);

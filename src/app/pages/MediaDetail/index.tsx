@@ -14,68 +14,91 @@ import styles from './MediaDetail.module.scss';
 import { RootState } from 'stores';
 import MediaContainer from 'app/containers/MediaContainer';
 import MediaDetailContent from 'app/containers/MediaDetailContent';
+import { ResponsePostType } from 'types/Post';
+import { UserInfo } from 'types/User';
 
 const cx = classNames.bind(styles);
 
+interface MediaOfLayoutFullType {
+  data: {
+    post: ResponsePostType[];
+    user: UserInfo;
+  };
+  mode?: string;
+  next?: boolean;
+}
+
 export function MediaDetail() {
   const navigate = useNavigate();
+
   const { username, mediaId } = useParams();
 
-  const mediaOfLayoutFull: any = useSelector(
+  const mediaOfLayoutFull: MediaOfLayoutFullType = useSelector(
     (state: RootState) => state.mediaOfLayoutFull.mediaOfLayoutFull,
   );
 
-  const [currentMedia, setCurrentMedia] = useState<any>(() => {
-    let i = 0;
-    mediaOfLayoutFull?.post &&
-      mediaOfLayoutFull?.post.forEach((item: any, index: number) => {
+  const [posts, setPosts] = useState<ResponsePostType[]>([]);
+  const [userOfPost, setUserOfPost] = useState<UserInfo>();
+  const [currentMedia, setCurrentMedia] = useState<any>();
+
+  useEffect(() => {
+    if (mediaOfLayoutFull?.data?.post.length > 0) {
+      setPosts(mediaOfLayoutFull?.data?.post);
+    }
+
+    if (mediaOfLayoutFull.mode === 'profile') {
+      setUserOfPost(mediaOfLayoutFull?.data?.user);
+    }
+  }, [mediaOfLayoutFull]);
+
+  useEffect(() => {
+    if (posts && userOfPost && mediaOfLayoutFull.mode === 'profile') {
+      let i = 0;
+      posts.forEach((item: any, index: number) => {
         if (item._id === mediaId) {
           i = index;
           return;
         }
       });
-    return {
-      index: i,
-      data: mediaOfLayoutFull?.post && mediaOfLayoutFull?.post[i],
-      user: mediaOfLayoutFull?.user,
-    };
-  });
+
+      setCurrentMedia({ index: i, data: posts && posts[i], user: userOfPost });
+    }
+  }, [mediaOfLayoutFull, posts, userOfPost]);
 
   const handleUp = useCallback(() => {
     setCurrentMedia((pre: any) => {
       if (pre.index === 0) {
         return {
           index: pre.index,
-          data: mediaOfLayoutFull?.post[pre.index],
+          data: posts[pre.index],
         };
       }
-      navigate(
-        `/@${username}/video/${mediaOfLayoutFull?.post[pre.index - 1]._id}`,
-      );
+
+      setTimeout(() => {
+        navigate(`/@${username}/video/${posts[pre.index - 1]?._id}`);
+      }, 0);
       return {
         index: pre.index - 1,
-        data: mediaOfLayoutFull?.post[pre.index - 1],
+        data: posts[pre.index - 1],
       };
     });
   }, [currentMedia, setCurrentMedia]);
 
   const handleDown = useCallback(() => {
     setCurrentMedia((pre: any) => {
-      if (pre.index === mediaOfLayoutFull?.post.length - 1) {
+      if (pre.index === posts.length - 1) {
         return {
           index: pre.index,
-          data: mediaOfLayoutFull?.post[pre.index],
-          user: mediaOfLayoutFull?.user,
+          data: posts[pre.index],
         };
       }
-      navigate(
-        `/@${username}/video/${mediaOfLayoutFull?.post[pre.index + 1]._id}`,
-      );
 
+      setTimeout(() => {
+        navigate(`/@${username}/video/${posts[pre.index + 1]?._id}`);
+      }, 0);
       return {
         index: pre.index + 1,
-        data: mediaOfLayoutFull?.post[pre.index + 1],
-        user: mediaOfLayoutFull?.user,
+        data: posts[pre.index + 1],
       };
     });
   }, [currentMedia, setCurrentMedia]);
@@ -84,51 +107,59 @@ export function MediaDetail() {
     const listener = (event: any) => {
       if (event.code === 'ArrowUp') {
         handleUp();
-        event.preventDefault();
       }
 
       if (event.code === 'ArrowDown') {
         handleDown();
-        event.preventDefault();
       }
     };
     document.addEventListener('keyup', listener);
     return () => {
       document.removeEventListener('keyup', listener);
     };
-  }, []);
+  }, [handleUp, handleDown, setCurrentMedia]);
 
   const handleCloseMediaDetail = useCallback(() => {
-    navigate('/');
+    navigate(`/@${username}`);
   }, []);
-
-  console.log(currentMedia?.data);
 
   return (
     <>
       <Helmet defaultTitle="Tiktok View | TikTok">
         <meta name="description" content="Tiktok View | TikTok" />
       </Helmet>
-      <div className={cx('wrapper')}>
-        <div className={cx('videoContainer')}>
-          <MediaContainer media={currentMedia?.data} />
-          <div className={cx('videoControls')}>
-            <button onClick={handleUp} className={cx('controlsBtn')}>
-              <ArrowIcon />
-            </button>
-            <button onClick={handleDown} className={cx('controlsBtn', 'down')}>
-              <ArrowIcon />
-            </button>
-          </div>
+      {mediaOfLayoutFull?.data?.post.length > 0 && (
+        <div className={cx('wrapper')}>
+          <div className={cx('videoContainer')}>
+            {currentMedia && <MediaContainer media={currentMedia?.data} />}
+            <div className={cx('videoControls')}>
+              <button onClick={handleUp} className={cx('controlsBtn')}>
+                <ArrowIcon />
+              </button>
+              <button
+                onClick={handleDown}
+                className={cx('controlsBtn', 'down')}
+              >
+                <ArrowIcon />
+              </button>
+            </div>
 
-          <div className={cx('closeMedia')} onClick={handleCloseMediaDetail}>
-            <CloseIcon className={cx('closeIcon')} />
+            <div className={cx('closeMedia')} onClick={handleCloseMediaDetail}>
+              <CloseIcon className={cx('closeIcon')} />
+            </div>
+          </div>
+          <div className={cx('contentContainer')}>
+            {userOfPost && currentMedia && (
+              <MediaDetailContent
+                postInfo={currentMedia?.data}
+                userOfPost={userOfPost}
+              />
+            )}
           </div>
         </div>
-        <div className={cx('contentContainer')}>
-          <MediaDetailContent postInfo={currentMedia?.data} />
-        </div>
-      </div>
+      )}
+
+      {mediaOfLayoutFull?.data?.post.length === 0 && <h1>{'No content :>'}</h1>}
     </>
   );
 }

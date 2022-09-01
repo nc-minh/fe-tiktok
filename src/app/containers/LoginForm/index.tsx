@@ -1,18 +1,16 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import classNames from 'classnames/bind';
 import { Typography } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState, memo } from 'react';
 
 import styles from './LoginForm.module.scss';
 import Button from 'app/components/Button';
 import { LoginType, TokensType } from 'types/Auth';
 import { useLogin } from 'mutations/auth';
-import { setUserData, setTokens } from 'utils/storage';
+import { setTokens } from 'utils/storage';
 import { ResponseError } from 'types/Error';
-import { useGetUserInfo } from 'queries/users';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
@@ -31,29 +29,17 @@ const SignupSchema = Yup.object().shape({
 });
 
 function LoginForm() {
+  const { t } = useTranslation();
   const [serverError, setServerError] = useState<ResponseError>();
-  const [isEnabled, setIsEnabled] = useState(false);
   const login = useLogin();
-
-  const { data: GetUserInfo, isFetching } = useGetUserInfo(isEnabled);
-  useEffect(() => {
-    if (GetUserInfo?.username) {
-      setUserData(GetUserInfo);
-
-      window.location.replace('/');
-    }
-  }, [GetUserInfo]);
 
   const handleOnSubmit = useCallback((values: LoginType) => {
     login.mutate(values, {
       onSuccess: async (res: TokensType) => {
         setTokens(res?.tokens);
-
-        setIsEnabled(true);
+        window.location.replace('/');
       },
       onError: async (err: any) => {
-        console.log(err);
-
         setServerError(err);
       },
     });
@@ -61,7 +47,7 @@ function LoginForm() {
 
   return (
     <div className={cx('wrapper')}>
-      <h2 className={cx('title')}>Login</h2>
+      <h2 className={cx('title')}>{t('text.login')}</h2>
       <Formik
         initialValues={{
           username: '',
@@ -90,7 +76,7 @@ function LoginForm() {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.username}
-              placeholder="username"
+              placeholder={t('placeholder.username')}
             />
             {errors.username && (
                 <Typography className={cx('error')}>
@@ -110,7 +96,7 @@ function LoginForm() {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.password}
-              placeholder="password"
+              placeholder={t('placeholder.password')}
             />
 
             {errors.password && (
@@ -129,12 +115,12 @@ function LoginForm() {
               </Typography>
             )}
             <Button
-              loading={login.isLoading || isFetching}
+              loading={login.isLoading || login.isLoading}
               className={cx('btn')}
               outline
               type="submit"
             >
-              Login
+              {t('text.login')}
             </Button>
           </form>
         )}
@@ -143,4 +129,4 @@ function LoginForm() {
   );
 }
 
-export default LoginForm;
+export default memo(LoginForm);

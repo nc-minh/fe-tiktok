@@ -3,7 +3,7 @@
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import PostList from 'app/components/PostList';
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import classNames from 'classnames/bind';
 
 import styles from './PostFeedTab.module.scss';
@@ -14,7 +14,7 @@ interface Props {
   userId: string;
 }
 
-export default function PostFeedTab({ userId }: Props) {
+function PostFeedTab({ userId }: Props) {
   const [value, setValue] = useState('Videos');
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -46,3 +46,5 @@ export default function PostFeedTab({ userId }: Props) {
     </div>
   );
 }
+
+export default memo(PostFeedTab);

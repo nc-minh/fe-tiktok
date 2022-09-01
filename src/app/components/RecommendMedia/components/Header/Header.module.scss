@@ -1,0 +1,73 @@
+.wrapper{
+    .container{
+        display: flex;
+        align-items: flex-start;
+
+        .avatarWrapper{
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            overflow: hidden;
+
+            .avatar{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .middle{
+            flex: 1;
+            margin-left: 12px;
+
+            .nameWrapper{
+                display: flex;
+                align-items: center;
+                width: fit-content;
+                
+                .username{
+                    font-weight: 700;
+                    font-size: 1.8rem;
+                    line-height: 2.5rem;
+                    display: inline-block;
+                    margin-right: 4px;
+                }
+
+                .icon{
+                    margin-right: 4px;
+                }
+
+                .fullname{
+                    font-weight: 400;
+                    font-size: 1.4rem;
+                    line-height: 2rem;
+                    display: inline-block;
+                    line-height: 2.8rem;
+                }
+
+                &:hover > .username{
+                    text-decoration: underline;
+                }
+            }
+
+            .postContent{
+                font-size: 1.6rem;
+                line-height: 2.2rem;
+            }
+        }
+
+        .btnWrapper{
+            
+            .btn{
+                height: 28px;
+                font-size: 1.6rem;
+                min-width: 88px;
+            }
+
+            .unfollow{
+                border: 1px solid var(--black);
+                color: #262626;
+            }
+        }
+    }
+}

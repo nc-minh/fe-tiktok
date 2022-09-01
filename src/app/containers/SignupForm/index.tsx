@@ -2,14 +2,17 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import classNames from 'classnames/bind';
 import { Typography } from '@mui/material';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, memo } from 'react';
 
 import styles from './SignupForm.module.scss';
 import Button from 'app/components/Button';
 import { SignupDataType, TokensType } from 'types/Auth';
 import { useSignup, useLogin } from 'mutations/auth';
-import { setUserData, setTokens } from 'utils/storage';
+import { setTokens } from 'utils/storage';
 import { ResponseError } from 'types/Error';
+import { globalStateActions } from 'app/layouts/slice';
+import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
@@ -33,14 +36,16 @@ const SignupSchema = Yup.object().shape({
 });
 
 function SignupForm() {
+  const { t } = useTranslation();
   const [serverError, setServerError] = useState<ResponseError>();
   const signup = useSignup();
   const login = useLogin();
+  const dispath = useDispatch();
 
   const handleOnSubmit = useCallback((values: SignupDataType) => {
     signup.mutate(values, {
       onSuccess: async res => {
-        setUserData(res);
+        dispath(globalStateActions.getUser(res));
         const username = values.username;
         const password = values.password;
 
@@ -65,7 +70,7 @@ function SignupForm() {
 
   return (
     <div className={cx('wrapper')}>
-      <h2 className={cx('title')}>Sign up</h2>
+      <h2 className={cx('title')}>{t('text.signup')}</h2>
       <Formik
         initialValues={{
           username: '',
@@ -99,7 +104,7 @@ function SignupForm() {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.username}
-              placeholder="username"
+              placeholder={t('placeholder.username')}
             />
             {errors.username && (
                 <Typography className={cx('error')}>
@@ -119,7 +124,7 @@ function SignupForm() {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.password}
-              placeholder="password"
+              placeholder={t('placeholder.password')}
             />
 
             {errors.password && (
@@ -139,7 +144,7 @@ function SignupForm() {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.retype_password}
-              placeholder="retype password"
+              placeholder={t('placeholder.retypePassword')}
             />
 
             {errors.retype_password && (
@@ -159,7 +164,7 @@ function SignupForm() {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.fullname}
-              placeholder="fullname"
+              placeholder={t('placeholder.fullname')}
             />
             {errors.fullname && (
                 <Typography className={cx('error')}>
@@ -181,7 +186,7 @@ function SignupForm() {
               outline
               type="submit"
             >
-              Sign up
+              {t('text.signup')}
             </Button>
           </form>
         )}
@@ -190,4 +195,4 @@ function SignupForm() {
   );
 }
 
-export default SignupForm;
+export default memo(SignupForm);

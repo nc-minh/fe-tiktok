@@ -7,10 +7,8 @@ const cx = classNames.bind(styles);
 
 export function Profile() {
   return (
-    <>
-      <div className={cx('wrapper')}>
-        <ProfileHeader />
-      </div>
-    </>
+    <div className={cx('wrapper')}>
+      <ProfileHeader />
+    </div>
   );
 }

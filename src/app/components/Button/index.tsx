@@ -1,5 +1,6 @@
 import classNames from 'classnames/bind';
 import { Link } from 'react-router-dom';
+import { memo } from 'react';
 
 import styles from './Button.module.scss';
 import { ReactComponent as SpinnerIcon } from 'assets/icons/spinner.svg';
@@ -42,7 +43,7 @@ function Button({
   disabled = false,
   rounded = false,
   box = false,
-  type = 'button',
+  type = 'text',
   loading = false,
 }: Props) {
   const _props: any = {
@@ -91,7 +92,12 @@ function Button({
   }
 
   return (
-    <button type={type} onClick={onClick} className={classes}>
+    <button
+      disabled={disabled}
+      type={type}
+      onClick={onClick}
+      className={classes}
+    >
       {leftIcon && <span className={cx('icon')}>{leftIcon}</span>}
       <span className={cx('title')}>
         {loading ? <SpinnerIcon className={cx('loading', 'size')} /> : children}
@@ -101,4 +107,4 @@ function Button({
   );
 }
 
-export default Button;
+export default memo(Button);

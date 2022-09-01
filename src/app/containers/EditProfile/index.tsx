@@ -1,19 +1,23 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import classNames from 'classnames/bind';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+import { useCallback, memo, useState } from 'react';
 
 import styles from './EditProfile.module.scss';
 import { ReactComponent as CloseIcon } from 'assets/icons/close.svg';
 import Image from 'app/components/Image';
-import { getUserData, setUserData } from 'utils/storage';
 import { ReactComponent as EditIcon } from 'assets/icons/edit-1.svg';
 import Button from 'app/components/Button';
-import { useCallback, useState } from 'react';
 import { useUpdateUser } from 'mutations/user';
 import ProfileHeaderUpload from '../ProfileHeaderUpload';
 import { ReactComponent as BackIcon } from 'assets/icons/arrowLeft.svg';
+import { globalStateActions } from 'app/layouts/slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'stores';
+import { useTranslation } from 'react-i18next';
 
 const SignupSchema = Yup.object().shape({
   username: Yup.string()
@@ -40,7 +44,11 @@ function EditProfile({
   handleOnCloseEditPopup = () => {},
   refetchInfoLogin = () => {},
 }: Props) {
-  const { avatar, username, fullname, bio } = getUserData();
+  const { t } = useTranslation();
+  const userLogin: any = useSelector(
+    (state: RootState) => state.globalState.user,
+  );
+  const { avatar, username, fullname, bio } = userLogin;
   const [usernamePre, setUsernamePre] = useState(() => {
     return username;
   });
@@ -51,6 +59,7 @@ function EditProfile({
     return bio;
   });
   const updateUser = useUpdateUser();
+  const dispath = useDispatch();
 
   const handleChangeUsernamePre = useCallback(
     (e: any) => {
@@ -73,8 +82,9 @@ function EditProfile({
   const [avatarFile, setAvatarFile] = useState();
 
   const chooseAvatarFile = useCallback(
-    (selectorFiles: any) => {
-      if (selectorFiles) setAvatarFile(selectorFiles[0]);
+    (e: any) => {
+      const file = e.target.files[0];
+      if (file) setAvatarFile(file);
     },
     [avatarFile, setAvatarFile],
   );
@@ -82,6 +92,7 @@ function EditProfile({
   const handleBackToEditUser = useCallback(() => {
     setAvatarFile(undefined);
   }, [avatarFile, setAvatarFile]);
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
@@ -89,10 +100,10 @@ function EditProfile({
           {avatarFile ? (
             <div className={cx('editAvatar')}>
               <BackIcon onClick={handleBackToEditUser} className={cx('icon')} />
-              <h3>Edit photo</h3>
+              <h3>{t('text.Editphoto')}</h3>
             </div>
           ) : (
-            <h3>Edit profile</h3>
+            <h3>{t('btn.editProfile')}</h3>
           )}
 
           <CloseIcon
@@ -109,7 +120,7 @@ function EditProfile({
         ) : (
           <section className={cx('content')}>
             <div className={cx('avatar')}>
-              <div className={cx('title')}>Profile photo</div>
+              <div className={cx('title')}>{t('text.profilePhoto')}</div>
               <div className={cx('avatarShow')}>
                 <Image className={cx('avatarUrl')} src={avatar} />
                 <input
@@ -117,7 +128,7 @@ function EditProfile({
                   id="avatar"
                   type="file"
                   accept="image/png, image/gif, image/jpeg, image/jpg"
-                  onChange={e => chooseAvatarFile(e.target.files)}
+                  onChange={chooseAvatarFile}
                 />
                 <label className={cx('lable')} htmlFor="avatar">
                   <EditIcon />
@@ -132,12 +143,12 @@ function EditProfile({
               }}
               validationSchema={SignupSchema}
               onSubmit={values => {
-                console.log(values);
                 updateUser.mutate(values, {
                   onSuccess: async data => {
-                    setUserData(data);
+                    dispath(globalStateActions.getUser(data));
                     handleOnCloseEditPopup();
                     refetchInfoLogin();
+                    dispath(globalStateActions.getRefetch(true));
                   },
                   onError: async (err: any) => {},
                 });
@@ -154,7 +165,7 @@ function EditProfile({
               }) => (
                 <form className={cx('form')} onSubmit={handleSubmit}>
                   <div className={cx('formItem')}>
-                    <div className={cx('title')}>Username</div>
+                    <div className={cx('title')}>{t('text.username')}</div>
                     <div className={cx('editProfile')}>
                       <input
                         autoComplete="off"
@@ -175,16 +186,12 @@ function EditProfile({
                       <p className={cx('link')}>
                         www.tiktok.com/@{usernamePre}
                       </p>
-                      <p className={cx('tip')}>
-                        Usernames can only contain letters, numbers,
-                        underscores, and periods. Changing your username will
-                        also change your profile link.
-                      </p>
+                      <p className={cx('tip')}>{t('text.tipEditUsername')}</p>
                     </div>
                   </div>
 
                   <div className={cx('formItem')}>
-                    <div className={cx('title')}>Name</div>
+                    <div className={cx('title')}>{t('text.name')}</div>
                     <div className={cx('editProfile')}>
                       <input
                         autoComplete="off"
@@ -206,7 +213,7 @@ function EditProfile({
                   </div>
 
                   <div className={cx('formItem', 'formItemBio')}>
-                    <div className={cx('title')}>Bio</div>
+                    <div className={cx('title')}>{t('text.bio')}</div>
                     <div className={cx('editProfile')}>
                       <textarea
                         autoComplete="off"
@@ -218,7 +225,7 @@ function EditProfile({
                         }}
                         onBlur={handleBlur}
                         value={values.bio}
-                        placeholder="Bio"
+                        placeholder={t('text.bio')}
                       />
                       {errors.bio && touched.bio && (
                         <p className={cx('error')}>{errors.bio}</p>
@@ -232,7 +239,7 @@ function EditProfile({
                       box
                       onClick={handleOnCloseEditPopup}
                     >
-                      Cancel
+                      {t('btn.cancel')}
                     </Button>
                     <Button
                       disabled={fullnamePre === fullname && bioPre === bio}
@@ -241,7 +248,7 @@ function EditProfile({
                       type="submit"
                       loading={updateUser.isLoading}
                     >
-                      Save
+                      {t('btn.save')}
                     </Button>
                   </footer>
                 </form>
@@ -254,4 +261,4 @@ function EditProfile({
   );
 }
 
-export default EditProfile;
+export default memo(EditProfile);

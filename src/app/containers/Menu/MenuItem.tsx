@@ -1,4 +1,5 @@
 import classNames from 'classnames/bind';
+import { memo } from 'react';
 
 import Button from 'app/components/Button';
 import styles from './Menu.module.scss';
@@ -27,4 +28,4 @@ function MenuItem({ item, onClick = () => {} }: Props) {
   );
 }
 
-export default MenuItem;
+export default memo(MenuItem);

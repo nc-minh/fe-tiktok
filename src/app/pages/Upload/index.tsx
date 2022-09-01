@@ -11,10 +11,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import UploadPreview from 'app/containers/UploadPreview';
 import { MB_50 } from 'utils/constants';
 import SnackbarCustomize from 'app/components/SnackbarCustomize';
-import { getUserData } from 'utils/storage';
 import DialogCustomize from 'app/components/DialogCustomize';
 import PopupBackorContinue from 'app/components/PopupBackorContinue';
 import { useCreatePost } from 'mutations/post';
+import { useSelector } from 'react-redux';
+import { RootState } from 'stores';
 
 const cx = classNames.bind(styles);
 
@@ -40,7 +41,10 @@ export function Upload() {
 
   const navigate = useNavigate();
 
-  const { _id } = getUserData();
+  const userLogin: any = useSelector(
+    (state: RootState) => state.globalState.user,
+  );
+  const { _id } = userLogin;
 
   useEffect(() => {
     if (!_id) {
@@ -64,7 +68,6 @@ export function Upload() {
   const handlePost = useCallback(
     (values: ContentsValuesTypes) => {
       const contents = values.contents;
-      console.log('contents:', contents);
 
       const formData = new FormData();
       if (mediaFile) formData.append('media_url', mediaFile);
@@ -177,7 +180,13 @@ export function Upload() {
                     handleSubmit,
                     /* and other goodies */
                   }) => (
-                    <form className={cx('form')} onSubmit={handleSubmit}>
+                    <form
+                      className={cx('form')}
+                      onSubmit={e => {
+                        e.preventDefault();
+                        handleSubmit();
+                      }}
+                    >
                       <div className={cx('contents')}>
                         <label
                           className={cx('contentsLabel')}
@@ -207,14 +216,12 @@ export function Upload() {
                       </div>
 
                       <div className={cx('btnWrapper')}>
-                        <Button
+                        <div
                           className={cx('btn', 'discard')}
-                          box
-                          type="text"
                           onClick={handleOnOpenDialog}
                         >
                           Discard
-                        </Button>
+                        </div>
                         <Button
                           className={cx('btn')}
                           primary

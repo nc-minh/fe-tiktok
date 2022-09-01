@@ -6,4 +6,5 @@ export const routeConfig = {
   search: '/search',
   live: '/live',
   media_detail: '/@:username/video/:mediaId',
+  not_found: '*',
 };

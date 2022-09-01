@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState, memo, useLayoutEffect } from 'react';
 import classNames from 'classnames/bind';
 import { Link, useNavigate } from 'react-router-dom';
 import { Tooltip } from '@mui/material';
@@ -29,12 +29,7 @@ import SearchBar from 'app/components/SearchBar';
 import { MenuItemType } from 'types/Menu';
 import { useSearchUsers } from 'queries/users';
 import { useDebounce } from 'app/hooks';
-import DialogCustomize from 'app/components/DialogCustomize';
-import PopupContent from 'app/components/PopupContent';
-import PopupLogin from 'app/containers/PopupLogin';
-import PopupSignup from 'app/containers/PopupSignup';
-import { getUserData, removeItemFromStorage } from 'utils/storage';
-import { UserInfo } from 'types/User';
+import { getTokens, removeItemFromStorage } from 'utils/storage';
 import { RootState } from 'stores';
 
 const cx = classNames.bind(styles);
@@ -43,6 +38,35 @@ interface Props {
   className?: string;
 }
 
+const MENU_ITEMS: MenuItemType[] = [
+  {
+    icon: <LanguageIcon />,
+    title: 'English',
+    children: {
+      title: 'Language',
+      data: [
+        {
+          code: 'en',
+          title: 'English',
+        },
+        {
+          code: 'vi',
+          title: 'Tiếng Việt',
+        },
+      ],
+    },
+  },
+  {
+    icon: <QuestionIcon />,
+    title: 'Feedback and Help',
+    to: '/feedback',
+  },
+  {
+    icon: <KeyboardIcon />,
+    title: 'Keyboard shortcuts',
+  },
+];
+
 function Header({ className = '' }: Props) {
   const { t } = useTranslation();
   const dispath = useDispatch();
@@ -50,53 +74,17 @@ function Header({ className = '' }: Props) {
   const classes = cx('inner', {
     [className]: className,
   });
+  const userLogin: any = useSelector(
+    (state: RootState) => state.globalState.user,
+  );
+
   const [textSearch, setTextSearch] = useState('');
   const [tooltipIsOpen, setTooltipIsOpen] = useState(false);
   const [isActive, setIsActive] = useState(false);
-  const [isLogin, setIsLogin] = useState(false);
-  const [tabLogin, setTabLogin] = useState(true);
 
   const debouncedValue = useDebounce(textSearch, 500);
 
-  const { username, _id } = getUserData();
-
-  const MENU_ITEMS: MenuItemType[] = [
-    {
-      icon: <LanguageIcon />,
-      title: 'English',
-      children: {
-        title: 'Language',
-        data: [
-          {
-            code: 'en',
-            title: 'English',
-          },
-          {
-            code: 'vi',
-            title: 'Tieng Viet',
-          },
-        ],
-      },
-    },
-    {
-      icon: <QuestionIcon />,
-      title: 'Feedback and Help',
-      to: '/feedback',
-    },
-    {
-      icon: <KeyboardIcon />,
-      title: 'Keyboard shortcuts',
-    },
-  ];
-  const currentUser: UserInfo = useMemo(() => {
-    if (getUserData()?.username) {
-      // dispath(reloadAvatarActions.reloadAvatar(false));
-      return getUserData();
-    } else {
-      removeItemFromStorage('tokens');
-      return null;
-    }
-  }, []);
+  const { username, _id } = userLogin;
 
   const USER_MENU: MenuItemType[] = [
     {
@@ -121,6 +109,15 @@ function Header({ className = '' }: Props) {
       separate: true,
     },
   ];
+
+  const currentUser = useMemo(() => {
+    if (getTokens()?.accessToken) {
+      return true;
+    } else {
+      removeItemFromStorage('tokens');
+      return false;
+    }
+  }, [userLogin]);
 
   const { data: searchUsersResults, isFetching } = useSearchUsers(
     {
@@ -166,43 +163,28 @@ function Header({ className = '' }: Props) {
     }, 200);
   }, [isFetching]);
 
-  const handleOnCloseDialog = useCallback(() => {
-    setIsLogin(false);
-    setTabLogin(true);
-  }, [setIsLogin, isLogin]);
-
-  const handleSwitchLoginTab = useCallback(() => {
-    setTabLogin(!tabLogin);
-  }, [tabLogin, setTabLogin]);
-
   const detectLogin: any = useSelector(
     (state: RootState) => state.detectLogin.detectLogin,
   );
 
-  useEffect(() => {
-    if (detectLogin) {
-      setIsLogin(true);
-      dispath(detectLoginActions.detectLogin(false));
-    }
-  }, [detectLogin]);
-
   const onUpload = useCallback(() => {
     if (_id) {
-      console.log('upload ne``');
-
       navigate('/upload');
     } else {
-      console.log('hong duoc upload ne`');
       dispath(detectLoginActions.detectLogin(true));
     }
   }, [_id, detectLogin]);
 
+  const handleOnLogin = useCallback(() => {
+    dispath(detectLoginActions.detectLogin(true));
+  }, [detectLogin]);
+
   return (
     <header className={cx('wrapper')}>
       <div className={classes}>
-        <Link to={routeConfig.home} className={cx('logo')}>
+        <a href={routeConfig.home} className={cx('logo')}>
           <Image src={tiktokLogo} alt="tiktok logo" />
-        </Link>
+        </a>
 
         <SearchBar
           autoFocus={false}
@@ -242,7 +224,7 @@ function Header({ className = '' }: Props) {
                 <PlusIcon className={cx('uploadIcon')} />
                 Upload
               </Button>
-              <Button onClick={() => setIsLogin(true)} primary>
+              <Button onClick={handleOnLogin} primary>
                 Login
               </Button>
             </>
@@ -250,11 +232,13 @@ function Header({ className = '' }: Props) {
 
           <Menu items={currentUser ? USER_MENU : MENU_ITEMS}>
             {currentUser ? (
-              <Image
-                className={cx('user-avatar')}
-                src={currentUser.avatar}
-                alt="avatar"
-              />
+              <div className={cx('user-avatarWrapper')}>
+                <Image
+                  className={cx('user-avatar')}
+                  src={userLogin?.avatar}
+                  alt="avatar"
+                />
+              </div>
             ) : (
               <span className={cx('more-btn')}>
                 <MoreIcon />
@@ -263,20 +247,8 @@ function Header({ className = '' }: Props) {
           </Menu>
         </div>
       </div>
-      <DialogCustomize open={isLogin} onClose={handleOnCloseDialog}>
-        <PopupContent
-          onClose={handleOnCloseDialog}
-          footerContent={
-            tabLogin ? "Don't have an account?" : 'Already have an account?'
-          }
-          linkContent={tabLogin ? 'Sign up' : 'Log in'}
-          onClick={handleSwitchLoginTab}
-        >
-          {tabLogin ? <PopupLogin /> : <PopupSignup />}
-        </PopupContent>
-      </DialogCustomize>
     </header>
   );
 }
 
-export default Header;
+export default memo(Header);

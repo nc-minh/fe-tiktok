@@ -36,6 +36,7 @@
 
     .upload{
         height: 36px;
+        width: fit-content;
         min-width: 114px;
         font-style: normal;
         font-weight: 500;
@@ -87,12 +88,18 @@
     background-color: var(--primary);
 }
 
-.user-avatar{
+.user-avatarWrapper{
     width: 32px;
     height: 32px;
-    object-fit: contain;
-    border-radius: 50%;
     margin-left: 12px;
-    cursor: pointer;
-    border: 0.5px solid rgba(22, 24, 35, 0.12);
+
+    .user-avatar{
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 50%;
+        cursor: pointer;
+        border: 0.5px solid rgba(22, 24, 35, 0.12);
+    }
 }
+

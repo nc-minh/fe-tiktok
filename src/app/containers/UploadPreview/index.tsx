@@ -1,5 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import classNames from 'classnames/bind';
-import { useCallback, useMemo, useState } from 'react';
+import {
+  useCallback,
+  useMemo,
+  useState,
+  memo,
+  useEffect,
+  useLayoutEffect,
+} from 'react';
 
 import styles from './UploadPreview.module.scss';
 import { isImage, isVideo } from 'utils/constants';
@@ -10,9 +18,11 @@ import musicSymbols2Icon from 'assets/icons/musicSymbols-2.png';
 import musicSymbols3Icon from 'assets/icons/musicSymbols-3.png';
 import { ReactComponent as MusicIcon } from 'assets/icons/musicIcon.svg';
 import { ReactComponent as CircleCheckIcon } from 'assets/icons/circleCheckIcon.svg';
-import { getUserData } from 'utils/storage';
 import DialogCustomize from 'app/components/DialogCustomize';
 import PopupBackorContinue from '../../components/PopupBackorContinue';
+import { useSelector } from 'react-redux';
+import { RootState } from 'stores';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
@@ -22,24 +32,35 @@ interface Props {
   onChangeVideo?: () => void;
 }
 function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
-  const { avatar, username } = getUserData();
+  const userLogin: any = useSelector(
+    (state: RootState) => state.globalState.user,
+  );
+  const { t } = useTranslation();
+  const { avatar, username } = userLogin;
   const [isChangeMedia, setIsChangeMedia] = useState(false);
+  const [mediapre, setMediapre] = useState('');
   const fileName = useMemo(() => {
     return file?.name || '';
   }, [file]);
 
-  const templateUrl = useMemo(() => {
-    return (file && URL.createObjectURL(file)) || '';
+  useLayoutEffect(() => {
+    if (file) {
+      const value = URL.createObjectURL(file);
+      setMediapre(value);
+    }
   }, [file]);
 
+  useEffect(() => {
+    return () => {
+      mediapre && URL.revokeObjectURL(mediapre);
+    };
+  }, [mediapre, setMediapre]);
+
   const handleOnCloseDialog = useCallback(() => {
-    console.log('close log');
     setIsChangeMedia(false);
   }, [setIsChangeMedia, isChangeMedia]);
 
   const handleOnOpenDialog = useCallback(() => {
-    console.log('open log');
-
     setIsChangeMedia(true);
   }, [setIsChangeMedia, isChangeMedia]);
 
@@ -48,16 +69,11 @@ function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
       <div className={cx('wrapper')}>
         <div className={cx('container')}>
           <div className={cx('content')}>
-            <video
-              autoPlay
-              className={cx('video')}
-              src={templateUrl}
-              controls
-            />
+            <video autoPlay className={cx('video')} src={mediapre} controls />
 
             <div className={cx('header')}>
-              <p>Following</p>
-              <p>For You</p>
+              <p>{t('text.following')}</p>
+              <p>{t('text.forYou')}</p>
             </div>
 
             <div className={cx('actions')}>
@@ -106,7 +122,7 @@ function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
             <p className={cx('changeVideoFilename')}>{fileName}</p>
           </div>
           <div onClick={handleOnOpenDialog} className={cx('changeVideoText')}>
-            Change video
+            {t('text.changeVideo')}
           </div>
         </div>
 
@@ -130,11 +146,11 @@ function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
       <div className={cx('wrapper')}>
         <div className={cx('container')}>
           <div className={cx('content')}>
-            <Image className={cx('video')} src={templateUrl} />
+            <Image className={cx('video')} src={mediapre} />
 
             <div className={cx('header')}>
-              <p>Following</p>
-              <p>For You</p>
+              <p>{t('text.following')}</p>
+              <p>{t('text.forYou')}</p>
             </div>
 
             <div className={cx('actions')}>
@@ -183,7 +199,7 @@ function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
             <p className={cx('changeVideoFilename')}>{fileName}</p>
           </div>
           <div onClick={handleOnOpenDialog} className={cx('changeVideoText')}>
-            Change video
+            {t('text.changeVideo')}
           </div>
         </div>
 
@@ -205,4 +221,4 @@ function UploadPreview({ file, caption, onChangeVideo = () => {} }: Props) {
   return <div className={cx('wrapper')}>Format Error</div>;
 }
 
-export default UploadPreview;
+export default memo(UploadPreview);

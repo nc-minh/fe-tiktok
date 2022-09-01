@@ -1,5 +1,5 @@
 import classNames from 'classnames/bind';
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import { useDispatch } from 'react-redux';
 
 import { useGetPostOfUser } from 'queries/post';
@@ -31,13 +31,13 @@ function PostList({ type, userId }: Props) {
     if (GetPostOfUser) {
       dispath(
         mediaOfLayoutFullActions.assignMedia({
-          mediaOfLayoutFull: GetPostOfUser,
+          data: GetPostOfUser,
           mode: 'profile',
           next: false,
         }),
       );
     }
-  });
+  }, [GetPostOfUser]);
 
   if (type === 'Videos') {
     return (
@@ -70,4 +70,4 @@ function PostList({ type, userId }: Props) {
   );
 }
 
-export default PostList;
+export default memo(PostList);

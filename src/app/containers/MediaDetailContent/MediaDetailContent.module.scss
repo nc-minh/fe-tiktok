@@ -108,6 +108,10 @@
                             .actionIcon{
 
                             }
+
+                            .isReaction{
+                                fill: red;
+                            }
                         }   
                         
 
@@ -214,6 +218,9 @@
                         min-height: 17px;
                         max-height: 68px;
                         word-break: break-all;
+                        padding: 0;
+                        border: none;
+                        height: fit-content;
     
                     }
 
@@ -241,7 +248,21 @@
                     margin-right: 4px;
                     background-color: transparent;
                     color: var(--primary);
+                    display: inline;
+                    min-width: 0;
+                    padding: 0;
                 }
+            }
+
+            .plsLogin{
+                color: rgb(254, 44, 85);
+                font-weight: 600;
+                height: 100%;
+                background: rgb(248, 248, 248);
+                border-radius: 2px;
+                padding: 14px 16px;
+                font-size: 1.6rem;
+                cursor: pointer;
             }
         }
     }

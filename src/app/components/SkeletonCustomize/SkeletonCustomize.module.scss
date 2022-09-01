@@ -13,10 +13,45 @@
     display: grid;
     gap: 24px 16px;
     grid-template-columns: repeat(auto-fill, minmax(184px, 1fr));
+
     .wrapper{
         .item{
             width: 100%;
             height: 324px;
+        }
+    }
+}
+
+.followings{
+    .wrapper{
+        margin: 8px 0;
+        margin-left: 8px;
+        display: flex;
+
+        .avatarWrapper{
+            width: 32px;
+            height: 32px;
+
+            .avatar{
+                width: 100%;
+                height: 100%;
+            }
+        }
+
+        .nameWrapper{
+            flex: 1;
+            margin-left: 12px;
+
+            .username{
+                height: 20px;
+                width: 120px;
+                margin-bottom: 2px;
+            }
+
+            .fullname{
+                height: 15px;
+                width: 80px;
+            }
         }
     }
 }

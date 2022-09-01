@@ -26,7 +26,7 @@ async function handleRefreshToken({
   );
   if (response?.data?.errors) {
     localStorage.clear();
-    window.location.replace('/login');
+    window.location.replace('/');
   } else if (response.data) {
     const tokens = response.data?.data;
     setTokens(tokens.tokens);

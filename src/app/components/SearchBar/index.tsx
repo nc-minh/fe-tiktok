@@ -1,5 +1,5 @@
 import { InputBase, Tooltip } from '@mui/material';
-import { RefObject, useCallback } from 'react';
+import { RefObject, useCallback, memo } from 'react';
 import classNames from 'classnames/bind';
 
 import styles from './SearchBar.module.scss';
@@ -120,4 +120,4 @@ function SearchBar(props: Props) {
   );
 }
 
-export default SearchBar;
+export default memo(SearchBar);

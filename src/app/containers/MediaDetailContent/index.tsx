@@ -1,6 +1,12 @@
-import Button from 'app/components/Button';
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import classNames from 'classnames/bind';
+import React, { memo, useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Tooltip } from '@mui/material';
+import { useDispatch, useSelector } from 'react-redux';
 
+import Button from 'app/components/Button';
 import styles from './MediaDetailContent.module.scss';
 import { ReactComponent as HeartIcon } from 'assets/icons/heart.svg';
 import { ReactComponent as CommentIcon } from 'assets/icons/comment.svg';
@@ -13,91 +19,131 @@ import { ReactComponent as ShareIcon } from 'assets/icons/share.svg';
 import { ReactComponent as MentionIcon } from 'assets/icons/mention.svg';
 import { ReactComponent as EmojiIcon } from 'assets/icons/emoji.svg';
 import Image from 'app/components/Image';
-import { CommentInfoType } from 'types/Comment';
 import CommentItem from 'app/components/CommentItem';
 import { PostInfoType } from 'types/Post';
+import { UserInfo } from 'types/User';
+import { useGetCommentOfPost } from 'queries/comment';
+import Input from 'app/components/Input';
+import { useCreateComment } from 'mutations/comment';
+import { detectLoginActions } from 'app/components/ProfileHeaderBase/slice';
+import { RootState } from 'stores';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
 interface Props {
   postInfo: PostInfoType;
+  userOfPost: UserInfo;
 }
 
-function MediaDetailContent({ postInfo }: Props) {
+function MediaDetailContent({ postInfo, userOfPost }: Props) {
   const pathName = window.location.href;
+  const navigate = useNavigate();
+  const dispath = useDispatch();
+  const { t } = useTranslation();
 
-  const test: CommentInfoType[] = [
-    {
-      avatar: 'https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg',
-      fullname: 'Minh',
-      username: 'nc-minh',
-      comment_reaction_count: 2134,
-      contents: 'day la cmt test',
-      created_at: new Date('2022-07-15T08:38:42.950Z'),
+  const [textValue, setTextValue] = useState('');
+  const [isOpenComment, setIsOpenComment] = useState(false);
+
+  const { data: GetCommentOfPost, refetch } = useGetCommentOfPost(
+    postInfo?._id,
+    true,
+  );
+
+  const detectLogin: any = useSelector(
+    (state: RootState) => state.detectLogin.detectLogin,
+  );
+
+  const createComment = useCreateComment();
+
+  window.onpopstate = () => {
+    navigate(`/@${userOfPost?.username}`);
+  };
+
+  const handleCreateComment = useCallback(() => {
+    createComment.mutate(
+      {
+        contents: textValue,
+        post_id: postInfo?._id,
+      },
+      {
+        onSuccess: data => {
+          refetch();
+          setTextValue('');
+        },
+        onError: (error: any) => {
+          if (error?.name === 'AuthenticationError') {
+            dispath(detectLoginActions.detectLogin(false));
+          }
+        },
+      },
+    );
+  }, [textValue]);
+
+  const handleOnKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        handleCreateComment();
+      }
     },
-    {
-      avatar: 'https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg',
-      fullname: 'Minh',
-      username: 'nc-minh',
-      comment_reaction_count: 2134,
-      contents: 'day la cmt test',
-      created_at: new Date('2022-07-15T08:38:42.950Z'),
+    [textValue],
+  );
+
+  const handleOnChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setTextValue(e.target.value);
     },
-    {
-      avatar: 'https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg',
-      fullname: 'Chi',
-      username: 'nc-chi',
-      comment_reaction_count: 54,
-      contents: 'day la cmt test',
-      created_at: new Date('2022-07-15T08:38:42.950Z'),
-    },
-    {
-      avatar: 'https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg',
-      fullname: 'VU',
-      username: 'nc-vu',
-      comment_reaction_count: 345,
-      contents: 'day la cmt test',
-      created_at: new Date('2022-07-15T08:38:42.950Z'),
-    },
-    {
-      avatar: 'https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg',
-      fullname: 'Tinh',
-      username: 'nc-tinh',
-      comment_reaction_count: 4,
-      contents: 'day la cmt test',
-      created_at: new Date('2022-07-15T08:38:42.950Z'),
-    },
-  ];
+    [textValue, setTextValue],
+  );
+
+  const handleShowLoginPopup = useCallback(() => {
+    dispath(detectLoginActions.detectLogin(true));
+  }, [detectLogin]);
+
+  const userLogin: any = useSelector(
+    (state: RootState) => state.globalState.user,
+  );
+
+  useEffect(() => {
+    if (userLogin?.username) {
+      setIsOpenComment(true);
+    } else {
+      setIsOpenComment(false);
+    }
+  }, [userLogin]);
+
   return (
     <div className={cx('wrapper')}>
       <div className={cx('container')}>
         <header className={cx('header')}>
           <div className={cx('userInfo')}>
             <div className={cx('imageWrapper')}>
-              <Image
-                className={cx('image')}
-                src="https://d1hjkbq40fs2x4.cloudfront.net/2016-01-31/files/1045.jpg"
-              />
+              <Image className={cx('image')} src={userOfPost?.avatar} />
             </div>
             <div className={cx('infoWrapper')}>
-              <h3 className={cx('username')}>{postInfo.user_id.username}</h3>
-              <strong className={cx('fullname')}>
-                {postInfo.user_id.fullname}
-              </strong>
+              <h3 className={cx('username')}>{userOfPost?.username}</h3>
+              <strong className={cx('fullname')}>{userOfPost?.fullname}</strong>
             </div>
             <Button className={cx('actionBtn')} outline>
-              Follow
+              {t('btn.follow')}
             </Button>
           </div>
-          <main className={cx('videoDesc')}>{postInfo.contents}</main>
+          <main className={cx('videoDesc')}>{postInfo?.contents}</main>
           <div className={cx('interactive')}>
             <div className={cx('InteractiveLeft')}>
               <div className={cx('actionBtnWrapper')}>
                 <div className={cx('actionIconWrapper')}>
-                  <HeartIcon className={cx('actionIcon')} />
+                  <HeartIcon
+                    className={cx(
+                      'actionIcon',
+                      postInfo?.isReaction &&
+                        postInfo?.isReaction[0]?._id &&
+                        'isReaction',
+                    )}
+                  />
                 </div>
                 <strong className={cx('actionCount')}>
-                  {postInfo.reaction_count}
+                  {postInfo?.reaction_count || 0}
                 </strong>
               </div>
               <div className={cx('actionBtnWrapper')}>
@@ -105,55 +151,80 @@ function MediaDetailContent({ postInfo }: Props) {
                   <CommentIcon className={cx('actionIcon')} />
                 </div>
                 <strong className={cx('actionCount')}>
-                  {postInfo.comment_count}
+                  {postInfo?.comment_count || 0}
                 </strong>
               </div>
             </div>
             <div className={cx('InteractiveRight')}>
-              <EmbedIcon className={cx('icon')} />
-              <SendIcon className={cx('icon')} />
-              <FacebookIcon className={cx('icon')} />
-              <WhatsappIcon className={cx('icon')} />
-              <TwitterIcon className={cx('icon')} />
+              <Tooltip title="Embed" arrow placement="top">
+                <EmbedIcon className={cx('icon')} />
+              </Tooltip>
+              <Tooltip title="Send to friends" arrow placement="top">
+                <SendIcon className={cx('icon')} />
+              </Tooltip>
+              <Tooltip title="Share to Facebook" arrow placement="top">
+                <FacebookIcon className={cx('icon')} />
+              </Tooltip>
+              <Tooltip title="Share to WhatsApp" arrow placement="top">
+                <WhatsappIcon className={cx('icon')} />
+              </Tooltip>
+              <Tooltip title="Share to WhatsApp" arrow placement="top">
+                <TwitterIcon className={cx('icon')} />
+              </Tooltip>
               <ShareIcon className={cx('icon')} />
             </div>
           </div>
           <div className={cx('copyLink')}>
             <div className={cx('link')}>{pathName}</div>
-            <div className={cx('copyBtn')}>Copy link</div>
+            <div className={cx('copyBtn')}>{t('text.copylink')}</div>
           </div>
         </header>
 
         <main className={cx('commentContainer')}>
           <div className={cx('commentWrapper')}>
-            {test &&
-              test.map((item, index: number) => (
+            {GetCommentOfPost &&
+              GetCommentOfPost.map((item, index: number) => (
                 <CommentItem key={index} commentInfo={item} />
               ))}
           </div>
         </main>
 
         <div className={cx('commentInput')}>
-          <div className={cx('commentInputWrapper')}>
-            <div className={cx('commentInputAction')}>
-              <input
-                placeholder="Add comment..."
-                className={cx('input')}
-                type="text"
-              />
-              <div className={cx('iconWrapper')}>
-                <MentionIcon className={cx('icon')} />
+          {isOpenComment ? (
+            <div className={cx('commentInputWrapper')}>
+              <div className={cx('commentInputAction')}>
+                <Input
+                  placeholder={t('placeholder.addComment')}
+                  type="text"
+                  className={cx('input')}
+                  onKeyDown={handleOnKeyDown}
+                  value={textValue}
+                  onChange={handleOnChange}
+                />
+                <div className={cx('iconWrapper')}>
+                  <MentionIcon className={cx('icon')} />
+                </div>
+                <div className={cx('iconWrapper')}>
+                  <EmojiIcon className={cx('icon')} />
+                </div>
               </div>
-              <div className={cx('iconWrapper')}>
-                <EmojiIcon className={cx('icon')} />
-              </div>
+              <Button
+                loading={createComment.isLoading}
+                onClick={handleCreateComment}
+                className={cx('cmtBtn')}
+              >
+                {t('btn.post')}
+              </Button>
             </div>
-            <button className={cx('cmtBtn')}>Post</button>
-          </div>
+          ) : (
+            <div onClick={handleShowLoginPopup} className={cx('plsLogin')}>
+              {t('text.loginToComment')}
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
 }
 
-export default MediaDetailContent;
+export default memo(MediaDetailContent);

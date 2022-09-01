@@ -3,16 +3,16 @@ export interface UserInfo {
   fullname: string;
   username: string;
   avatar: string;
-  bio: string;
+  bio?: string;
   tick: boolean;
   followings_count: number;
   followers_count: number;
   isFollow?: boolean;
   likes_count: number;
   website_url: string;
-  social_network: [];
-  created_at?: Date;
-  updated_at?: Date;
+  social_network?: [];
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface UpdateUserType {

@@ -1,5 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { getUserInfo, getUserByUsername } from 'services/user';
+import {
+  getUserInfo,
+  getUserByUsername,
+  getSuggestedAccounts,
+} from 'services/user';
 import { searchUsers } from 'services/search';
 import { SearchUsersPayload } from 'types/Search';
 
@@ -19,8 +23,24 @@ export const useSearchUsers = (payload: SearchUsersPayload, enabled: boolean) =>
 
 export const useGetUserByUsername = (username: string, enabled: boolean) =>
   useQuery(
-    ['user-info', username, enabled],
+    ['user-info-by-name', username, enabled],
     () => getUserByUsername(username),
+    {
+      staleTime: STALE_TIME.ONE_HOUR,
+      enabled: enabled,
+      retry: false,
+      refetchOnWindowFocus: false,
+    },
+  );
+
+export const useGetSuggestedAccounts = (
+  pageSize: number,
+  currentPage: number,
+  enabled: boolean,
+) =>
+  useQuery(
+    ['suggested-accounts', enabled, pageSize, currentPage],
+    () => getSuggestedAccounts(pageSize, currentPage),
     {
       staleTime: STALE_TIME.ONE_HOUR,
       enabled: enabled,

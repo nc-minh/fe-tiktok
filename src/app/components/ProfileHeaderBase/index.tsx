@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import Button from 'app/components/Button';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, memo } from 'react';
 import Image from 'app/components/Image';
 import classNames from 'classnames/bind';
 import { Tooltip } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import styles from './ProfileHeaderBase.module.scss';
 import { ReactComponent as EditIcon } from 'assets/icons/edit.svg';
@@ -18,10 +18,11 @@ import SkeletonCustomize from 'app/components/SkeletonCustomize';
 import { useFollow } from 'mutations/follow';
 import DialogCustomize from '../DialogCustomize';
 import EditProfile from 'app/containers/EditProfile';
-import { getUserData } from 'utils/storage';
 import { detectLoginActions } from './slice';
 import PostFeedTab from 'app/containers/PostFeedTab';
 import { numberFormat } from 'utils/constants';
+import { RootState } from 'stores';
+import { useTranslation } from 'react-i18next';
 
 const cx = classNames.bind(styles);
 
@@ -39,14 +40,17 @@ const ButtonRender = ({
   refetch = () => {},
   handleOnpenEditPopup = () => {},
 }: ButtonRenderProps) => {
+  const { t } = useTranslation();
   const dispath = useDispatch();
   const follow_id = user?._id;
-  const { _id } = getUserData();
+  const userLogin: any = useSelector(
+    (state: RootState) => state.globalState.user,
+  );
 
   const follow = useFollow();
 
   const onFollow = useCallback(() => {
-    if (follow_id && _id) {
+    if (follow_id && userLogin?._id) {
       follow.mutate(
         { follow_id },
         {
@@ -82,16 +86,16 @@ const ButtonRender = ({
         className={cx('btnEdit')}
         box
       >
-        Edit profile
+        {t('btn.editProfile')}
       </Button>
     );
   } else if (isFollow) {
     return (
       <div className={cx('messageWrapper')}>
         <Button className={cx('message')} outline>
-          Messages
+          {t('btn.messages')}
         </Button>
-        <Tooltip title="Unfollow" arrow>
+        <Tooltip title={t('tooltip.unfollow')} arrow>
           <div onClick={onUnFollow} className={cx('unfollowIcon')}>
             <UnfollowIcon />
           </div>
@@ -106,7 +110,7 @@ const ButtonRender = ({
         onClick={onFollow}
         loading={follow.isLoading}
       >
-        Follow
+        {t('btn.follow')}
       </Button>
     );
   }
@@ -124,6 +128,7 @@ function ProfileHeaderBase({
   refetch = () => {},
   refetchInfoLogin = () => {},
 }: Props) {
+  const { t } = useTranslation();
   const isFollow = user?.isFollow;
   const [isEditPopup, setIsEditPopup] = useState(false);
 
@@ -148,7 +153,11 @@ function ProfileHeaderBase({
               {user?.tick ? (
                 <div className={cx('fullnameWrapper')}>
                   <h1 className={cx('fullname')}>{user?.username}</h1>
-                  <Tooltip title="Verified" arrow placement="right">
+                  <Tooltip
+                    title={t('tooltip.verified')}
+                    arrow
+                    placement="right"
+                  >
                     <CheckIcon className={cx('checkIcon')} />
                   </Tooltip>
                 </div>
@@ -172,22 +181,24 @@ function ProfileHeaderBase({
               <strong title="Following" className={cx('count')}>
                 {numberFormat(user.followings_count)}
               </strong>
-              <span className={cx('actionName')}>Following</span>
+              <span className={cx('actionName')}>{t('text.following')}</span>
             </div>
             <div className={cx('countInfos__item')}>
               <strong title="Followers" className={cx('count')}>
                 {numberFormat(user.followers_count)}
               </strong>
-              <span className={cx('actionName')}>Followers</span>
+              <span className={cx('actionName')}>{t('text.followers')}</span>
             </div>
             <div className={cx('countInfos__item')}>
               <strong title="Likes" className={cx('count')}>
                 {numberFormat(user.likes_count)}
               </strong>
-              <span className={cx('actionName')}>Likes</span>
+              <span className={cx('actionName')}>{t('text.likes')}</span>
             </div>
           </div>
-          <h2 className={cx('bio')}>{user.bio ? user.bio : 'No bio yet.'}</h2>
+          <h2 className={cx('bio')}>
+            {user.bio ? user.bio : t('text.Nobioyet')}
+          </h2>
         </div>
       ) : (
         <SkeletonCustomize profileHeader />
@@ -205,4 +216,4 @@ function ProfileHeaderBase({
   );
 }
 
-export default ProfileHeaderBase;
+export default memo(ProfileHeaderBase);

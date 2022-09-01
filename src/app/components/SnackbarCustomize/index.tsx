@@ -1,4 +1,5 @@
 import { Snackbar, Alert } from '@mui/material';
+import { memo } from 'react';
 
 interface Props {
   open?: boolean;
@@ -9,7 +10,7 @@ interface Props {
   vertical?: 'top' | 'bottom';
   horizontal?: 'right' | 'center' | 'left';
 }
-export default function SnackbarCustomize({
+function SnackbarCustomize({
   open,
   autoHideDuration = 1000,
   onClose = () => {},
@@ -92,3 +93,5 @@ export default function SnackbarCustomize({
     </Snackbar>
   );
 }
+
+export default memo(SnackbarCustomize);

@@ -15,7 +15,6 @@ export const getUserByUsername = async (
   const response: AxiosResponse = await axiosInstance.get(
     `/users/info/${username}`,
   );
-
   return response?.data?.data;
 };
 
@@ -47,5 +46,21 @@ export const updateAvatar = async (
     avatar,
   );
 
+  return response?.data?.data;
+};
+
+export const getSuggestedAccounts = async (
+  pageSize: number,
+  currentPage: number,
+) => {
+  const response: AxiosResponse = await axiosInstance.get(
+    `/users/suggested-accounts`,
+    {
+      params: {
+        pageSize: pageSize,
+        currentPage: currentPage,
+      },
+    },
+  );
   return response?.data?.data;
 };
